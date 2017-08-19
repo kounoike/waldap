@@ -7,6 +7,11 @@ This repository is experimental version!
 
 `sbt jetty:start` and go to `http://localhost:10080/`. It also starts LDAP server which listen on port 10389.
 
+### Data directory
+
+save LDIFs to `$HOME/.ldapanda`
+
+
 ## Components
 
 * Scala 2.12.1
