@@ -151,8 +151,8 @@ public class LdapandaDirectoryServiceFactory implements DirectoryServiceFactory 
         directoryService.addPartition(dataPartition);
 
         directoryService.setAccessControlEnabled(true);
-        directoryService.setAllowAnonymousAccess(false);
-        directoryService.setPasswordHidden(true);
+        directoryService.setAllowAnonymousAccess(true);
+        //directoryService.setPasswordHidden(true);
 
         directoryService.startup();
 

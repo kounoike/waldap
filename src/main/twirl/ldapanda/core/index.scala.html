@@ -4,7 +4,7 @@
   <h3>Users:</h3>
   @usersCursor.asScala.map{ user =>
     <div>
-        @user.get("uid")/@user.get("sn") @user.get("cn")
+        @user.get("uid")/@user.get("sn") @user.get("cn")/@user.get("displayName")/@user.get("mail")
     </div>
   }
 
@@ -19,8 +19,14 @@
     sn: <input type="text" name="sn">
     <span class="error" id="error-sn"></span>
     <br/>
-    cn: <input type="text" type="text" name="cn">
+    cn: <input type="text" name="cn">
     <span class="error" id="error-cn"></span>
+    <br/>
+    displayName: <input type="text" name="displayName">
+    <span class="error" id="error-displayName"></span>
+    <br/>
+    mail: <input type="text" name="mail">
+    <span class="error" id="error-mail"></span>
     <br/>
     <input type="submit" value="Click"/>
   </form>
