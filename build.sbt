@@ -21,7 +21,6 @@ libraryDependencies ++= Seq(
   "org.json4s"          %% "json4s-jackson"    % "3.5.0",
   "io.github.gitbucket" %% "scalatra-forms"    % "1.1.0",
   "org.apache.directory.server" % "apacheds-all" % "2.0.0-M24",
-  "com.unboundid" % "unboundid-ldapsdk" % "4.0.0",
   "commons-io" % "commons-io" % "2.5",
   "commons-codec" % "commons-codec" % "1.10",
   "org.webjars" % "webjars-locator" % "0.32-1",
