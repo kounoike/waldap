@@ -1,0 +1,62 @@
+version: 3
+
+dn: cn=microsoft, ou=schema
+objectclass: metaSchema
+objectclass: top
+cn: microsoft
+
+dn: ou=attributetypes, cn=microsoft, ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: attributetypes
+
+dn: m-oid=1.2.840.113556.1.4.222, ou=attributetypes, cn=microsoft, ou=schema
+objectclass: metaAttributeType
+objectclass: metaTop
+objectclass: top
+m-oid: 1.2.840.113556.1.4.222
+m-name: memberOf
+m-equality: caseIgnoreMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.15
+m-singleValue: FALSE
+m-supattributetype: distinguishedName
+
+dn: ou=objectclasses, cn=microsoft, ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: objectClasses
+
+dn: m-oid=1.2.840.113556.1.5.6, ou=objectclasses, cn=microsoft, ou=schema
+objectclass: metaObjectClass
+objectclass: metaTop
+objectclass: top
+m-oid: 1.2.840.113556.1.5.6
+m-name: simulatedMicrosoftSecurityPrincipal
+m-supObjectClass: top
+m-typeObjectClass: AUXILIARY
+m-may: memberOf
+
+dn: o=ldapanda
+o: ldapanda
+objectClass: top
+objectClass: Organization
+administrativeRole: accessControlSpecificArea
+
+dn: ou=Users,o=ldapanda
+objectClass: organizationalUnit
+objectClass: top
+ou: Users
+
+dn: cn=jBossAuthorizationRequirementsACISubentry,o=ldapanda
+objectclass: top
+objectclass: subentry
+objectclass: accessControlSubentry
+cn:jBossAuthorizationRequirementsACISubentry
+prescriptiveACI: { identificationTag "AllUsersACI", precedence 10, authenticationLevel none, itemOrUserFirst userFirst: { userClasses { allUsers }, userPermissions { { protectedItems { attributeType { userPassword } }, grantsAndDenials { denyCompare, denyFilterMatch, denyRead } }, { protectedItems { entry, allUserAttributeTypes }, grantsAndDenials { grantFilterMatch, grantCompare, grantDiscloseOnError, grantReturnDN, grantBrowse, grantRead } } } } }
+prescriptiveACI: { identificationTag "Admin ACI", precedence 11, authenticationLevel simple, itemOrUserFirst userFirst: { userClasses { name { "uid=admin,ou=system" } }, userPermissions { { protectedItems { entry, allUserAttributeTypesAndValues }, grantsAndDenials { grantFilterMatch, grantRemove, grantCompare, grantDiscloseOnError, grantExport, grantReturnDN, grantRename, grantAdd, grantModify, grantImport, grantInvoke, grantBrowse, grantRead } } } } }
+subtreeSpecification: { }
+
+dn: ou=Gropus,o=ldapanda
+objectclass: top
+objectclass: organizationalUnit
+ou: Roles
