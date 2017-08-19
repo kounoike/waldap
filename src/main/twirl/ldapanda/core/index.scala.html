@@ -11,10 +11,10 @@
     <tbody>
       @usersCursor.asScala.map{ user =>
         <tr>
-          <td>@user.get("uid")</td>
-          <td>@user.get("sn") @user.get("cn")</td>
-          <td>@user.get("displayName")</td>
-          <td>@user.get("mail")</td>
+          <td>@user.get("uid").get</td>
+          <td>@user.get("sn").get @user.get("cn").get</td>
+          <td>@user.get("displayName").get</td>
+          <td>@user.get("mail").get</td>
         </tr>
       }
     </tbody>
@@ -67,6 +67,11 @@
           <span class="error" id="error-mail"></span>
           <div class="control">
             <input class="input" type="text" name="mail">
+          </div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <button class="button is-primary">Submit</button>
           </div>
         </div>
       </form>
