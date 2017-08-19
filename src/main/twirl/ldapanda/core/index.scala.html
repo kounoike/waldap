@@ -1,5 +1,13 @@
-@()
+@(usersCursor:java.lang.Iterable[org.apache.directory.api.ldap.model.entry.Entry])
+@import scala.collection.JavaConverters._
 @main {
+  <h3>Users:</h3>
+  @usersCursor.asScala.map{ user =>
+    <div>
+        @user.get("uid")/@user.get("sn") @user.get("cn")
+    </div>
+  }
+
   <h3>add user (test version)</h3>
   <form method="POST" action="/hello" validate="true">
     username: <input type="text" name="username">

@@ -12,7 +12,11 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.codec.binary.Base64
 import ldapanda.core.ldap.LdapandaLdapServer
 import org.apache.directory.api.ldap.model.entry.{AttributeUtils, DefaultEntry}
+import org.apache.directory.api.ldap.model.message.{AliasDerefMode, SearchScope}
+import org.apache.directory.api.ldap.model.name.Dn
+import org.apache.directory.api.ldap.model.filter.FilterParser
 
+import scala.collection.JavaConverters._
 
 class IndexController extends ControllerBase with JacksonJsonSupport with I18nSupport with ClientSideValidationFormSupport {
 
@@ -26,7 +30,21 @@ class IndexController extends ControllerBase with JacksonJsonSupport with I18nSu
   )(HelloForm.apply)
 
   get("/"){
-    html.index()
+    val adminSession = LdapandaLdapServer.directoryService.getAdminSession()
+    val dn = new Dn(LdapandaLdapServer.directoryService.getSchemaManager, "ou=Users,o=ldapanda")
+    val usersCursor = adminSession.search(dn, SearchScope.ONELEVEL,
+      FilterParser.parse("(objectClass=inetOrgPerson)"), AliasDerefMode.DEREF_ALWAYS,
+      "uid", "sn", "cn", "objectClass"
+    )
+    println(dn)
+    println(usersCursor, usersCursor.available())
+    adminSession.search(dn, SearchScope.ONELEVEL,
+      FilterParser.parse("(objectClass=inetOrgPerson)"), AliasDerefMode.DEREF_ALWAYS,
+      "uid", "sn", "cn", "objectClass"
+    ).asScala.map{ user =>
+      println(user.get("uid"), user.get("sn"), user.get("cn"))
+    }
+    html.index(usersCursor)
   }
 
   post("/hello", form){ form =>
@@ -49,7 +67,7 @@ class IndexController extends ControllerBase with JacksonJsonSupport with I18nSu
       }
     }
 
-    html.hello(form.username, form.sn, form.cn)
+    redirect("/")
   }
 
 }
