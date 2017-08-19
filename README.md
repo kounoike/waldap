@@ -1,19 +1,7 @@
-scalatra-twirl.g8
+LDAP And A / Ldap-Panda - easy LDAP for WebApps.
 =================
 
-giter8 template for web applications based on Scalatra with Twirl template
-
-## Usage
-
-You can create and run a project as following:
-
-```
-$ sbt new takezoe/scalatra-twirl.g8
-$ cd <name-of-app>
-$ sbt ~jetty:start
-```
-
-Then open http://localhost:8080/ in your browser.
+This repository is experimental version!
 
 ## Components
 
@@ -21,3 +9,4 @@ Then open http://localhost:8080/ in your browser.
 * scalatra 2.5.0
 * twirl 1.3.0
 * scalatra-forms 1.1.0
+* Apache DS 1.0.0M24
