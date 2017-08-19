@@ -1,33 +1,75 @@
 @(usersCursor:java.lang.Iterable[org.apache.directory.api.ldap.model.entry.Entry])
 @import scala.collection.JavaConverters._
 @main {
-  <h3>Users:</h3>
-  @usersCursor.asScala.map{ user =>
-    <div>
-        @user.get("uid")/@user.get("sn") @user.get("cn")/@user.get("displayName")/@user.get("mail")
-    </div>
-  }
+  <h3 class="title is-3">Users</h3>
+  <table class="table is-striped">
+    <thead>
+      <tr>
+        <th>uid</th><th>sn cn</th><th>displayName</th><th>mail</th>
+      </tr>
+    </thead>
+    <tbody>
+      @usersCursor.asScala.map{ user =>
+        <tr>
+          <td>@user.get("uid")</td>
+          <td>@user.get("sn") @user.get("cn")</td>
+          <td>@user.get("displayName")</td>
+          <td>@user.get("mail")</td>
+        </tr>
+      }
+    </tbody>
+  </table>
 
-  <h3>add user (test version)</h3>
-  <form method="POST" action="/hello" validate="true">
-    username: <input type="text" name="username">
-    <span class="error" id="error-username"></span>
-    <br/>
-    password: <input type="password" name="password">
-    <span class="error" id="error-password"></span>
-    <br/>
-    sn: <input type="text" name="sn">
-    <span class="error" id="error-sn"></span>
-    <br/>
-    cn: <input type="text" name="cn">
-    <span class="error" id="error-cn"></span>
-    <br/>
-    displayName: <input type="text" name="displayName">
-    <span class="error" id="error-displayName"></span>
-    <br/>
-    mail: <input type="text" name="mail">
-    <span class="error" id="error-mail"></span>
-    <br/>
-    <input type="submit" value="Click"/>
-  </form>
+  <h3 class="title is-3">add user (test version)</h3>
+  <div class="columns">
+    <div class="column is-half">
+      <form method="POST" action="/hello" validate="true">
+        <div class="field">
+          <label class="label">username</label>
+          <span class="error" id="error-username"></span>
+          <div class="control has-icons-left">
+            <input class="input" type="text" name="username">
+            <span class="icon is-small is-left">
+              <i class="fa fa-user"></i>
+            </span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">password</label>
+          <span class="error" id="error-password"></span>
+          <div class="control">
+            <input class="input" type="password" name="password">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">sn</label>
+          <span class="error" id="error-sn"></span>
+          <div class="control">
+            <input class="input" type="text" name="sn">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">cn</label>
+          <span class="error" id="error-cn"></span>
+          <div class="control">
+            <input class="input" type="text" name="cn">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">displayName</label>
+          <span class="error" id="error-displayName"></span>
+          <div class="control">
+            <input class="input" type="text" name="displayName">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">mail</label>
+          <span class="error" id="error-mail"></span>
+          <div class="control">
+            <input class="input" type="text" name="mail">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 }

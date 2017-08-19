@@ -8,7 +8,7 @@ name := "ldapanda"
 
 version := "0.0.1-SNAPSHOT"
 
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.3"
 
 scalacOptions := Seq("-deprecation", "-language:postfixOps")
 
@@ -24,7 +24,8 @@ libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "2.5",
   "commons-codec" % "commons-codec" % "1.10",
   "org.webjars" % "webjars-locator" % "0.32-1",
-  "org.webjars" % "bootstrap" % "3.3.7-1",
+  "org.webjars.npm" % "bulma" % "0.5.1",
+  "org.webjars" % "font-awesome" % "4.7.0",
   "org.webjars" % "jquery" % "1.11.1"
 )
 
@@ -36,7 +37,7 @@ packageOptions += Package.MainClass("JettyLauncher")
 
 //ScalatraPlugin.scalatraWithJRebel
 
-enablePlugins(SbtTwirl, JettyPlugin)
+enablePlugins(SbtTwirl, JettyPlugin, SbtWeb)
 
 containerPort := 10080
 
@@ -51,3 +52,12 @@ val myDistSettings = DistPlugin.distSettings ++ Seq(
 artifactName := { (v: ScalaVersion, m: ModuleID, a: Artifact) =>
   a.name + "." + a.extension
 }
+
+import org.irundaia.sbt.sass._
+
+SassKeys.assetRootURL := "/main/assets"
+SassKeys.cssStyle := Maxified
+
+import com.typesafe.sbt.web.Import.WebKeys.webTarget
+//webTarget = target.value / "web"
+resourceManaged in SassKeys.sassify in Assets := target.value / "webapp" /  "assets" / "sass"

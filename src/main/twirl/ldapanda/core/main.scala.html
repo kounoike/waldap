@@ -1,14 +1,55 @@
 @(body: Html)
+@import ldapanda.core.view.helpers
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
+  <link rel="stylesheet" href="/assets/sass/stylesheets/main.css">
+  <link rel="stylesheet" href="@helpers.webjars("font-awesome", "css/font-awesome.min.css")">
   <script src="/assets/js/jquery-2.0.3.min.js"></script>
   <script src="/assets/js/validation.js"></script>
   <title>Hello Scalatra!</title>
 </head>
 <body>
-  <h1>Hello Scalatra!</h1>
-  @body
+  <header class="nav">
+    <div class="nav-left">
+      <span class="nav-item">
+        <span>LDAPなんとか</span>
+      </span>
+    </div>
+    <div class="nav-right">
+      <div class="nav-item">
+        <a href="#" class="fa fa-user">Sign in</a>
+      </div>
+    </div>
+  </header>
+    <div class="hero is-info is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">LdaPandA</h1>
+          <h2 class="subtitle">Easily manageable LDAP Solution for WebApps</h2>
+        </div>
+      </div>
+    </div>
+  <main class="columns">
+    <div class="column is-one-quarter">
+    </div>
+    <div class="column">
+      <h1 class="title is-1">Hello Scalatra!</h1>
+      @body
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="container">
+      <p>
+        LdapAndA - LDAP &amp; A or LDAP-Panda? Easily manageable LDAP Solution for WebApps.
+        <span>
+        <a class="icon" href="https://github.com/kounoike/ldap-and-web-test">
+          <i class="fa fa-github"></i>
+        </a>
+      </span>
+      </p>
+    </div>
+  </footer>
 </body>
 </html>
