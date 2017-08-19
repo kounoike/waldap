@@ -104,15 +104,6 @@ public class LdapandaDirectoryServiceFactory implements DirectoryServiceFactory 
         // instance layout
         InstanceLayout instanceLayout = new InstanceLayout(Directory.IncetanceHome());
 
-        // remove instance dir if exists.
-        if (instanceLayout.getInstanceDirectory().exists()) {
-            try {
-                FileUtils.deleteDirectory(instanceLayout.getInstanceDirectory());
-            } catch (IOException e) {
-                LOG.warn("couldn't delete the instance directory before initializing the DirectoryService", e);
-            }
-        }
-
         directoryService.setInstanceLayout(instanceLayout);
 
         // EhCache in disabled-like-mode
@@ -166,11 +157,12 @@ public class LdapandaDirectoryServiceFactory implements DirectoryServiceFactory 
         directoryService.startup();
 
         CoreSession session = directoryService.getAdminSession();
-        LdifReader reader = new LdifReader(getClass().getResourceAsStream("/base.ldif"));
-        for (LdifEntry entry: reader) {
-            session.add(new DefaultEntry(directoryService.getSchemaManager(), entry.getEntry()));
+        if (!session.exists("o=ldapanda")){
+            LdifReader reader = new LdifReader(getClass().getResourceAsStream("/base.ldif"));
+            for (LdifEntry entry: reader) {
+                session.add(new DefaultEntry(directoryService.getSchemaManager(), entry.getEntry()));
+            }
         }
-
     }
 
     /**
