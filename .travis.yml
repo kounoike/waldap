@@ -1,0 +1,12 @@
+language: scala
+sudo: false
+dist: trusty
+jdk: oraclejdk8
+script:
+  - sbt test
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot
+    - $HOME/.sbt/launchers
+    - $HOME/.coursier
