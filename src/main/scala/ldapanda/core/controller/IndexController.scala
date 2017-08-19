@@ -10,7 +10,7 @@ import org.json4s.DefaultFormats
 import ldapanda.core.html
 import org.apache.commons.io.FileUtils
 import org.apache.commons.codec.binary.Base64
-import ldapanda.core.ldap.LdapandaLdapServer
+import ldapanda.core.ldap.{LDAPUtil, LdapandaLdapServer}
 import org.apache.directory.api.ldap.model.entry.{AttributeUtils, DefaultEntry}
 import org.apache.directory.api.ldap.model.message.{AliasDerefMode, SearchScope}
 import org.apache.directory.api.ldap.model.name.Dn
@@ -20,13 +20,15 @@ import scala.collection.JavaConverters._
 
 class IndexController extends ControllerBase with JacksonJsonSupport with I18nSupport with ClientSideValidationFormSupport {
 
-  case class HelloForm(username: String, password: String, sn: String, cn: String)
+  case class HelloForm(username: String, password: String, sn: String, cn: String, displayName: String, mail: String)
 
   val form = mapping(
     "username" -> text(required, maxlength(40)),
     "password" -> text(required, maxlength(40)),
     "sn" -> text(required, maxlength(40)),
-    "cn" -> text(required, maxlength(40))
+    "cn" -> text(required, maxlength(40)),
+    "displayName" -> text(required, maxlength(40)),
+    "mail" -> text(required, maxlength(40))
   )(HelloForm.apply)
 
   get("/"){
@@ -34,16 +36,8 @@ class IndexController extends ControllerBase with JacksonJsonSupport with I18nSu
     val dn = new Dn(LdapandaLdapServer.directoryService.getSchemaManager, "ou=Users,o=ldapanda")
     val usersCursor = adminSession.search(dn, SearchScope.ONELEVEL,
       FilterParser.parse("(objectClass=inetOrgPerson)"), AliasDerefMode.DEREF_ALWAYS,
-      "uid", "sn", "cn", "objectClass"
+      "uid", "sn", "cn", "displayName", "mail", "objectClass"
     )
-    println(dn)
-    println(usersCursor, usersCursor.available())
-    adminSession.search(dn, SearchScope.ONELEVEL,
-      FilterParser.parse("(objectClass=inetOrgPerson)"), AliasDerefMode.DEREF_ALWAYS,
-      "uid", "sn", "cn", "objectClass"
-    ).asScala.map{ user =>
-      println(user.get("uid"), user.get("sn"), user.get("cn"))
-    }
     html.index(usersCursor)
   }
 
@@ -58,9 +52,11 @@ class IndexController extends ControllerBase with JacksonJsonSupport with I18nSu
         s"cn: ${form.cn}",
         s"sn: ${form.sn}",
         s"uid: ${form.username}",
-        s"userPassword: ${form.password}"
+        s"mail: ${form.mail}",
+        s"userPassword: ${LDAPUtil.encodePassword(form.password)}"
       )) match {
         case Some(entry) =>
+          entry.add("displayName", form.displayName)
           adminSession.add(entry)
         case None =>
           println("DefaultEntry null!")
