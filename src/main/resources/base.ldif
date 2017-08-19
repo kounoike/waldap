@@ -52,8 +52,9 @@ objectclass: top
 objectclass: subentry
 objectclass: accessControlSubentry
 cn:jBossAuthorizationRequirementsACISubentry
-prescriptiveACI: { identificationTag "AllUsersACI", precedence 10, authenticationLevel none, itemOrUserFirst userFirst: { userClasses { allUsers }, userPermissions { { protectedItems { attributeType { userPassword } }, grantsAndDenials { denyCompare, denyFilterMatch, denyRead } }, { protectedItems { entry, allUserAttributeTypes }, grantsAndDenials { grantFilterMatch, grantCompare, grantDiscloseOnError, grantReturnDN, grantBrowse, grantRead } } } } }
-prescriptiveACI: { identificationTag "Admin ACI", precedence 11, authenticationLevel simple, itemOrUserFirst userFirst: { userClasses { name { "uid=admin,ou=system" } }, userPermissions { { protectedItems { entry, allUserAttributeTypesAndValues }, grantsAndDenials { grantFilterMatch, grantRemove, grantCompare, grantDiscloseOnError, grantExport, grantReturnDN, grantRename, grantAdd, grantModify, grantImport, grantInvoke, grantBrowse, grantRead } } } } }
+prescriptiveACI: { identificationTag "AllUsersACI", precedence 10, authenticationLevel none, itemOrUserFirst userFirst: { userClasses { allUsers }, userPermissions { { protectedItems { attributeType { userPassword } }, grantsAndDenials { denyCompare, denyFilterMatch, denyRead } }, { protectedItems { entry, allUserAttributeTypesAndValues }, grantsAndDenials { grantFilterMatch, grantCompare, grantDiscloseOnError, grantReturnDN, grantBrowse, grantRead } } } } }
+prescriptiveACI: { identificationTag "UserPassword can read by self", precedence 11, authenticationLevel simple, itemOrUserFirst userFirst: { userClasses { thisEntry }, userPermissions { { protectedItems { attributeType { userPassword } }, grantsAndDenials { grantBrowse, grantRead } } } } }
+prescriptiveACI: { identificationTag "Admin ACI", precedence 12, authenticationLevel simple, itemOrUserFirst userFirst: { userClasses { name { "uid=admin,ou=system" } }, userPermissions { { protectedItems { entry, allUserAttributeTypesAndValues }, grantsAndDenials { grantFilterMatch, grantRemove, grantCompare, grantDiscloseOnError, grantExport, grantReturnDN, grantRename, grantAdd, grantModify, grantImport, grantInvoke, grantBrowse, grantRead } } } } }
 subtreeSpecification: { }
 
 dn: ou=Gropus,o=ldapanda
