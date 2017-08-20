@@ -1,0 +1,80 @@
+@(usersCursor:java.lang.Iterable[org.apache.directory.api.ldap.model.entry.Entry])(implicit context: ldapanda.core.controller.Context)
+@import scala.collection.JavaConverters._
+@main("Welcome to LdapAndA") {
+  <h3 class="title is-3">Users</h3>
+  <table class="table is-striped">
+    <thead>
+      <tr>
+        <th>uid</th><th>sn cn</th><th>displayName</th><th>mail</th>
+      </tr>
+    </thead>
+    <tbody>
+      @usersCursor.asScala.map{ user =>
+        <tr>
+          <td>@user.get("uid").get</td>
+          <td>@user.get("sn").get @user.get("cn").get</td>
+          <td>@user.get("displayName").get</td>
+          <td>@user.get("mail").get</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <h3 class="title is-3">add user (test version)</h3>
+  <div class="columns">
+    <div class="column is-half">
+      <form method="POST" action="/hello" validate="true">
+        <div class="field">
+          <label class="label">username</label>
+          <span class="error" id="error-username"></span>
+          <div class="control has-icons-left">
+            <input class="input" type="text" name="username">
+            <span class="icon is-small is-left">
+              <i class="fa fa-user"></i>
+            </span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">password</label>
+          <span class="error" id="error-password"></span>
+          <div class="control">
+            <input class="input" type="password" name="password">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">sn</label>
+          <span class="error" id="error-sn"></span>
+          <div class="control">
+            <input class="input" type="text" name="sn">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">cn</label>
+          <span class="error" id="error-cn"></span>
+          <div class="control">
+            <input class="input" type="text" name="cn">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">displayName</label>
+          <span class="error" id="error-displayName"></span>
+          <div class="control">
+            <input class="input" type="text" name="displayName">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">mail</label>
+          <span class="error" id="error-mail"></span>
+          <div class="control">
+            <input class="input" type="text" name="mail">
+          </div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <button class="button is-primary">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+}

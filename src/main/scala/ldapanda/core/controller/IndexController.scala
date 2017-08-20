@@ -32,13 +32,7 @@ class IndexController extends ControllerBase with JacksonJsonSupport with I18nSu
   )(HelloForm.apply)
 
   get("/"){
-    val adminSession = LdapandaLdapServer.directoryService.getAdminSession()
-    val dn = new Dn(LdapandaLdapServer.directoryService.getSchemaManager, "ou=Users,o=ldapanda")
-    val usersCursor = adminSession.search(dn, SearchScope.ONELEVEL,
-      FilterParser.parse("(objectClass=inetOrgPerson)"), AliasDerefMode.DEREF_ALWAYS,
-      "uid", "sn", "cn", "displayName", "mail", "objectClass"
-    )
-    html.index(usersCursor)
+    html.index("LdapAndA")
   }
 
   post("/hello", form){ form =>
@@ -63,6 +57,11 @@ class IndexController extends ControllerBase with JacksonJsonSupport with I18nSu
       }
     }
 
+    redirect("/")
+  }
+
+  get("/signout"){
+    session.invalidate
     redirect("/")
   }
 

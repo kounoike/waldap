@@ -1,23 +1,37 @@
 @(
-  userName: Option[Any] = None,
-  password: Option[Any] = None,
-  error: Option[Any] = None)
-)
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div class="content-wrapper main-center">
-    <div class="content body">
-        <div class="signin-form">
-            @*
-            gitbucket.core.html.signinform(context.settings, userName, password)
-            *@
+userName: Option[Any] = None,
+password: Option[Any] = None,
+error: Option[Any] = None)(implicit context: ldapanda.core.controller.Context)
+@ldapanda.core.html.main("Sign in"){
+}{
+  <section class="hero is-fullheight is-light is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-vcentered">
+          <div class="column is-4 is-offset-4">
+            <h2 class="title is-2">for administrator</h2>
+            <form action="@context.path/admin/signin" method="POST">
+              <div class="field">
+                <label class="label">Name</label><span class="error" id="error-username"></span>
+                <div class="control">
+                  <input class="input" type="text" name="username" placeholder="username">
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Password</label><span class="error" id="error-password"></span>
+                <div class="control">
+                  <input class="input" type="password" name="password" placeholder="your password">
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <button class="button is-primary">Sign in</button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-</body>
-</html>
+  </section>
+}

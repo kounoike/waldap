@@ -1,4 +1,4 @@
-@(body: Html)
+@(title: String)(nav: Html)(body: Html)(implicit context: ldapanda.core.controller.Context)
 @import ldapanda.core.view.helpers
 <!DOCTYPE html>
 <html>
@@ -6,35 +6,42 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="/assets/sass/stylesheets/main.css">
   <link rel="stylesheet" href="@helpers.webjars("font-awesome", "css/font-awesome.min.css")">
-  <script src="/assets/js/jquery-2.0.3.min.js"></script>
+  <script src="/assets/vendor/jquery-2.0.3/js/jquery-2.0.3.min.js"></script>
   <script src="/assets/js/validation.js"></script>
-  <title>LdapAndA</title>
+  <title>@{title}</title>
 </head>
 <body>
-  <header class="nav">
-    <div class="nav-left">
-      <span class="nav-item">
-        <span class="icon"><i class="fa fa-address-book-o"></i></span>
-        <span>LdapAndA</span>
-      </span>
-    </div>
-    <div class="nav-right">
-      <div class="nav-item">
-        <a href="#" class="fa fa-user">Sign in</a>
-      </div>
-    </div>
-  </header>
     <div class="hero is-primary is-bold">
+      <div class="hero-head">
+        <header class="nav">
+          <div class="container">
+            <div class="navbar-brand">
+            <span class="nav-item">
+              <span class="icon"><i class="fa fa-address-book-o"></i></span>
+              <span>LdapAndA</span>
+            </span>
+            </div>
+            @nav
+            <div class="nav-right">
+              <div class="nav-item">
+                @context.loginAccount.map{ user =>
+                  <a href="#" class="fa fa-user">@user.userName</a>
+                }
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
       <div class="hero-body">
         <div class="container">
           <h1 class="title">LdaPandA</h1>
           <h2 class="subtitle">Easily manageable LDAP Solution for WebApps</h2>
         </div>
       </div>
+      <div class="hero-foot">
+      </div>
     </div>
   <main class="columns">
-    <div class="column is-one-quarter">
-    </div>
     <div class="column">
       @body
     </div>

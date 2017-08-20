@@ -4,9 +4,13 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.{FilterChain, ServletRequest, ServletResponse}
 
 import io.github.gitbucket.scalatra.forms.ClientSideValidationFormSupport
-import ldapanda.core.util.Keys
+import ldapanda.core.ldap.LdapandaLdapServer
+import ldapanda.core.model.Account
+import ldapanda.core.util.{Keys, StringUtil}
+import ldapanda.core.util.Implicits._
 import ldapanda.core.util.SyntaxSugars._
 import ldapanda.core.service.SystemSettingsService
+import org.apache.directory.server.core.api.CoreSession
 import org.scalatra.{FlashMap, FlashMapSupport, ScalatraFilter}
 import org.scalatra.i18n.I18nSupport
 import org.scalatra.json.JacksonJsonSupport
@@ -15,33 +19,56 @@ import org.scalatra.json.JacksonJsonSupport
 abstract class ControllerBase extends ScalatraFilter
   with ClientSideValidationFormSupport with JacksonJsonSupport with I18nSupport with FlashMapSupport
   with SystemSettingsService{
+
   override def doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain): Unit = try{
     super.doFilter(request, response, chain)
   } finally {
     contextCache.remove()
   }
   implicit val jsonFormats = ldapanda.core.util.JsonFormat.jsonFormats
-  private val contextCache = new java.lang.ThreadLocal[Context]()
 
-  /**
-    * Returns the context object for the request.
-    */
+  protected def UnauthorizedAdmin()(implicit context: Context) =
+    if(request.hasAttribute(Keys.Request.Ajax)){
+      org.scalatra.Unauthorized()
+    } else {
+      if(context.loginAccount.isDefined){
+        org.scalatra.Unauthorized(redirect("/"))
+      } else {
+        if(request.getMethod.toUpperCase == "POST"){
+          org.scalatra.Unauthorized(redirect("/admin/signin"))
+        } else {
+          org.scalatra.Unauthorized(redirect("/admin/signin?redirect=" + StringUtil.urlEncode(
+            defining(request.getQueryString){ queryString =>
+              request.getRequestURI.substring(request.getContextPath.length) + (if(queryString != null) "?" + queryString else "")
+            }
+          )))
+        }
+      }
+    }
+
+  private val contextCache = new java.lang.ThreadLocal[Context]()
   implicit def context: Context = {
     contextCache.get match {
       case null => {
-        val context = Context(loadSystemSettings(), request)
+        val context = Context(loadSystemSettings(), LoginAccount, request)
         contextCache.set(context)
         context
       }
       case context => context
     }
-  }}
+  }
 
-case class Context(settings: SystemSettingsService.SystemSettings, request: HttpServletRequest){
+  implicit def ldapSession: CoreSession = context.ldapSession
+
+  private def LoginAccount: Option[Account] = request.getAs[Account](Keys.Session.LoginAccount).orElse(session.getAs[Account](Keys.Session.LoginAccount))
+}
+
+case class Context(settings: SystemSettingsService.SystemSettings, loginAccount: Option[Account], request: HttpServletRequest){
   val path = settings.baseUrl.getOrElse(request.getContextPath)
-  val currentPath = request.getRequestURI.substring((request.getContextPath.length))
+  val currentPath = request.getRequestURI.substring(request.getContextPath.length)
   val baseUrl = settings.baseUrl(request)
   val host = new java.net.URL(baseUrl).getHost
+  val ldapSession = LdapandaLdapServer.directoryService.getAdminSession
 
   /**
     * Get object from cache.
