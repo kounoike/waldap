@@ -8,10 +8,15 @@
       <span>Add</span>
     </a>
   </h3>
-  <table class="table is-striped tablesorter">
+  <table class="tablesorter">
     <thead>
     <tr>
-      <th>uid</th><th>sn</th><th>cn</th><th>displayName</th><th>mail</th><th class="control"></th>
+      <th>@context.messages.get("ldapuser.uid")</th>
+      <th>@context.messages.get("ldapuser.sn")</th>
+      <th>@context.messages.get("ldapuser.cn")</th>
+      <th>@context.messages.get("ldapuser.displayName")</th>
+      <th>@context.messages.get("ldapuser.mail")</th>
+      <th class="control"></th>
     </tr>
     </thead>
     <tbody>
@@ -26,8 +31,14 @@
         <a href="" class="button is-success is-small">
           <span class="icon is-small"><i class="fa fa-pencil"></i></span>
         </a>
+        <button class="button is-light is-small" data-username="@user.get("uid").get" data-userdn="@user.getDn()">
+        <span class="icon is-small"><i class="fa fa-key"></i></span>
+        </button>
+        <button class="button is-warning is-small" data-username="@user.get("uid").get" data-userdn="@user.getDn()">
+        <span class="icon is-small"><i class="fa fa-lock"></i></span>
+        </button>
         <button class="button is-danger is-small user-delete" data-username="@user.get("uid").get" data-userdn="@user.getDn()">
-          <span class="icon is-small"><i class="fa fa-times"></i></span>
+        <span class="icon is-small"><i class="fa fa-times"></i></span>
         </button>
       </td>
     </tr>
@@ -38,6 +49,9 @@
 <script>
 $(function(){
   $(".tablesorter").tablesorter({
+    theme: "green",
+    sortList: [[0, 0]],
+    widgets: ["zebra"],
     headers: {
       '.control': {
         sorter: false

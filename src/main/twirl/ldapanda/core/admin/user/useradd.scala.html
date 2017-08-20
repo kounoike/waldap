@@ -6,7 +6,7 @@
   <div class="column is-half">
     <form method="POST" action="@context.path/admin/users/add" validate="true">
       <div class="field">
-        <label class="label">@context.messages.get("ldapuser.username")</label>
+        <label class="label">@context.messages.get("ldapuser.uid")</label>
         <span class="error" id="error-username"></span>
         <div class="control has-icons-left">
           <input class="input" type="text" name="username">
