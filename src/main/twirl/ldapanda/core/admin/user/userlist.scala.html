@@ -8,17 +8,18 @@
       <span>Add</span>
     </a>
   </h3>
-  <table class="table is-striped">
+  <table class="table is-striped tablesorter">
     <thead>
     <tr>
-      <th>uid</th><th>sn cn</th><th>displayName</th><th>mail</th><th></th>
+      <th>uid</th><th>sn</th><th>cn</th><th>displayName</th><th>mail</th><th class="control"></th>
     </tr>
     </thead>
     <tbody>
     @usersCursor.asScala.map{ user =>
     <tr>
       <td>@user.get("uid").get</td>
-      <td>@user.get("sn").get @user.get("cn").get</td>
+      <td>@user.get("sn").get</td>
+      <td>@user.get("cn").get</td>
       <td>@user.get("displayName").get</td>
       <td>@user.get("mail").get</td>
       <td>
@@ -36,6 +37,13 @@
 </div>
 <script>
 $(function(){
+  $(".tablesorter").tablesorter({
+    headers: {
+      '.control': {
+        sorter: false
+      }
+    }
+  });
   $(".user-delete").on('click', function() {
     var user = $(this).data("username");
     $.confirm({
