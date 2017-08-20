@@ -12,7 +12,7 @@ import ldapanda.core.util.SyntaxSugars._
 import ldapanda.core.service.SystemSettingsService
 import org.apache.directory.server.core.api.CoreSession
 import org.scalatra.{FlashMap, FlashMapSupport, ScalatraFilter}
-import org.scalatra.i18n.I18nSupport
+import org.scalatra.i18n.{I18nSupport, Messages}
 import org.scalatra.json.JacksonJsonSupport
 
 
@@ -46,11 +46,19 @@ abstract class ControllerBase extends ScalatraFilter
       }
     }
 
+  protected def NotFound() =
+    if(request.hasAttribute(Keys.Request.Ajax)){
+      org.scalatra.NotFound()
+    } else {
+      org.scalatra.NotFound(ldapanda.core.html.error("Not Found"))
+    }
+
+
   private val contextCache = new java.lang.ThreadLocal[Context]()
   implicit def context: Context = {
     contextCache.get match {
       case null => {
-        val context = Context(loadSystemSettings(), LoginAccount, request)
+        val context = Context(loadSystemSettings(), LoginAccount, request, messages)
         contextCache.set(context)
         context
       }
@@ -63,7 +71,7 @@ abstract class ControllerBase extends ScalatraFilter
   private def LoginAccount: Option[Account] = request.getAs[Account](Keys.Session.LoginAccount).orElse(session.getAs[Account](Keys.Session.LoginAccount))
 }
 
-case class Context(settings: SystemSettingsService.SystemSettings, loginAccount: Option[Account], request: HttpServletRequest){
+case class Context(settings: SystemSettingsService.SystemSettings, loginAccount: Option[Account], request: HttpServletRequest, messages: Messages){
   val path = settings.baseUrl.getOrElse(request.getContextPath)
   val currentPath = request.getRequestURI.substring(request.getContextPath.length)
   val baseUrl = settings.baseUrl(request)

@@ -6,7 +6,9 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="/assets/sass/stylesheets/main.css">
   <link rel="stylesheet" href="@helpers.webjars("font-awesome", "css/font-awesome.min.css")">
-  <script src="/assets/vendor/jquery-2.0.3/js/jquery-2.0.3.min.js"></script>
+  <link rel="stylesheet" href="@helpers.webjars("github-com-craftpip-jquery-confirm", "jquery-confirm.min.css")">
+  <script src="@helpers.webjars("jquery", "jquery.min.js")"></script>
+  <script src="@helpers.webjars("github-com-craftpip-jquery-confirm", "jquery-confirm.js")"></script>
   <script src="/assets/js/validation.js"></script>
   <title>@{title}</title>
 </head>
@@ -16,10 +18,10 @@
         <header class="nav">
           <div class="container">
             <div class="navbar-brand">
-            <span class="nav-item">
-              <span class="icon"><i class="fa fa-address-book-o"></i></span>
-              <span>LdapAndA</span>
-            </span>
+              <span class="nav-item">
+                <span class="icon"><i class="fa fa-address-book-o"></i></span>
+                <span>LdapAndA</span>
+              </span>
             </div>
             @nav
             <div class="nav-right">

@@ -1,0 +1,12 @@
+.aside {
+  & .main {
+    padding: 40px;
+  }
+  & .icon {
+    padding-right: 30px
+  }
+}
+
+.box-main {
+  margin-top: 5px;
+}

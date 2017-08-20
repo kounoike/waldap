@@ -1,6 +1,14 @@
-@(title: String)(body: Html)(implicit context: ldapanda.core.controller.Context)
+@(title: String, activeMenu: Option[String])(body: Html)(implicit context: ldapanda.core.controller.Context)
 @ldapanda.core.html.main(title){
   <div class="nav-item">admin</div>
 }{
-  @body
+<div class="columns">
+  <div class="column is-2">
+    @activeMenu.map{ active =>
+      @ldapanda.core.admin.html.menu(active)
+    }
+  </div>
+  <div class="column is-10">
+    @body
+  </div>
 }

@@ -1,0 +1,62 @@
+@(usersCursor:java.lang.Iterable[org.apache.directory.api.ldap.model.entry.Entry])(implicit context: ldapanda.core.controller.Context)
+@import scala.collection.JavaConverters._
+@ldapanda.core.admin.html.main("User List", Some("users")) {
+<div class="box box-main">
+  <h3 class="title is-3">Users
+    <a class="button is-primary" href="@context.path/admin/users/add">
+      <span class="icon"><i class="fa fa-plus-square"></i></span>
+      <span>Add</span>
+    </a>
+  </h3>
+  <table class="table is-striped">
+    <thead>
+    <tr>
+      <th>uid</th><th>sn cn</th><th>displayName</th><th>mail</th><th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @usersCursor.asScala.map{ user =>
+    <tr>
+      <td>@user.get("uid").get</td>
+      <td>@user.get("sn").get @user.get("cn").get</td>
+      <td>@user.get("displayName").get</td>
+      <td>@user.get("mail").get</td>
+      <td>
+        <a href="" class="button is-success is-small">
+          <span class="icon is-small"><i class="fa fa-pencil"></i></span>
+        </a>
+        <button class="button is-danger is-small user-delete" data-username="@user.get("uid").get" data-userdn="@user.getDn()">
+          <span class="icon is-small"><i class="fa fa-times"></i></span>
+        </button>
+      </td>
+    </tr>
+    }
+    </tbody>
+  </table>
+</div>
+<script>
+$(function(){
+  $(".user-delete").on('click', function() {
+    var user = $(this).data("username");
+    $.confirm({
+      title: "confirm",
+      content: "Really delete this user? " + $(this).data("username"),
+      type: "red",
+      boxWidth: "30%",
+      useBootstrap: false,
+      buttons: {
+        confirm: {
+          btnClass: "btn-red",
+          text: "Delete",
+          action: function() {
+            window.location.href = "@context.path/admin/users/" + user + "/delete";
+          }
+        },
+        cancel: function() {
+        }
+      }
+    });
+  });
+});
+</script>
+}

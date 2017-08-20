@@ -20,44 +20,8 @@ import scala.collection.JavaConverters._
 
 class IndexController extends ControllerBase with JacksonJsonSupport with I18nSupport with ClientSideValidationFormSupport {
 
-  case class HelloForm(username: String, password: String, sn: String, cn: String, displayName: String, mail: String)
-
-  val form = mapping(
-    "username" -> text(required, maxlength(40)),
-    "password" -> text(required, maxlength(40)),
-    "sn" -> text(required, maxlength(40)),
-    "cn" -> text(required, maxlength(40)),
-    "displayName" -> text(required, maxlength(40)),
-    "mail" -> text(required, maxlength(40))
-  )(HelloForm.apply)
-
   get("/"){
     html.index("LdapAndA")
-  }
-
-  post("/hello", form){ form =>
-    val dn = s"uid=${form.username},ou=Users,o=ldapanda"
-    val adminSession = LdapandaLdapServer.getAdminSession()
-    if(!adminSession.exists(dn)){
-      Option(new DefaultEntry(LdapandaLdapServer.directoryService.getSchemaManager, dn,
-        "objectClass: top",
-        "objectClass: person",
-        "objectClass: inetOrgPerson",
-        s"cn: ${form.cn}",
-        s"sn: ${form.sn}",
-        s"uid: ${form.username}",
-        s"mail: ${form.mail}",
-        s"userPassword: ${LDAPUtil.encodePassword(form.password)}"
-      )) match {
-        case Some(entry) =>
-          entry.add("displayName", form.displayName)
-          adminSession.add(entry)
-        case None =>
-          println("DefaultEntry null!")
-      }
-    }
-
-    redirect("/")
   }
 
   get("/signout"){

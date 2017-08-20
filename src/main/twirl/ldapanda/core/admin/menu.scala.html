@@ -1,0 +1,9 @@
+@(activeMenu: String)(implicit context: ldapanda.core.controller.Context)
+<aside class="menu aside is-dark has-shadow hero is-fullheight is-hidden-mobile">
+  <div>
+    <div class="main">
+      <div class="title">Admin menu</div>
+      <a href="#" class="item@if(activeMenu=="users"){ is-active}"><span class="icon"><i class="fa fa-users"></i></span>@context.messages.get("menu.users")</a>
+    </div>
+  </div>
+</aside>
