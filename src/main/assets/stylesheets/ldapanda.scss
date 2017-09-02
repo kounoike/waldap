@@ -1,6 +1,10 @@
 .aside {
   & .main {
     padding: 40px;
+    & .item {
+      display: block;
+      padding: 10px 0;
+    }
   }
   & .icon {
     padding-right: 30px
