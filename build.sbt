@@ -30,7 +30,8 @@ libraryDependencies ++= Seq(
   "org.webjars" % "font-awesome" % "4.7.0",
   "org.webjars" % "jquery" % "3.2.1",
   "org.webjars.npm" % "github-com-craftpip-jquery-confirm" % "3.2.3",
-  "org.webjars" % "tablesorter" % "2.25.4"
+  "org.webjars" % "tablesorter" % "2.25.4",
+  "org.webjars.npm" % "mustache" % "2.3.0"
 )
 
 javacOptions in compile ++= Seq("-target", "8", "-source", "8")
