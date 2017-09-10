@@ -1,0 +1,250 @@
+@(groupsCursor:java.lang.Iterable[org.apache.directory.api.ldap.model.entry.Entry])(implicit context: waldap.core.controller.Context)
+@import scala.collection.JavaConverters._
+@waldap.core.admin.html.main("Group List", Some("groups")) {
+<div class="box box-main">
+  <button class="button is-primary is-pulled-right" id="add-button">
+    <span class="icon"><i class="fa fa-plus-square"></i></span>
+    <span>Add</span>
+  </button>
+  <div class="title is-3">Groups</div>
+  <div>
+    <table class="tablesorter">
+      <thead>
+      <tr>
+        <th>@context.messages.get("ldapgroup.cn")</th>
+        <th class="type">@context.messages.get("ldapgroup.grouptype")</th>
+        <th>@context.messages.get("ldapgroup.member")</th>
+        <th class="control"></th>
+      </tr>
+      </thead>
+      <tbody>
+      @groupsCursor.asScala.map{ group =>
+      <tr>
+        <td>@group.get("cn").get</td>
+        <td>@group.get("businesscategory").get</td>
+        <td>
+          @group.get("member").asScala.map{ member =>
+            @member.toString.substring(4, member.toString.indexOf(','))
+          }
+        </td>
+        <td>
+          <button class="button is-success is-small user-edit"
+                  data-groupname="@group.get("cn").get">
+
+          <span class="icon is-small"><i class="fa fa-pencil"></i></span>
+          </button>
+          <button class="button is-danger is-small user-delete" data-username="@group.get("cn").get">
+          <span class="icon is-small"><i class="fa fa-times"></i></span>
+          </button>
+        </td>
+      </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+</div>
+<script id="add-form-tmpl" type="text/html">
+  <form method="POST" action="@context.path/admin/users/add" validate="true">
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.uid")</label>
+      <span class="error" id="error-username"></span>
+      <div class="control has-icons-left">
+        <input class="input" type="text" name="username">
+        <span class="icon is-small is-left">
+          <i class="fa fa-user"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.password")</label>
+      <span class="error" id="error-password"></span>
+      <div class="control">
+        <input class="input" type="password" name="password">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.sn")</label>
+      <span class="error" id="error-sn"></span>
+      <div class="control">
+        <input class="input" type="text" name="sn">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.cn")</label>
+      <span class="error" id="error-cn"></span>
+      <div class="control">
+        <input class="input" type="text" name="cn">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.displayName")</label>
+      <span class="error" id="error-displayName"></span>
+      <div class="control">
+        <input class="input" type="text" name="displayName">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.mail")</label>
+      <span class="error" id="error-mail"></span>
+      <div class="control">
+        <input class="input" type="text" name="mail">
+      </div>
+    </div>
+  </form>
+</script>
+<script id="edit-form-tmpl" type="text/html">
+  <form method="POST" action="@context.path/admin/users/{{ uid }}/edit" validate="true">
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.sn")</label>
+      <span class="error" id="error-sn"></span>
+      <div class="control">
+        <input class="input" type="text" name="sn" value="{{ sn }}">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.cn")</label>
+      <span class="error" id="error-cn"></span>
+      <div class="control">
+        <input class="input" type="text" name="cn" value="{{ cn }}">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.displayName")</label>
+      <span class="error" id="error-displayName"></span>
+      <div class="control">
+        <input class="input" type="text" name="displayName" value="{{ displayName }}">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.mail")</label>
+      <span class="error" id="error-mail"></span>
+      <div class="control">
+        <input class="input" type="text" name="mail" value="{{ mail }}">
+      </div>
+    </div>
+  </form>
+</script>
+<script id="password-form-tmpl" type="text/html">
+  <form method="POST" action="@context.path/admin/users/{{ uid }}/password" validate="true">
+    <div class="field">
+      <label class="label">@context.messages.get("ldapuser.password")</label>
+      <span class="error" id="error-password"></span>
+      <div class="control">
+        <input class="input" type="password" name="password">
+      </div>
+    </div>
+  </form>
+</script>
+<script>
+$(function(){
+  $(".tablesorter").tablesorter({
+    theme: "green",
+    sortList: [[0, 0]],
+    widgets: ["zebra"],
+    headers: {
+      '.control': {
+        sorter: false
+      }
+    }
+  });
+  $("#add-button").on("click", function() {
+    $.confirm({
+      title: "Add user",
+      content: $("#add-form-tmpl").html(),
+      type: "green",
+      boxWidth: "40%",
+      useBootstrap: false,
+      buttons: {
+        formSubmit: {
+          text: 'Submit',
+          btnClass: 'btn-blue',
+          action: function(){
+            var form = this.$content.find('form');
+            form.submit();
+          }
+        },
+        cancel: function(){
+        }
+      }
+    });
+  });
+  $(".user-edit").on("click", function() {
+    var data = {
+      uid: $(this).data("username"),
+      sn: $(this).data("sn"),
+      cn: $(this).data("cn"),
+      displayName: $(this).data("display-name"),
+      mail: $(this).data("mail")
+    };
+    var tmpl = $("#edit-form-tmpl").html();
+    Mustache.parse(tmpl);
+    $.confirm({
+      title: "Edit user:" + data.uid,
+      content: Mustache.render(tmpl, data),
+      type: "green",
+      boxWidth: "40%",
+      useBootstrap: false,
+      buttons: {
+        formSubmit: {
+          text: 'Submit',
+          btnClass: 'btn-blue',
+          action: function(){
+            var form = this.$content.find('form');
+            form.submit();
+          }
+        },
+        cancel: function(){
+        }
+      }
+    });
+  });
+  $(".user-password").on("click", function() {
+    var data = {
+      uid: $(this).data("username")
+    };
+    var tmpl = $("#password-form-tmpl").html();
+    Mustache.parse(tmpl);
+    $.confirm({
+      title: "Change password for " + data.uid,
+      content: Mustache.render(tmpl, data),
+      type: "yellow",
+      boxWidth: "40%",
+      useBootstrap: false,
+      buttons: {
+        formSubmit: {
+          text: 'Submit',
+          btnClass: 'btn-blue',
+          action: function(){
+            var form = this.$content.find('form');
+            form.submit();
+          }
+        },
+        cancel: function(){
+        }
+      }
+    });
+  });
+  $(".user-delete").on('click', function() {
+    var user = $(this).data("username");
+    $.confirm({
+      title: "confirm",
+      content: "Really delete this user? " + $(this).data("username"),
+      type: "red",
+      boxWidth: "40%",
+      useBootstrap: false,
+      buttons: {
+        confirm: {
+          btnClass: "btn-red",
+          text: "Delete",
+          action: function() {
+            window.location.href = "@context.path/admin/users/" + user + "/delete";
+          }
+        },
+        cancel: function() {
+        }
+      }
+    });
+  });
+});
+</script>
+}

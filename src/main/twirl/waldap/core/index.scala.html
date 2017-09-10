@@ -1,0 +1,20 @@
+@(title: String)(implicit context: waldap.core.controller.Context)
+@import waldap.core.view.helpers
+@main(title){<div class="nav-item">@title</div>}{
+<div class="column">
+  <div class="tile is-anscestor">
+    <div class="tile is-6 is-vertical is-parent">
+      <div class="tile is-child box">
+        <p class="title">For users</p>
+        <p><a href="/user/signin" class="button fa fa-sign-in">Sign in</a></p>
+      </div>
+    </div>
+    <div class="tile is-vertical is-parent">
+      <div class="tile is-child box">
+        <p class="title">For administrators</p>
+        <p><a href="/admin/signin" class="button fa fa-sign-in">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+}

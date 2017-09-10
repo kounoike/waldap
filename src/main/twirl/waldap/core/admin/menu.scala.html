@@ -1,0 +1,11 @@
+@(activeMenu: String)(implicit context: waldap.core.controller.Context)
+<aside class="menu aside is-dark has-shadow hero is-fullheight is-hidden-mobile">
+  <div>
+    <div class="main">
+      <div class="title">Admin menu</div>
+      <a href="@context.path/admin/users" class="item@if(activeMenu=="users"){ is-active}"><span class="icon"><i class="fa fa-users"></i></span><span>@context.messages.get("menu.users")</span></a>
+      <a href="@context.path/admin/apps" class="item@if(activeMenu=="apps"){ is-active}"><span class="icon"><i class="fa fa-cogs"></i></span><span>@context.messages.get("menu.apps")</span></a>
+      <a href="@context.path/admin/groups" class="item@if(activeMenu=="groups"){ is-active}"><span class="icon"><i class="fa fa-sitemap"></i></span><span>@context.messages.get("menu.groups")</span></a>
+    </div>
+  </div>
+</aside>
