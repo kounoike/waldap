@@ -1,7 +1,7 @@
-LDAP And A / Ldap-Panda - easy LDAP for WebApps. [![Build Status](https://travis-ci.org/kounoike/ldap-and-web-test.svg?branch=master)](https://travis-ci.org/kounoike/ldap-and-web-test)
+WALDAP - LDAP for WebApps [![Build Status](https://travis-ci.org/kounoike/ldap-and-web-test.svg?branch=master)](https://travis-ci.org/kounoike/waldap)
 =================
 
-This repository is experimental version!
+Under development now.
 
 ## Run
 
