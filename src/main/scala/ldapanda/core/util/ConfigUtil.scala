@@ -5,7 +5,7 @@ import scala.reflect.ClassTag
 
 object ConfigUtil {
   def getEnvironmentVariable[A](key: String): Option[A] = {
-    val value = System.getenv("LDAPANDA_" + key.toUpperCase.replace('.', '_'))
+    val value = System.getenv("WALDAP_" + key.toUpperCase.replace('.', '_'))
     if(value != null && value.nonEmpty){
       Some(convertType(value)).asInstanceOf[Option[A]]
     } else {
@@ -14,7 +14,7 @@ object ConfigUtil {
   }
 
   def getSystemProperty[A](key: String): Option[A] = {
-    val value = System.getProperty("ldapanda." + key)
+    val value = System.getProperty("waldap." + key)
     if (value != null && value.nonEmpty) {
       Some(convertType(value)).asInstanceOf[Option[A]]
     } else {

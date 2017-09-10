@@ -21,7 +21,7 @@ import scala.collection.JavaConverters._
 class IndexController extends ControllerBase with JacksonJsonSupport with I18nSupport with ClientSideValidationFormSupport {
 
   get("/"){
-    html.index("LdapAndA")
+    html.index("WALDAP")
   }
 
   get("/signout"){

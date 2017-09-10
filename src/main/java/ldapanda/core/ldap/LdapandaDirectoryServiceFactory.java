@@ -146,8 +146,8 @@ public class LdapandaDirectoryServiceFactory implements DirectoryServiceFactory 
         directoryService.setSystemPartition(systemPartition);
 
         Partition dataPartition = partitionFactory.createPartition(directoryService.getSchemaManager(),
-                directoryService.getDnFactory(), "ldapanda", "o=ldapanda", 500,
-                new File(directoryService.getInstanceLayout().getPartitionsDirectory(), "ldapanda"));
+                directoryService.getDnFactory(), "waldap", "o=waldap", 500,
+                new File(directoryService.getInstanceLayout().getPartitionsDirectory(), "waldap"));
         directoryService.addPartition(dataPartition);
 
         directoryService.setAccessControlEnabled(true);
@@ -157,7 +157,7 @@ public class LdapandaDirectoryServiceFactory implements DirectoryServiceFactory 
         directoryService.startup();
 
         CoreSession session = directoryService.getAdminSession();
-        if (!session.exists("o=ldapanda")){
+        if (!session.exists("o=waldap")){
             LdifReader reader = new LdifReader(getClass().getResourceAsStream("/base.ldif"));
             for (LdifEntry entry: reader) {
                 session.add(new DefaultEntry(directoryService.getSchemaManager(), entry.getEntry()));

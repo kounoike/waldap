@@ -38,7 +38,7 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport {
 
   get("/admin/users"){
     val adminSession = LdapandaLdapServer.directoryService.getAdminSession()
-    val dn = new Dn(LdapandaLdapServer.directoryService.getSchemaManager, "ou=Users,o=ldapanda")
+    val dn = new Dn(LdapandaLdapServer.directoryService.getSchemaManager, "ou=Users,o=waldap")
     val usersCursor = adminSession.search(dn, SearchScope.ONELEVEL,
       FilterParser.parse("(objectClass=inetOrgPerson)"), AliasDerefMode.DEREF_ALWAYS,
       "uid", "sn", "cn", "displayName", "mail", "objectClass"
@@ -52,7 +52,7 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport {
 
   post("/admin/users/:name/edit", usereditform) { form =>
     params.get("name").map{ n =>
-      val dn = s"uid=${n},ou=Users,o=ldapanda"
+      val dn = s"uid=${n},ou=Users,o=waldap"
       if (context.ldapSession.exists(dn)) {
         val cnMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE, "cn", form.cn)
         val snMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE, "sn", form.sn)
@@ -69,7 +69,7 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport {
 
   post("/admin/users/:name/password", passwordform) { form =>
     params.get("name").map{ n =>
-      val dn = s"uid=${n},ou=Users,o=ldapanda"
+      val dn = s"uid=${n},ou=Users,o=waldap"
       if (context.ldapSession.exists(dn)) {
         val passwordMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE,
           "userPassword", LDAPUtil.encodePassword(form.password))
@@ -85,7 +85,7 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport {
   get("/admin/users/:name/delete"){
     val name = params.get("name")
     name.map { n =>
-      val dn = s"uid=${n},ou=Users,o=ldapanda"
+      val dn = s"uid=${n},ou=Users,o=waldap"
       if (context.ldapSession.exists(dn)){
         context.ldapSession.delete(new Dn(context.ldapSession.getDirectoryService.getSchemaManager, dn))
         redirect("/admin/users")
@@ -96,7 +96,7 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport {
   }
 
   post("/admin/users/add", useraddform){form =>
-    val dn = s"uid=${form.username},ou=Users,o=ldapanda"
+    val dn = s"uid=${form.username},ou=Users,o=waldap"
     if(!context.ldapSession.exists(dn)){
       logger.info(s"${LDAPUtil.encodePassword(form.password)}")
       val entry = new DefaultEntry(context.ldapSession.getDirectoryService.getSchemaManager())

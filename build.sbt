@@ -4,7 +4,7 @@ import org.scalatra.sbt.DistPlugin.DistKeys._
 
 organization := "io.github.kounoike"
 
-name := "ldapanda"
+name := "waldap"
 
 version := "0.0.1-SNAPSHOT"
 

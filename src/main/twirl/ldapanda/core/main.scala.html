@@ -18,26 +18,30 @@
   <title>@{title}</title>
 </head>
 <body>
+<header>
+  <nav class="navbar">
+    <a class="navbar-brand">
+      <span class="icon"><i class="fa fa-address-book-o"></i></span>
+      <span>WALDAP</span>
+    </a>
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        @nav
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          @context.loginAccount.map{ user =>
+          <a href="#" class="fa fa-user">@user.userName</a>
+          }.getOrElse{
+            Sign in
+          }
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
     <div class="hero is-primary is-bold">
       <div class="hero-head">
-        <header class="nav">
-          <div class="container">
-            <div class="navbar-brand">
-              <span class="nav-item">
-                <span class="icon"><i class="fa fa-address-book-o"></i></span>
-                <span>LdapAndA</span>
-              </span>
-            </div>
-            @nav
-            <div class="nav-right">
-              <div class="nav-item">
-                @context.loginAccount.map{ user =>
-                  <a href="#" class="fa fa-user">@user.userName</a>
-                }
-              </div>
-            </div>
-          </div>
-        </header>
       </div>
       <div class="hero-body">
         <div class="container">

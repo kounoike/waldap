@@ -6,7 +6,7 @@ import org.apache.directory.server.protocol.shared.transport.TcpTransport
 
 object LdapandaLdapServer{
   val dsFactory = new LdapandaDirectoryServiceFactory()
-  dsFactory.init("ldapanda")
+  dsFactory.init("waldap")
   val directoryService = dsFactory.getDirectoryService()
   val ldapServer = new org.apache.directory.server.ldap.LdapServer()
 

@@ -12,7 +12,7 @@ import org.scalatra.FlashMapSupport
 trait GroupControllerBase extends ControllerBase with FlashMapSupport {
   get("/admin/groups"){
     val adminSession = LdapandaLdapServer.directoryService.getAdminSession()
-    val dn = new Dn(LdapandaLdapServer.directoryService.getSchemaManager, "ou=Groups,o=ldapanda")
+    val dn = new Dn(LdapandaLdapServer.directoryService.getSchemaManager, "ou=Groups,o=waldap")
     val groupsCursor = adminSession.search(dn, SearchScope.ONELEVEL,
       FilterParser.parse("(objectClass=groupOfNames)"), AliasDerefMode.DEREF_ALWAYS,
       "cn", "businesscategory", "member", "description"

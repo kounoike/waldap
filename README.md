@@ -9,7 +9,7 @@ Under development now.
 
 ### Data directory
 
-save LDIFs to `$HOME/.ldapanda`
+save LDIFs to `$HOME/.waldap`
 
 
 ## Components
