@@ -46,7 +46,6 @@ trait IndexControllerBase extends ControllerBase with FlashMapSupport with Accou
     session.setAttribute(Keys.Session.LoginAccount, account)
 
     flash.get(Keys.Flash.Redirect).asInstanceOf[Option[String]].map { redirectUrl =>
-      println(redirectUrl)
       redirect(redirectUrl)
     }.getOrElse {
       redirect("/admin")
