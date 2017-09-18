@@ -14,8 +14,8 @@ trait IndexControllerBase extends ControllerBase with FlashMapSupport with Accou
 
   case class SignInForm(username: String, password: String)
   val signinForm = mapping(
-    "username" -> trim(label("Username", text(required))),
-    "password" -> trim(label("Password", text(required)))
+    "username" -> label("Username", text(required)),
+    "password" -> label("Password", text(required))
   )(SignInForm.apply)
 
   get("/admin") {
