@@ -1,7 +1,6 @@
 package waldap.core.ldap
 
-import org.apache.directory.server.core.api.{CoreSession, DirectoryService}
-import org.apache.directory.server.ldap.LdapServer
+import org.apache.directory.server.core.api.CoreSession
 import org.apache.directory.server.protocol.shared.transport.TcpTransport
 
 object WaldapLdapServer{
