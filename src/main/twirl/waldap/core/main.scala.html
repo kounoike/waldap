@@ -31,7 +31,8 @@
       <div class="navbar-end">
         <div class="navbar-item">
           @context.loginAccount.map{ user =>
-          <a href="#" class="fa fa-user">@user.userName</a>
+          <span class="fa fa-user">@user.userName</span>
+          <a href="/signout" class="fa fa-sign-out">Sign out</a>
           }.getOrElse{
             Sign in
           }
@@ -45,7 +46,7 @@
       </div>
       <div class="hero-body">
         <div class="container">
-          <h1 class="title">LdaPandA</h1>
+          <h1 class="title">WALDAP</h1>
           <h2 class="subtitle">Easily manageable LDAP Solution for WebApps</h2>
         </div>
       </div>
