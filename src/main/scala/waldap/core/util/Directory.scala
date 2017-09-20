@@ -3,7 +3,7 @@ package waldap.core.util
 import java.io.File
 
 object Directory {
-  val LdapandaHome = (System.getProperty("waldap.home") match {
+  val WaldapHome = (System.getProperty("waldap.home") match {
     case path if (path != null) =>
       new File(path)
     case _ =>
@@ -16,7 +16,7 @@ object Directory {
       }
   }).getAbsolutePath
 
-  val LdapandaConf = new File(LdapandaHome, "waldap.conf")
+  val LdapandaConf = new File(WaldapHome, "waldap.conf")
 
-  val IncetanceHome = s"${LdapandaHome}/server"
+  val InstanceHome = s"${WaldapHome}/server"
 }
