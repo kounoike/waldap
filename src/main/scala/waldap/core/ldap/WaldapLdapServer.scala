@@ -4,7 +4,7 @@ import org.apache.directory.server.core.api.{CoreSession, DirectoryService}
 import org.apache.directory.server.ldap.LdapServer
 import org.apache.directory.server.protocol.shared.transport.TcpTransport
 
-object LdapandaLdapServer{
+object WaldapLdapServer{
   val dsFactory = new WaldapDirectoryServiceFactory()
   dsFactory.init(LDAPUtil.ldapName)
   val directoryService = dsFactory.getDirectoryService()

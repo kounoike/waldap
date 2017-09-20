@@ -3,7 +3,7 @@ import org.scalatra._
 import javax.servlet._
 
 import waldap.core.controller.IndexController
-import waldap.core.ldap.LdapandaLdapServer
+import waldap.core.ldap.WaldapLdapServer
 
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
@@ -20,6 +20,6 @@ class ScalatraBootstrap extends LifeCycle {
 
     context.mount(new ValidationJavaScriptProvider, "/assets/js/*")
 
-    LdapandaLdapServer.init()
+    WaldapLdapServer.init()
   }
 }

@@ -10,7 +10,7 @@ import org.json4s.DefaultFormats
 import waldap.core.html
 import org.apache.commons.io.FileUtils
 import org.apache.commons.codec.binary.Base64
-import waldap.core.ldap.{LDAPUtil, LdapandaLdapServer}
+import waldap.core.ldap.{LDAPUtil, WaldapLdapServer}
 import org.apache.directory.api.ldap.model.entry.{AttributeUtils, DefaultEntry}
 import org.apache.directory.api.ldap.model.message.{AliasDerefMode, SearchScope}
 import org.apache.directory.api.ldap.model.name.Dn

@@ -5,7 +5,7 @@ import waldap.core.model.{Account, AdminAccount, UserAccount}
 import waldap.core.service.SystemSettingsService.SystemSettings
 import org.slf4j.LoggerFactory
 import waldap.core.controller.Context
-import waldap.core.ldap.LdapandaLdapServer
+import waldap.core.ldap.WaldapLdapServer
 
 
 trait AccountService {
@@ -19,7 +19,7 @@ trait AccountService {
   }
 
   def userAuthenticate(settings: SystemSettings, userName: String, password: String)(implicit context: Context): Option[Account] = {
-    val ds = LdapandaLdapServer.directoryService
+    val ds = WaldapLdapServer.directoryService
     val dnString = s"uid=${userName},ou=Users,o=waldap"
 
     val account = if (context.ldapSession.exists(dnString)) {

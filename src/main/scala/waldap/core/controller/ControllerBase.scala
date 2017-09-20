@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.{FilterChain, ServletRequest, ServletResponse}
 
 import io.github.gitbucket.scalatra.forms.ClientSideValidationFormSupport
-import waldap.core.ldap.LdapandaLdapServer
+import waldap.core.ldap.WaldapLdapServer
 import waldap.core.model.Account
 import waldap.core.util.{Keys, StringUtil}
 import waldap.core.util.Implicits._
@@ -76,7 +76,7 @@ case class Context(settings: SystemSettingsService.SystemSettings, loginAccount:
   val currentPath = request.getRequestURI.substring(request.getContextPath.length)
   val baseUrl = settings.baseUrl(request)
   val host = new java.net.URL(baseUrl).getHost
-  val ldapSession = LdapandaLdapServer.directoryService.getAdminSession
+  val ldapSession = WaldapLdapServer.directoryService.getAdminSession
 
   /**
     * Get object from cache.

@@ -2,7 +2,7 @@ package waldap.core.controller.admin
 
 import io.github.gitbucket.scalatra.forms._
 import waldap.core.controller.ControllerBase
-import waldap.core.ldap.{LDAPUtil, LdapandaLdapServer}
+import waldap.core.ldap.{LDAPUtil, WaldapLdapServer}
 import org.apache.directory.api.ldap.model.entry.{DefaultEntry, DefaultModification, ModificationOperation}
 import org.apache.directory.api.ldap.model.filter.FilterParser
 import org.apache.directory.api.ldap.model.message.{AliasDerefMode, SearchScope}
@@ -37,8 +37,8 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport {
   )(PasswordForm.apply)
 
   get("/admin/users"){
-    val adminSession = LdapandaLdapServer.directoryService.getAdminSession()
-    val dn = new Dn(LdapandaLdapServer.directoryService.getSchemaManager, "ou=Users,o=waldap")
+    val adminSession = WaldapLdapServer.directoryService.getAdminSession()
+    val dn = new Dn(WaldapLdapServer.directoryService.getSchemaManager, "ou=Users,o=waldap")
     val usersCursor = adminSession.search(dn, SearchScope.ONELEVEL,
       FilterParser.parse("(objectClass=inetOrgPerson)"), AliasDerefMode.DEREF_ALWAYS,
       "uid", "sn", "cn", "displayName", "mail", "objectClass"
