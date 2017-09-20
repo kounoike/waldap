@@ -1,0 +1,28 @@
+@(entry: org.apache.directory.api.ldap.model.entry.Entry)(implicit context: waldap.core.controller.Context)
+@waldap.core.user.html.main(context.loginAccount.map(_.userName).getOrElse("Unknown user")) {
+<section class="hero is-light is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-4 is-offset-4">
+          <h3 class="title is-3">@context.loginAccount.get.userName</h3>
+          <form>
+            <div class="field">
+              <label class="label" for="fullName">Fullname</label>
+              <div class="control">
+                <input type="text" id="fullName" name="fullName" value="@entry.get("displayName").get"/>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="mail">mail</label>
+              <div class="control">
+                <input type="text" id="mail" name="mail" value="@entry.get("mail").get"/>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+}

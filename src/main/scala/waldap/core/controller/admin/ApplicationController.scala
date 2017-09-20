@@ -5,7 +5,7 @@ import org.scalatra.FlashMapSupport
 
 trait ApplicationControllerBase extends ControllerBase with FlashMapSupport {
   get("/admin/apps"){
-    """apps"""
+    s"""apps ${context.loginAccount.isEmpty}"""
   }
 }
 

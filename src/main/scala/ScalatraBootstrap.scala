@@ -7,11 +7,17 @@ import waldap.core.ldap.LdapandaLdapServer
 
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
-    context.mount(new IndexController, "/")
-    context.mount(new waldap.core.controller.admin.IndexController, "/admin")
-    context.mount(new waldap.core.controller.admin.UserController, "/admin/users")
-    context.mount(new waldap.core.controller.admin.GroupController, "/admin/groups")
-    context.mount(new waldap.core.controller.admin.ApplicationController, "/admin/apps")
+    // access filter
+    context.mount(new waldap.core.controller.admin.PreprocessController, "/*")
+
+    context.mount(new IndexController, "/*")
+    context.mount(new waldap.core.controller.admin.IndexController, "/*")
+    context.mount(new waldap.core.controller.admin.UserController, "/*")
+    context.mount(new waldap.core.controller.admin.GroupController, "/*")
+    context.mount(new waldap.core.controller.admin.ApplicationController, "/*")
+
+    context.mount(new waldap.core.controller.user.IndexController, "/*")
+
     context.mount(new ValidationJavaScriptProvider, "/assets/js/*")
 
     LdapandaLdapServer.init()

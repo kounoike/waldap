@@ -9,18 +9,21 @@ error: Option[Any] = None)(implicit context: waldap.core.controller.Context)
       <div class="container">
         <div class="columns">
           <div class="column is-4 is-offset-4">
-            <h2 class="title is-2 is-capitalized">@context.messages.get("loginform.foradmin")</h2>
-            <form action="@context.path/admin/signin" method="POST">
+            <h2 class="title is-2 is-capitalized">@context.messages.get("loginform.foruser")</h2>
+            <div class="is-danger">@error</div>
+            <form action="@context.path/user/signin" method="POST">
               <div class="field">
                 <label class="label is-capitalized">@context.messages.get("loginform.username")</label><span class="error" id="error-username"></span>
+                <span id="error-username" class="error"></span>
                 <div class="control">
-                  <input class="input" type="text" name="username" placeholder="username">
+                  <input class="input" id="username" type="text" name="username" placeholder="username">
                 </div>
               </div>
               <div class="field">
                 <label class="label is-capitalized">@context.messages.get("loginform.password")</label><span class="error" id="error-password"></span>
+                <span id="error-password" class="error"></span>
                 <div class="control">
-                  <input class="input" type="password" name="password" placeholder="your password">
+                  <input class="input" id="password" type="password" name="password" placeholder="your password">
                 </div>
               </div>
               <div class="field">
