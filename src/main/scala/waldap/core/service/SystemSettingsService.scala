@@ -15,7 +15,7 @@ trait SystemSettingsService {
       settings.baseUrl.foreach(x => props.setProperty(BaseURL, x.replace("/\\Z", "")))
       props.setProperty(AdminPassword, settings.adminPassword)
       props.setProperty(LdapPort, settings.ldapPort.toString)
-      using(new java.io.FileOutputStream(Directory.LdapandaConf)){ out =>
+      using(new java.io.FileOutputStream(Directory.WaldapConf)){ out =>
         props.store(out, null)
       }
     }
@@ -23,8 +23,8 @@ trait SystemSettingsService {
 
   def loadSystemSettings(): SystemSettings = {
     defining(new java.util.Properties()){ props =>
-      if(Directory.LdapandaConf.exists){
-        using(new java.io.FileInputStream(Directory.LdapandaConf)){ in =>
+      if(Directory.WaldapConf.exists){
+        using(new java.io.FileInputStream(Directory.WaldapConf)){ in =>
           props.load(in)
         }
       }

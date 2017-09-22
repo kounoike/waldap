@@ -16,7 +16,7 @@ object Directory {
       }
   }).getAbsolutePath
 
-  val LdapandaConf = new File(WaldapHome, "waldap.conf")
+  val WaldapConf = new File(WaldapHome, "waldap.conf")
 
   val InstanceHome = s"${WaldapHome}/server"
 }
