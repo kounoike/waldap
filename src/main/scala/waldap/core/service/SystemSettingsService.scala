@@ -13,7 +13,7 @@ trait SystemSettingsService {
   def saveSystemSettings(settings: SystemSettings): Unit = {
     defining(new java.util.Properties()){ props =>
       settings.baseUrl.foreach(x => props.setProperty(BaseURL, x.replace("/\\Z", "")))
-      settings.baseDn.foreach(x => props.setProperty(BaseDN, x.replace("/\\Z", "")))
+      props.setProperty(AdminPassword, settings.adminPassword)
       props.setProperty(LdapPort, settings.ldapPort.toString)
       using(new java.io.FileOutputStream(Directory.LdapandaConf)){ out =>
         props.store(out, null)
@@ -30,7 +30,7 @@ trait SystemSettingsService {
       }
       SystemSettings(
         getOptionValue[String](props, BaseURL, None).map(x => x.replaceFirst("/\\Z", "")),
-        getOptionValue[String](props, BaseDN, None).map(x => x.replaceFirst("/\\Z", "")),
+        getValue[String](props, AdminPassword, "secret"),
         getValue[Int](props, LdapPort, 10389)
       )
     }
@@ -42,14 +42,14 @@ object SystemSettingsService {
 
   case class SystemSettings(
     baseUrl: Option[String],
-    baseDn: Option[String],
+    adminPassword: String,
     ldapPort: Int
   ){
     def baseUrl(request: HttpServletRequest): String = baseUrl.fold(request.baseUrl)(_.stripSuffix("/"))
   }
 
   private val BaseURL = "base_url"
-  private val BaseDN = "base_dn"
+  private val AdminPassword = "admin.password"
   private val LdapPort = "ldap.port"
 
   private def getValue[A: ClassTag](props: java.util.Properties, key: String, default: A): A = {

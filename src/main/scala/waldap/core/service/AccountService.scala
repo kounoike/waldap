@@ -2,6 +2,7 @@ package waldap.core.service
 
 import org.apache.directory.api.ldap.model.entry.Entry
 import waldap.core.model.{Account, AdminAccount, UserAccount}
+import waldap.core.ldap.LDAPUtil
 import waldap.core.service.SystemSettingsService.SystemSettings
 import org.slf4j.LoggerFactory
 import waldap.core.controller.Context
@@ -13,9 +14,7 @@ trait AccountService {
   private val logger = LoggerFactory.getLogger(classOf[AccountService])
 
   def adminAuthenticate(settings: SystemSettings, userName: String, password: String): Option[Account] = {
-    val account = if (password == "secret") Some(AdminAccount(userName)) else None
-
-    account
+    if (LDAPUtil.checkPassword(settings.adminPassword, password)) Some(AdminAccount(userName)) else None
   }
 
   def userAuthenticate(settings: SystemSettings, userName: String, password: String)(implicit context: Context): Option[Account] = {

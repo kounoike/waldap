@@ -1,0 +1,27 @@
+@(info: Option[Any])(implicit context: waldap.core.controller.Context)
+@waldap.core.admin.html.main("System settings", Some("system")){
+<div class="box box-main">
+    @info.map{ i =>
+      <div class="box is-info">@i</div>
+    }
+    <form action="@context.path/admin/system" method="POST" validate="true">
+      <div class="field">
+        <label class="label">Web UI Base URL</label>
+        <div class="control">
+          <input class="input" type="text" name="baseUrl" value="@context.settings.baseUrl">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">LDAP port</label>
+        <div class="control">
+          <input class="input" type="text" name="ldapPort" value="@context.settings.ldapPort">
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <button class="button is-primary">Submit</button>
+        </div>
+      </div>
+    </form>
+</div>
+}

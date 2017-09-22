@@ -15,6 +15,7 @@ class ScalatraBootstrap extends LifeCycle {
     context.mount(new waldap.core.controller.admin.UserController, "/*")
     context.mount(new waldap.core.controller.admin.GroupController, "/*")
     context.mount(new waldap.core.controller.admin.ApplicationController, "/*")
+    context.mount(new waldap.core.controller.admin.SettingsController, "/*")
 
     context.mount(new waldap.core.controller.user.IndexController, "/*")
 
