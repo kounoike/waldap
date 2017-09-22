@@ -2,13 +2,13 @@ import io.github.gitbucket.scalatra.forms.ValidationJavaScriptProvider
 import org.scalatra._
 import javax.servlet._
 
-import waldap.core.controller.IndexController
+import waldap.core.controller.{IndexController, PreprocessController}
 import waldap.core.ldap.WaldapLdapServer
 
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
     // access filter
-    context.mount(new waldap.core.controller.admin.PreprocessController, "/*")
+    context.mount(new PreprocessController, "/*")
 
     context.mount(new IndexController, "/*")
     context.mount(new waldap.core.controller.admin.IndexController, "/*")

@@ -1,8 +1,7 @@
-package waldap.core.controller.admin
+package waldap.core.controller
 
-import waldap.core.controller.{Context, ControllerBase}
-import waldap.core.util.Keys
 import waldap.core.util.Implicits._
+import waldap.core.util.Keys
 
 class PreprocessController extends ControllerBase {
 
