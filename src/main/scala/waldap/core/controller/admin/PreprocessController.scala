@@ -15,6 +15,7 @@ class PreprocessController extends ControllerBase {
   }
 
   get(context.loginAccount.isEmpty && context.currentPath != "/" && !context.currentPath.startsWith("/assets")
+    && !context.currentPath.startsWith("/webjars")
     && !context.currentPath.startsWith("/admin/signin") && !context.currentPath.startsWith("/user/signin") ) {
     Unauthorized()
   }
