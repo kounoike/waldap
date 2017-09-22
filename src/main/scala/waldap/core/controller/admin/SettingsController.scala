@@ -2,7 +2,7 @@ package waldap.core.controller.admin
 
 import waldap.core.controller.ControllerBase
 import waldap.core.service.SystemSettingsService
-import waldap.core.ldap.LDAPUtil
+import waldap.core.ldap.{LDAPUtil, WaldapLdapServer}
 import waldap.core.admin.html
 import io.github.gitbucket.scalatra.forms._
 import org.scalatra.FlashMapSupport
@@ -45,7 +45,13 @@ class SettingsController extends ControllerBase with FlashMapSupport with System
 
   post("/admin/system", settingForm){ form =>
     val newSettings = SystemSettingsService.SystemSettings(form.baseUrl, context.settings.adminPassword, form.ldapPort)
+    val needRestartLdap: Boolean = context.settings.ldapPort != newSettings.ldapPort
     saveSystemSettings(newSettings)
+
+    if(needRestartLdap){
+      WaldapLdapServer.restart()
+    }
+
     flash += "info" -> context.messages.get("settings.saved")
 
     redirect("/admin/system")
