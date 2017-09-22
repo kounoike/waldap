@@ -18,41 +18,24 @@
   <title>@{title}</title>
 </head>
 <body>
-<header>
-  <nav class="navbar">
-    <a class="navbar-brand">
-      <span class="icon"><i class="fa fa-address-book-o"></i></span>
-      <span>WALDAP</span>
-    </a>
-    <div class="navbar-menu">
-      <div class="navbar-start">
-        @nav
+  <div class="hero is-primary is-bold">
+    <div class="hero-head">
+      <div class="navbar-brand is-pulled-left">
+        <span class="icon"><i class="fa fa-address-book-o"></i></span>
+        <span>WALDAP</span>
       </div>
-      <div class="navbar-end">
-        <div class="navbar-item">
-          @context.loginAccount.map{ user =>
-          <span class="fa fa-user">@user.userName</span>
-          <a href="/signout" class="fa fa-sign-out">Sign out</a>
-          }.getOrElse{
-            Sign in
-          }
-        </div>
+      <div class="is-pulled-right">
+        @context.loginAccount.map{ user =>
+        <span class="fa fa-user">@user.userName</span>
+        <a href="/signout" class="fa fa-sign-out">Sign out</a>
+        }.getOrElse{
+        Sign in
+        }
       </div>
     </div>
-  </nav>
-</header>
-    <div class="hero is-primary is-bold">
-      <div class="hero-head">
-      </div>
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">WALDAP</h1>
-          <h2 class="subtitle">Easily manageable LDAP Solution for WebApps</h2>
-        </div>
-      </div>
-      <div class="hero-foot">
-      </div>
+    <div class="hero-foot">
     </div>
+  </div>
   <main class="columns">
     <div class="column">
       @body
