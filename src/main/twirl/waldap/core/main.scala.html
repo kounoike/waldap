@@ -1,4 +1,4 @@
-@(title: String)(nav: Html)(body: Html)(implicit context: waldap.core.controller.Context)
+@(title: String)(body: Html)(implicit context: waldap.core.controller.Context)
 @import waldap.core.view.helpers
 <!DOCTYPE html>
 <html>
@@ -43,14 +43,16 @@
   </main>
   <footer class="footer">
     <div class="container">
-      <p>
-        WALDAP - LDAP for WebApps.
-        <span>
-        <a class="icon" href="https://github.com/kounoike/ldap-and-web-test">
-          <i class="fa fa-github"></i>
-        </a>
-      </span>
-      </p>
+      <div class="content has-text-centered">
+        <p>
+          WALDAP - LDAP for WebApps.
+          <span>
+            <a class="icon" href="https://github.com/kounoike/waldap">
+              <i class="fa fa-github"></i>
+            </a>
+          </span>
+        </p>
+      </div>
     </div>
   </footer>
 </body>
