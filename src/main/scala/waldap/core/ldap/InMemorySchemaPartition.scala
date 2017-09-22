@@ -27,7 +27,6 @@ class InMemorySchemaPartition(schemaManager: SchemaManager) extends AbstractLdif
       val resMap = ResourceMap.getResources(Pattern.compile("schema[/\\Q\\\\E]ou=schema.*"))
       val keySet = new java.util.TreeSet[String](resMap.keySet()).asScala
       keySet.foreach { resourcePath =>
-        println(resourcePath)
         if(resourcePath.endsWith(".ldif")){
           val resource = DefaultSchemaLdifExtractor.getUniqueResource(resourcePath, "Schema LDIF file")
           val reader = new LdifReader(resource.openStream)
