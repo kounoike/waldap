@@ -9,7 +9,6 @@ import org.apache.directory.api.ldap.model.constants.SchemaConstants
 import org.apache.directory.api.ldap.model.entry.DefaultEntry
 import org.apache.directory.api.ldap.model.ldif.LdifReader
 import org.apache.directory.api.ldap.model.schema.comparators.NormalizingComparator
-import org.apache.directory.api.ldap.model.schema.registries.SchemaLoader
 import org.apache.directory.api.ldap.schema.loader.JarLdifSchemaLoader
 import org.apache.directory.api.ldap.schema.manager.impl.DefaultSchemaManager
 import org.apache.directory.api.util.exception.Exceptions
@@ -78,11 +77,6 @@ class WaldapDirectoryServiceFactory extends DirectoryServiceFactory{
     directoryService.startup()
 
     val session: CoreSession = directoryService.getAdminSession
-
-    val schemaReader = new LdifReader((getClass.getResourceAsStream("/schema.ldif")))
-    schemaReader.forEach{ entry =>
-      session.add(new DefaultEntry(directoryService.getSchemaManager, entry.getEntry))
-    }
 
     if (!session.exists(LDAPUtil.baseDnName)){
       val reader = new LdifReader(getClass.getResourceAsStream("/base.ldif"))
