@@ -6,7 +6,7 @@ import scala.collection.JavaConverters._
 import net.sf.ehcache.CacheManager
 import net.sf.ehcache.config.{CacheConfiguration, Configuration}
 import org.apache.directory.api.ldap.model.constants.SchemaConstants
-import org.apache.directory.api.ldap.model.entry.DefaultEntry
+import org.apache.directory.api.ldap.model.entry.{DefaultEntry, Entry}
 import org.apache.directory.api.ldap.model.ldif.LdifReader
 import org.apache.directory.api.ldap.model.schema.comparators.NormalizingComparator
 import org.apache.directory.api.ldap.schema.loader.JarLdifSchemaLoader
@@ -66,17 +66,23 @@ class WaldapDirectoryServiceFactory extends DirectoryServiceFactory{
     partitionFactory.addIndex(systemPartition, SchemaConstants.OBJECT_CLASS_AT,100)
     directoryService.setSystemPartition(systemPartition)
 
-    val dataPartition = partitionFactory.createPartition(directoryService.getSchemaManager,
-      directoryService.getDnFactory, LDAPUtil.ldapName, LDAPUtil.baseDnName, 500,
-      new File(directoryService.getInstanceLayout.getPartitionsDirectory, LDAPUtil.ldapName))
-    directoryService.addPartition(dataPartition)
-
     directoryService.setAccessControlEnabled(true)
     directoryService.setAllowAnonymousAccess(true)
 
     directoryService.startup()
 
-    val session: CoreSession = directoryService.getAdminSession
+    val schemaReader = new LdifReader((getClass.getResourceAsStream("/schema.ldif")))
+    schemaReader.forEach{ ldifEntry =>
+      val entry: Entry = new DefaultEntry(schemaManager, ldifEntry.getEntry)
+      directoryService.getAdminSession.add(entry)
+    }
+
+    val dataPartition = partitionFactory.createPartition(directoryService.getSchemaManager,
+      directoryService.getDnFactory, LDAPUtil.ldapName, LDAPUtil.baseDnName, 500,
+      new File(directoryService.getInstanceLayout.getPartitionsDirectory, LDAPUtil.ldapName))
+    directoryService.addPartition(dataPartition)
+
+    val session = directoryService.getAdminSession()
 
     if (!session.exists(LDAPUtil.baseDnName)){
       val reader = new LdifReader(getClass.getResourceAsStream("/base.ldif"))

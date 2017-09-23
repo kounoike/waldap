@@ -44,19 +44,6 @@ class InMemorySchemaPartition(schemaManager: SchemaManager) extends AbstractLdif
           super.add(new AddOperationContext(null, entry))
         }
       }
-
-      val schemaReader = new LdifReader((getClass.getResourceAsStream("/schema.ldif")))
-      schemaReader.forEach{ ldifEntry =>
-        val entry: Entry = new DefaultEntry(schemaManager, ldifEntry.getEntry)
-        //add mandatory attributes
-        if (Option(entry.get(SchemaConstants.ENTRY_CSN_AT)).isEmpty){
-          entry.add(SchemaConstants.ENTRY_CSN_AT, AbstractLdifPartition.defaultCSNFactory.newInstance.toString)
-        }
-        if (Option(entry.get(SchemaConstants.ENTRY_UUID_AT)).isEmpty){
-          entry.add(SchemaConstants.ENTRY_UUID_AT, UUID.randomUUID.toString)
-        }
-        super.add(new AddOperationContext(null, entry))
-      }
     }
   }
 }
