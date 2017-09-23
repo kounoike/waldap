@@ -90,7 +90,7 @@ trait LDAPAccountService {
     }
   }
 
-  def AddLDAPGroup(groupName: String)(implicit context: Context): Unit = {
+  def AddLDAPGroup(groupName: String, webAppName: String, instanceSuffix: String)(implicit context: Context): Unit = {
     val dn = s"cn=${groupName},${LDAPUtil.groupsDn}"
     if (!context.ldapSession.exists(dn)){
       val entry = new DefaultEntry(context.ldapSession.getDirectoryService.getSchemaManager())
@@ -98,6 +98,8 @@ trait LDAPAccountService {
       entry.add("objectClass", "top", "groupOfNames")
       entry.add("cn", groupName)
       entry.add("member", s"${LDAPUtil.systemAdmin}")
+      entry.add("o", webAppName)
+      entry.add("ou", instanceSuffix)
       context.ldapSession.add(entry)
     }
   }

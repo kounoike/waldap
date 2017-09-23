@@ -1,7 +1,18 @@
-@(title: String)(body: Html)(implicit context: waldap.core.controller.Context)
+@(title: String, activeMenu: String)(body: Html)(implicit context: waldap.core.controller.Context)
 @waldap.core.html.main(title){
 <div class="columns">
-  <div class="column is-12">
+  <div class="column is-3">
+    <aside class="menu aside is-dark has-shadow hero is-fullheight is-hidden-mobile">
+      <div>
+        <div class="main">
+          <div class="title">User menu</div>
+          <a href="@context.path/user/apps" class="item@if(activeMenu=="apps"){ is-active}"><span class="icon"><i class="fa fa-cogs"></i></span><span>@context.messages.get("menu.apps")</span></a>
+          <a href="@context.path/user/password" class="item@if(activeMenu=="password"){ is-active}"><span class="icon"><i class="fa fa-key"></i></span>@context.messages.get("menu.password")</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <div class="column is-9">
     @body
   </div>
 </div>

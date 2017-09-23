@@ -4,10 +4,10 @@ import io.github.gitbucket.scalatra.forms._
 import waldap.core.user.html
 import waldap.core.controller.ControllerBase
 import waldap.core.model.Account
-import waldap.core.service.AccountService
+import waldap.core.service.{AccountService, LDAPAccountService}
 import waldap.core.util.Keys
 
-class IndexController extends ControllerBase with AccountService {
+class IndexController extends ControllerBase with AccountService with LDAPAccountService {
 
   case class SignInForm(username: String, password: String)
   val signinForm = mapping(
@@ -22,6 +22,12 @@ class IndexController extends ControllerBase with AccountService {
     }.getOrElse{
       NotFound()
     }
+  }
+
+  get("/user/apps"){
+    val groups = GetLDAPUsersGroups(context.loginAccount.get.userName)
+
+    "hoge"
   }
 
   get("/user/signin"){

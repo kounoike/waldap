@@ -25,12 +25,10 @@ trait WebAppService extends LDAPAccountService {
     val app = WebApps.filter(_.name === webAppName.bind).first
     app.userType match {
       case "USER" =>
-        AddLDAPGroup(s"${webAppName}_${instanceSuffix}_Users")
+        AddLDAPGroup(s"${webAppName}_${instanceSuffix}_Users", webAppName, instanceSuffix)
       case "USER_ADMIN" =>
-        AddLDAPGroup(s"${webAppName}_${instanceSuffix}_Users")
-        AddLDAPGroup(s"${webAppName}_${instanceSuffix}_Admins")
-      case x =>
-        println(s"""?????????? userType:${x}""")
+        AddLDAPGroup(s"${webAppName}_${instanceSuffix}_Users", webAppName, instanceSuffix)
+        AddLDAPGroup(s"${webAppName}_${instanceSuffix}_Admins", webAppName, instanceSuffix)
     }
   }
 
