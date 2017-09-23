@@ -7,16 +7,20 @@ trait WebAppComponent extends TemplateComponent { self: Profile =>
   lazy val WebApps = TableQuery[WebApps]
 
   class WebApps(tag: Tag) extends Table[WebApp](tag, "WEBAPP") {
-    val name = column[String]("NAME", O PrimaryKey)
-    val url = column[Option[String]]("URL")
-    val guide = column[String]("GUIDE")
+    val id = column[Int]("ID", O PrimaryKey)
+    val name = column[String]("NAME")
+    val url = column[String]("URL")
+    val guideTemplate = column[String]("GUIDE_TEMPLATE")
+    val userType = column[String]("USER_TYPE")
 
-    def * = (name, url, guide) <> (WebApp.tupled, WebApp.unapply)
+    def * = (id, name, url, guideTemplate, userType) <> (WebApp.tupled, WebApp.unapply)
   }
 }
 
 case class WebApp(
+  id: Int,
   name: String,
-  url: Option[String],
-  guide: String
+  url: String,
+  guideTemplate: String,
+  userType: String
 )

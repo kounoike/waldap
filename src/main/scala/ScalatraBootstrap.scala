@@ -20,14 +20,12 @@ class ScalatraBootstrap extends LifeCycle {
     context.mount(new waldap.core.controller.admin.IndexController, "/*")
     context.mount(new waldap.core.controller.admin.UserController, "/*")
     context.mount(new waldap.core.controller.admin.GroupController, "/*")
-    context.mount(new waldap.core.controller.admin.ApplicationController, "/*")
+    context.mount(new waldap.core.controller.admin.WebAppsController, "/*")
     context.mount(new waldap.core.controller.admin.SettingsController, "/*")
 
     context.mount(new waldap.core.controller.user.IndexController, "/*")
 
     context.mount(new ValidationJavaScriptProvider, "/assets/js/*")
-
-    WaldapLdapServer.init()
   }
 
   override def destroy(context: ServletContext): Unit = {

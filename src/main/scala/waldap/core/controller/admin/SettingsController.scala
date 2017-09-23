@@ -1,13 +1,13 @@
 package waldap.core.controller.admin
 
 import waldap.core.controller.ControllerBase
-import waldap.core.service.SystemSettingsService
+import waldap.core.service.{LDAPAccountService, SystemSettingsService}
 import waldap.core.ldap.{LDAPUtil, WaldapLdapServer}
 import waldap.core.admin.html
 import io.github.gitbucket.scalatra.forms._
 import org.scalatra.FlashMapSupport
 
-class SettingsController extends ControllerBase with FlashMapSupport with SystemSettingsService{
+class SettingsController extends ControllerBase with FlashMapSupport with SystemSettingsService with LDAPAccountService {
   case class SettingsForm(baseUrl: Option[String], ldapPort: Int)
 
   private val settingForm = mapping(
@@ -28,15 +28,16 @@ class SettingsController extends ControllerBase with FlashMapSupport with System
   post("/admin/password", passwordForm){ form =>
     if(form.adminPassword != form.adminPasswordRetype){
       flash += "info" -> context.messages.get("settings.passwordMismatch")
-      redirect("/admin/password")
     }
     else{
       val adminPassword = LDAPUtil.encodePassword(form.adminPassword)
       val newSettings = SystemSettingsService.SystemSettings(context.settings.baseUrl, adminPassword, context.settings.ldapPort, context.settings.db)
       saveSystemSettings(newSettings)
+      ChangeLDAPAdminPassword(form.adminPassword)
+
       flash += "info" -> context.messages.get("settings.passwordChanged")
-      redirect("/admin/password")
     }
+    redirect("/admin/password")
   }
 
   get("/admin/system"){

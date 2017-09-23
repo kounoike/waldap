@@ -5,6 +5,10 @@
       version="3.0">
 
   <listener>
+    <listener-class>waldap.core.servlet.InitializeListner</listener-class>
+  </listener>
+
+  <listener>
     <listener-class>org.scalatra.servlet.ScalatraListener</listener-class>
   </listener>
 

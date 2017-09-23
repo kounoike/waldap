@@ -78,6 +78,12 @@ class WaldapDirectoryServiceFactory extends DirectoryServiceFactory{
     directoryService.startup()
 
     val session: CoreSession = directoryService.getAdminSession
+
+    val schemaReader = new LdifReader((getClass.getResourceAsStream("/schema.ldif")))
+    schemaReader.forEach{ entry =>
+      session.add(new DefaultEntry(directoryService.getSchemaManager, entry.getEntry))
+    }
+
     if (!session.exists(LDAPUtil.baseDnName)){
       val reader = new LdifReader(getClass.getResourceAsStream("/base.ldif"))
       reader.forEach{ entry =>

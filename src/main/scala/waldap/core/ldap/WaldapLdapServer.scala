@@ -25,5 +25,9 @@ object WaldapLdapServer extends WaldapLdapServer {
     init()
   }
 
+  def stop(): Unit = {
+    ldapServer.stop()
+  }
+
   def getAdminSession(): CoreSession = directoryService.getAdminSession()
 }

@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeSet>
   <createTable tableName="WEBAPP">
-    <column name="NAME" type="varchar(100)" nullable="false"/>
+    <column name="ID" type="int" nullable="false" autoIncrement="true" unique="true"/>
+    <column name="NAME" type="varchar(100)" nullable="false" unique="true"/>
     <column name="URL" type="varchar(512)" nullable="false"/>
-    <column name="GUIDE" type="varchar(5000)" nullable="false"/>
+    <column name="GUIDE_TEMPLATE" type="varchar(5000)" nullable="false"/>
+    <column name="USER_TYPE" type="varchar(20)" nullable="false"/>
   </createTable>
-  <addPrimaryKey constraintName="IDX_WEBAPP_PK" tableName="WEBAPP" columnNames="NAME"/>
+  <addPrimaryKey constraintName="IDX_WEBAPP_PK" tableName="WEBAPP" columnNames="ID"/>
+
+  <insert tableName="WEBAPP">
+    <column name="NAME" value="_Custom"/>
+    <column name="URL" value="#"/>
+    <column name="GUIDE_TEMPLATE" value="Custom app."/>
+    <column name="USER_TYPE" value="USER"/>
+  </insert>
 
   <insert tableName="WEBAPP">
     <column name="NAME" value="GitBucket"/>
     <column name="URL" value="https://gitbucket.github.io/"/>
-    <column name="GUIDE" value=""/>
+    <column name="GUIDE_TEMPLATE" value="GitBucket"/>
+    <column name="USER_TYPE" value="USER"/>
   </insert>
+
+  <insert tableName="WEBAPP">
+    <column name="NAME" value="Jenkins"/>
+    <column name="URL" value="https://jenkins.io/"/>
+    <column name="GUIDE_TEMPLATE" value="Jenkins"/>
+    <column name="USER_TYPE" value="USER_ADMIN"/>
+  </insert>
+
+  <createTable tableName="WEBAPP_INSTANCE">
+    <column name="ID" type="int" nullable="false" autoIncrement="true" unique="true"/>
+    <column name="WEBAPP_NAME" type="varchar(100)" nullable="false"/>
+    <column name="INSTANCE_SUFFIX" type="varchar(100)" nullable="false"/>
+    <column name="URL" type="varchar(512)" nullable="false"/>
+  </createTable>
+  <addPrimaryKey constraintName="IDX_WEBAPP_INSTANCE_PK" tableName="WEBAPP_INSTANCE" columnNames="ID"/>
+  <addUniqueConstraint constraintName="IDX_WEBAPP_INSTANCE_1" tableName="WEBAPP_INSTANCE" columnNames="WEBAPP_NAME,INSTANCE_SUFFIX"/>
+  <addForeignKeyConstraint constraintName="IDX_WEBAPP_INSTANCE_FK0" baseTableName="WEBAPP_INSTANCE" baseColumnNames="WEBAPP_NAME" referencedTableName="WEBAPP" referencedColumnNames="NAME"/>
+
 </changeSet>

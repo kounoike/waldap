@@ -15,5 +15,6 @@ trait ProfileProvider { self: Profile with SystemSettingsService =>
 
 trait CoreProfile extends ProfileProvider with Profile with SystemSettingsService
   with WebAppComponent
+  with WebAppInstanceComponent
 
 object Profile extends CoreProfile

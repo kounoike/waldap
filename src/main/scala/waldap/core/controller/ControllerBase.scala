@@ -3,15 +3,16 @@ package waldap.core.controller
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.{FilterChain, ServletRequest, ServletResponse}
 
-import io.github.gitbucket.scalatra.forms.ClientSideValidationFormSupport
+import io.github.gitbucket.scalatra.forms.{ClientSideValidationFormSupport, ValueType}
 import waldap.core.ldap.WaldapLdapServer
 import waldap.core.model.Account
 import waldap.core.util.{Keys, StringUtil}
 import waldap.core.util.Implicits._
 import waldap.core.util.SyntaxSugars._
+import waldap.core.util._
 import waldap.core.service.SystemSettingsService
 import org.apache.directory.server.core.api.CoreSession
-import org.scalatra.{FlashMap, FlashMapSupport, ScalatraFilter}
+import org.scalatra.{FlashMap, FlashMapSupport, Route, ScalatraFilter}
 import org.scalatra.i18n.{I18nSupport, Messages}
 import org.scalatra.json.JacksonJsonSupport
 
@@ -44,6 +45,30 @@ abstract class ControllerBase extends ScalatraFilter
           )))
         }
       }
+    }
+
+  def ajaxGet(path : String)(action : => Any) : Route =
+    super.get(path){
+      request.setAttribute(Keys.Request.Ajax, "true")
+      action
+    }
+
+  override def ajaxGet[T](path : String, form : ValueType[T])(action : T => Any) : Route =
+    super.ajaxGet(path, form){ form =>
+      request.setAttribute(Keys.Request.Ajax, "true")
+      action(form)
+    }
+
+  def ajaxPost(path : String)(action : => Any) : Route =
+    super.post(path){
+      request.setAttribute(Keys.Request.Ajax, "true")
+      action
+    }
+
+  override def ajaxPost[T](path : String, form : ValueType[T])(action : T => Any) : Route =
+    super.ajaxPost(path, form){ form =>
+      request.setAttribute(Keys.Request.Ajax, "true")
+      action(form)
     }
 
   protected def NotFound() =

@@ -1,0 +1,121 @@
+@(instanceMap: Map[waldap.core.model.WebApp, List[waldap.core.model.WebAppInstance]], info: Option[Any])(implicit context: waldap.core.controller.Context)
+@waldap.core.admin.html.main("WebApps", Some("apps")){
+<script type="text/html" id="add-instance-tmpl">
+  <form method="POST" action="@context.path/admin/apps/instance/add" validate="true">
+    <input type="hidden" name="webAppName" value="{{ name }}"/>
+    <div class="field">
+      <label class="label">Instance Suffix</label>
+      <span class="error" id="error-instanceSuffix"></span>
+      <div class="control">
+        <input class="input" type="text" name="instanceSuffix">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">URL</label>
+      <span class="error" id="error-url"></span>
+      <div class="control">
+        <input class="input" type="text" name="url">
+      </div>
+    </div>
+  </form>
+</script>
+<div class="box box-main">
+  @info.map{ i =>
+  <div class="box is-info">@i</div>
+  }
+  @instanceMap.map{ case(app, ls) =>
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          @app.name
+        </p>
+      </header>
+      <div class="card-content">
+        @if(ls.nonEmpty) {
+          <table class="table">
+            <thead>
+              <tr><th>Instance name</th><th>url</th><th><br/></th></tr>
+            </thead>
+            <tbody>
+              @ls.map{ i =>
+                <tr>
+                  <td>@{app.name}_@{i.instanceSuffix}</td>
+                  <td>@i.url</td>
+                  <td>
+                    <button class="button is-success is-small instance-edit" data-appName="@app.name" data-instanceSuffix="@i.instanceSuffix">
+                      <span class="icon is-small"><i class="fa fa-pencil"></i></span>
+                    </button>
+                    <button class="button is-danger is-small instance-delete" data-id="@i.id" data-name="@{app.name}_@{i.instanceSuffix}">
+                      <span class="icon is-small"><i class="fa fa-times"></i></span>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } else {
+          No Instance
+        }
+      </div>
+      <div class="card-footer">
+        <a href="#" class="card-footer-item add-instance" data-id="@app.id" data-name="@app.name">Add Instance</a>
+      </div>
+    </div>
+    <hr/>
+  }
+</div>
+<script>
+$(function(){
+  $(".add-instance").on("click", function() {
+    var data = {
+      id: $(this).data("id"),
+      name: $(this).data("name")
+    };
+    var tmpl = $("#add-instance-tmpl").html();
+    Mustache.parse(tmpl);
+    $.confirm({
+      title: "Add " + $(this).data("name") + "Instance",
+      content: Mustache.render(tmpl, data),
+      type: "green",
+      boxWidth: "40%",
+      useBootstrap: false,
+      buttons: {
+        formSubmit: {
+          text: 'Submit',
+          btnClass: 'btn-blue',
+          action: function(){
+            var form = this.$content.find('form');
+            form.submit();
+          }
+        },
+        cancel: function(){
+        }
+      }
+    });
+  });
+
+  $(".instance-delete").on('click', function() {
+    var id = $(this).data("id");
+    var name = $(this).data("name");
+    $.confirm({
+      title: "confirm",
+      content: "Really delete this instance [" + name + "]?",
+      type: "red",
+      boxWidth: "40%",
+      useBootstrap: false,
+      buttons: {
+        confirm: {
+          btnClass: "btn-red",
+          text: "Delete",
+          action: function() {
+            window.location.href = "@context.path/admin/apps/instance/" + id + "/delete";
+          }
+        },
+        cancel: function() {
+        }
+      }
+    });
+  });
+});
+</script>
+}

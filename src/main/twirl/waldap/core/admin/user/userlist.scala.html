@@ -1,5 +1,4 @@
-@(usersCursor:java.lang.Iterable[org.apache.directory.api.ldap.model.entry.Entry])(implicit context: waldap.core.controller.Context)
-@import scala.collection.JavaConverters._
+@(users:List[org.apache.directory.api.ldap.model.entry.Entry], groups:List[org.apache.directory.api.ldap.model.entry.Entry])(implicit context: waldap.core.controller.Context)
 @waldap.core.admin.html.main("User List", Some("users")) {
 <div class="box box-main">
   <button class="button is-primary is-pulled-right" id="add-button">
@@ -12,21 +11,28 @@
       <thead>
       <tr>
         <th>@context.messages.get("ldapuser.uid")</th>
-        <th>@context.messages.get("ldapuser.sn")</th>
-        <th>@context.messages.get("ldapuser.cn")</th>
         <th>@context.messages.get("ldapuser.displayName")</th>
         <th>@context.messages.get("ldapuser.mail")</th>
+        <th>Groups</th>
         <th class="control"></th>
       </tr>
       </thead>
       <tbody>
-      @usersCursor.asScala.map{ user =>
+      @users.map{ user =>
       <tr>
         <td>@user.get("uid").get</td>
-        <td>@user.get("sn").get</td>
-        <td>@user.get("cn").get</td>
         <td>@user.get("displayName").get</td>
         <td>@user.get("mail").get</td>
+        <td>
+          @groups.map{ group =>
+            <div class="tags has-addons">
+              <span class="tag is-small @if(group.get("member").contains(user.getDn.getName)){is-primary}else{is-light}">@group.get("cn").get</span>
+              <a class="tag is-light is-small @if(group.get("member").contains(user.getDn.getName)){disjoin}else{join}" data-userName="@user.get("uid").get" data-groupName="@group.get("cn").get">
+                <i class="fa fa-check-square"></i>
+              </a>
+            </div>
+          }
+        </td>
         <td>
           <button class="button is-success is-small user-edit"
                   data-username="@user.get("uid").get"
@@ -153,6 +159,7 @@ $(function(){
       }
     }
   });
+
   $("#add-button").on("click", function() {
     $.confirm({
       title: "Add user",
@@ -174,6 +181,7 @@ $(function(){
       }
     });
   });
+
   $(".user-edit").on("click", function() {
     var data = {
       uid: $(this).data("username"),
@@ -204,6 +212,7 @@ $(function(){
       }
     });
   });
+
   $(".user-password").on("click", function() {
     var data = {
       uid: $(this).data("username")
@@ -230,6 +239,7 @@ $(function(){
       }
     });
   });
+
   $(".user-delete").on('click', function() {
     var user = $(this).data("username");
     $.confirm({
@@ -244,6 +254,52 @@ $(function(){
           text: "Delete",
           action: function() {
             window.location.href = "@context.path/admin/users/" + user + "/delete";
+          }
+        },
+        cancel: function() {
+        }
+      }
+    });
+  });
+
+  $(".join").on('click', function() {
+    var user = $(this).data("username");
+    var group = $(this).data("groupname");
+    $.confirm({
+      title: "confirm",
+      content: "Join to Group?",
+      type: "green",
+      boxWidth: "40%",
+      useBootstrap: false,
+      buttons: {
+        confirm: {
+          btnClass: "btn-green",
+          text: "Join",
+          action: function() {
+            window.location.href = "@context.path/admin/users/join/" + user + "/" + group;
+          }
+        },
+        cancel: function() {
+        }
+      }
+    });
+  });
+
+  $(".disjoin").on('click', function() {
+    var user = $(this).data("username");
+    var group = $(this).data("groupname");
+    $.confirm({
+      title: "confirm",
+      content: "Disjoin from Group?",
+      type: "green",
+      boxWidth: "40%",
+      useBootstrap: false,
+      buttons: {
+        confirm: {
+          btnClass: "btn-green",
+          text: "Disjoin",
+          action: function() {
+            window.location.href = "@context.path/admin/users/disjoin/" + user + "/" + group;
           }
         },
         cancel: function() {
