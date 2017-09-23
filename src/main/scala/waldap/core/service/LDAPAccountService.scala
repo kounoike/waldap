@@ -87,9 +87,6 @@ trait LDAPAccountService {
       val passwordAdd = new DefaultModification(ModificationOperation.ADD_ATTRIBUTE, "userPassword",
         LDAPUtil.encodePassword(password))
       context.ldapSession.modify(new Dn(context.ldapSession.getDirectoryService.getSchemaManager, dn), passwordRemove, passwordAdd)
-      println(password)
-      println(LDAPUtil.encodePassword(password))
-      println(context.ldapSession.lookup(new Dn(context.ldapSession.getDirectoryService.getSchemaManager, dn)).get("userPassword"))
     }
   }
 
