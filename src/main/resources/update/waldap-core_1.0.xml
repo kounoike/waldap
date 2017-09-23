@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<changeSet>
+  <createTable tableName="WEBAPP">
+    <column name="NAME" type="varchar(100)" nullable="false"/>
+    <column name="URL" type="varchar(512)" nullable="false"/>
+    <column name="GUIDE" type="varchar(5000)" nullable="false"/>
+  </createTable>
+  <addPrimaryKey constraintName="IDX_WEBAPP_PK" tableName="WEBAPP" columnNames="NAME"/>
+
+  <insert tableName="WEBAPP">
+    <column name="NAME" value="GitBucket"/>
+    <column name="URL" value="https://gitbucket.github.io/"/>
+    <column name="GUIDE" value=""/>
+  </insert>
+</changeSet>

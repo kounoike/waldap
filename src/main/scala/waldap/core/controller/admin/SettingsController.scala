@@ -32,7 +32,7 @@ class SettingsController extends ControllerBase with FlashMapSupport with System
     }
     else{
       val adminPassword = LDAPUtil.encodePassword(form.adminPassword)
-      val newSettings = SystemSettingsService.SystemSettings(context.settings.baseUrl, adminPassword, context.settings.ldapPort)
+      val newSettings = SystemSettingsService.SystemSettings(context.settings.baseUrl, adminPassword, context.settings.ldapPort, context.settings.db)
       saveSystemSettings(newSettings)
       flash += "info" -> context.messages.get("settings.passwordChanged")
       redirect("/admin/password")
@@ -44,7 +44,7 @@ class SettingsController extends ControllerBase with FlashMapSupport with System
   }
 
   post("/admin/system", settingForm){ form =>
-    val newSettings = SystemSettingsService.SystemSettings(form.baseUrl, context.settings.adminPassword, form.ldapPort)
+    val newSettings = SystemSettingsService.SystemSettings(form.baseUrl, context.settings.adminPassword, form.ldapPort, context.settings.db)
     val needRestartLdap: Boolean = context.settings.ldapPort != newSettings.ldapPort
     saveSystemSettings(newSettings)
 

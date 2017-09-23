@@ -18,5 +18,7 @@ object Directory {
 
   val WaldapConf = new File(WaldapHome, "waldap.conf")
 
+  val DatabaseHome = s"${WaldapHome}/data"
+
   val InstanceHome = s"${WaldapHome}/server"
 }

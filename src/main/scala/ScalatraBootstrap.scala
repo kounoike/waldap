@@ -1,13 +1,19 @@
+import java.util.EnumSet
+
 import io.github.gitbucket.scalatra.forms.ValidationJavaScriptProvider
 import org.scalatra._
 import javax.servlet._
 
 import waldap.core.controller.{IndexController, PreprocessController}
 import waldap.core.ldap.WaldapLdapServer
+import waldap.core.servlet.TransactionFilter
+import waldap.core.util.Database
 
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
-    // access filter
+    context.addFilter("transactionFilter", new TransactionFilter)
+    context.getFilterRegistration("transactionFilter").addMappingForUrlPatterns(EnumSet.allOf(classOf[DispatcherType]), true, "/*")
+
     context.mount(new PreprocessController, "/*")
 
     context.mount(new IndexController, "/*")
@@ -22,5 +28,10 @@ class ScalatraBootstrap extends LifeCycle {
     context.mount(new ValidationJavaScriptProvider, "/assets/js/*")
 
     WaldapLdapServer.init()
+  }
+
+  override def destroy(context: ServletContext): Unit = {
+    Database.closeDataSource()
+    super.destroy(context)
   }
 }

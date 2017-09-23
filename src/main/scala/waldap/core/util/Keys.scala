@@ -8,6 +8,7 @@ object Keys {
   object Request {
     def Cache(key: String) = s"cache.${key}"
     val Ajax = "AJAX"
+    val DBSession = "DB_SESSION"
   }
 
   object Flash {
