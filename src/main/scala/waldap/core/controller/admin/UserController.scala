@@ -9,20 +9,20 @@ import waldap.core.service.LDAPAccountService
 trait UserControllerBase extends ControllerBase with FlashMapSupport with LDAPAccountService{
   private val logger = LoggerFactory.getLogger(getClass)
 
-  case class UserAddForm(username: String, password: String, sn: String, cn: String, displayName: String, mail: String)
+  case class UserAddForm(username: String, password: String, sn: String, givenName: String, displayName: String, mail: String)
   val useraddform = mapping(
     "username" -> text(required, maxlength(40)),
     "password" -> text(required, maxlength(40)),
     "sn" -> text(required, maxlength(40)),
-    "cn" -> text(required, maxlength(40)),
+    "givenName" -> text(required, maxlength(40)),
     "displayName" -> text(required, maxlength(40)),
     "mail" -> text(required, maxlength(40))
   )(UserAddForm.apply)
 
-  case class UserEditForm(sn: String, cn: String, displayName: String, mail: String)
+  case class UserEditForm(sn: String, givenName: String, displayName: String, mail: String)
   val usereditform = mapping(
     "sn" -> text(required, maxlength(40)),
-    "cn" -> text(required, maxlength(40)),
+    "givenName" -> text(required, maxlength(40)),
     "displayName" -> text(required, maxlength(40)),
     "mail" -> text(required, maxlength(40))
   )(UserEditForm.apply)
@@ -36,13 +36,9 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport with LDAPAc
     waldap.core.admin.user.html.userlist(GetLDAPUsers, GetLDAPGroups)
   }
 
-  get("/admin/users/add"){
-    waldap.core.admin.user.html.useradd()
-  }
-
   post("/admin/users/:name/edit", usereditform) { form =>
     params.get("name").map{ n =>
-      EditLDAPUser(n, form.cn, form.sn, form.displayName, form.mail)
+      EditLDAPUser(n, form.givenName, form.sn, form.displayName, form.mail)
       redirect("/admin/users")
     }getOrElse(NotFound())
   }
@@ -63,7 +59,7 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport with LDAPAc
   }
 
   post("/admin/users/add", useraddform){form =>
-    AddLDAPUser(form.username, form.password, form.cn, form.sn, form.displayName, form.mail)
+    AddLDAPUser(form.username, form.password, form.givenName, form.sn, form.displayName, form.mail)
 
     redirect("/admin/users")
   }

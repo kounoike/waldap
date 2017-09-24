@@ -27,7 +27,7 @@
           @groups.map{ group =>
             <div class="tags has-addons">
               <span class="tag is-small @if(group.get("member").contains(user.getDn.getName)){is-primary}else{is-light}">@group.get("cn").get</span>
-              <a class="tag is-light is-small @if(group.get("member").contains(user.getDn.getName)){disjoin}else{join}" data-userName="@user.get("uid").get" data-groupName="@group.get("cn").get">
+              <a class="tag is-light is-small @if(group.get("member").contains(user.getDn.getName)){disjoin}else{join}" data-username="@user.get("uid").get" data-groupname="@group.get("cn").get">
                 <i class="fa fa-check-square"></i>
               </a>
             </div>
@@ -36,7 +36,7 @@
         <td>
           <button class="button is-success is-small user-edit"
                   data-username="@user.get("uid").get"
-          data-sn="@user.get("sn").get" data-cn="@user.get("cn").get"
+          data-sn="@user.get("sn").get" data-given-name="@user.get("givenName").get"
           data-display-name="@user.get("displayName").get" data-mail="@user.get("mail").get">
 
           <span class="icon is-small"><i class="fa fa-pencil"></i></span>
@@ -82,10 +82,10 @@
       </div>
     </div>
     <div class="field">
-      <label class="label">@context.messages.get("ldapuser.cn")</label>
-      <span class="error" id="error-cn"></span>
+      <label class="label">@context.messages.get("ldapuser.givenName")</label>
+      <span class="error" id="error-givenName"></span>
       <div class="control">
-        <input class="input" type="text" name="cn">
+        <input class="input" type="text" name="givenName">
       </div>
     </div>
     <div class="field">
@@ -114,10 +114,10 @@
       </div>
     </div>
     <div class="field">
-      <label class="label">@context.messages.get("ldapuser.cn")</label>
-      <span class="error" id="error-cn"></span>
+      <label class="label">@context.messages.get("ldapuser.givenName")</label>
+      <span class="error" id="error-givenName"></span>
       <div class="control">
-        <input class="input" type="text" name="cn" value="{{ cn }}">
+        <input class="input" type="text" name="givenName" value="{{ givenName }}">
       </div>
     </div>
     <div class="field">
@@ -186,7 +186,7 @@ $(function(){
     var data = {
       uid: $(this).data("username"),
       sn: $(this).data("sn"),
-      cn: $(this).data("cn"),
+      givenName: $(this).data("given-name"),
       displayName: $(this).data("display-name"),
       mail: $(this).data("mail")
     };

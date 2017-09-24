@@ -33,17 +33,18 @@ trait LDAPAccountService {
     }.toList
   }
 
-  def AddLDAPUser(userName: String, password: String, cn: String, sn: String, displayName: String, mail: String)(implicit context: Context): Unit = {
+  def AddLDAPUser(userName: String, password: String, givenName: String, sn: String, displayName: String, mail: String)(implicit context: Context): Unit = {
     val dn = s"uid=${userName},${LDAPUtil.usersDn}"
     if(!context.ldapSession.exists(dn)){
       val entry = new DefaultEntry(context.ldapSession.getDirectoryService.getSchemaManager())
       entry.setDn(dn)
       entry.add("objectClass", "top", "person", "inetOrgPerson", "simulatedMemberOfObjectClass")
       entry.add("uid", userName)
-      entry.add("cn", cn)
+      entry.add("givenName", givenName)
       entry.add("sn", sn)
       entry.add("mail", mail)
       entry.add("userPassword", LDAPUtil.encodePassword(password))
+      entry.add("cn", displayName)
       entry.add("displayName", displayName)
       context.ldapSession.add(entry)
     }
@@ -61,15 +62,16 @@ trait LDAPAccountService {
     }
   }
 
-  def EditLDAPUser(userName: String, cn: String, sn: String, displayName: String, mail: String)(implicit context: Context): Unit = {
+  def EditLDAPUser(userName: String, givenName: String, sn: String, displayName: String, mail: String)(implicit context: Context): Unit = {
     val dn = s"uid=${userName},${LDAPUtil.usersDn}"
     if (context.ldapSession.exists(dn)) {
-      val cnMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE, "cn", cn)
+      val givenNameMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE, "givenName", givenName)
       val snMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE, "sn", sn)
+      val cnMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE, "cn", displayName)
       val displayNameMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE, "displayName", displayName)
       val mailMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE, "mail", mail)
       context.ldapSession.modify(new Dn(context.ldapSession.getDirectoryService.getSchemaManager, dn),
-        cnMod, snMod, displayNameMod, mailMod)
+        cnMod, snMod, displayNameMod, givenNameMod, mailMod)
     }
   }
 
