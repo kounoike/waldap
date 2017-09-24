@@ -10,6 +10,10 @@ trait WebAppService extends LDAPAccountService {
     WebApps sortBy(_.name) list
   }
 
+  def getWebAppInstance(appName: String, instanceSuffix: String)(implicit s: Session): Option[WebAppInstance] = {
+    WebAppInstances.filter(x => x.webAppName === appName.bind && x.instanceSuffix === instanceSuffix.bind).firstOption
+  }
+
   def getWebAppInstanceMap(implicit s:Session): Map[WebApp, List[WebAppInstance]] = {
     getAllWebApps().map(app =>
       (app -> (WebAppInstances.filter(_.webAppName === app.name.bind) list))

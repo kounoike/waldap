@@ -4,7 +4,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="/assets/sass/stylesheets/main.css">
+  <link rel="stylesheet" href="@context.path/assets/sass/stylesheets/main.css">
   <link rel="stylesheet" href="@helpers.webjars("bulmaswatch", "default/bulmaswatch.min.css")">
   <link rel="stylesheet" href="@helpers.webjars("font-awesome", "css/font-awesome.min.css")">
   <link rel="stylesheet" href="@helpers.webjars("github-com-craftpip-jquery-confirm", "jquery-confirm.min.css")">
@@ -14,22 +14,22 @@
   <script src="@helpers.webjars("github-com-craftpip-jquery-confirm", "jquery-confirm.min.js")"></script>
   <script src="@helpers.webjars("tablesorter", "js/jquery.tablesorter.js")"></script>
   <script src="@helpers.webjars("mustache", "mustache.min.js")"></script>
-  <script src="/assets/js/validation.js"></script>
+  <script src="@context.path/assets/js/validation.js"></script>
   <title>@{title}</title>
 </head>
 <body>
   <div class="hero is-primary is-bold">
     <div class="hero-head">
       <div class="navbar-brand is-pulled-left">
-        <span class="icon"><i class="fa fa-address-book-o"></i></span>
-        <span>WALDAP</span>
+        <a href="@context.path/">
+          <span class="icon"><i class="fa fa-address-book-o"></i></span>
+          <span>WALDAP</span>
+        </a>
       </div>
       <div class="is-pulled-right">
         @context.loginAccount.map{ user =>
         <span class="fa fa-user">@user.userName</span>
         <a href="/signout" class="fa fa-sign-out">Sign out</a>
-        }.getOrElse{
-        Sign in
         }
       </div>
     </div>

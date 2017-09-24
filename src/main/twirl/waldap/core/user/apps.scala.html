@@ -1,0 +1,12 @@
+@(instances: List[waldap.core.model.WebAppInstance])(implicit context: waldap.core.controller.Context)
+@waldap.core.user.html.main("WebApps", "apps") {
+<div class="box">
+  <div class="content">
+    @instances.map{ instance =>
+      <p>
+        <a href="@instance.url" target="_blank">@{instance.webAppName}(@{instance.webAppName}_@{instance.instanceSuffix})</a>
+      </p>
+    }
+  </div>
+</div>
+}

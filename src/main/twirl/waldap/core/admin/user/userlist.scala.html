@@ -139,7 +139,7 @@
 <script id="password-form-tmpl" type="text/html">
   <form method="POST" action="@context.path/admin/users/{{ uid }}/password" validate="true">
     <div class="field">
-      <label class="label">@context.messages.get("ldapuser.password")</label>
+      <label class="label">@context.messages.get("password.newPassword")</label>
       <span class="error" id="error-password"></span>
       <div class="control">
         <input class="input" type="password" name="password">
