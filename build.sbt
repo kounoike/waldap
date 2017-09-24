@@ -6,7 +6,7 @@ organization := "io.github.kounoike"
 
 name := "waldap"
 
-version := "0.0.1-SNAPSHOT"
+version := "0.9.0"
 
 scalaVersion := "2.12.3"
 
