@@ -5,7 +5,6 @@ import org.scalatra._
 import javax.servlet._
 
 import waldap.core.controller.{IndexController, PreprocessController}
-import waldap.core.ldap.WaldapLdapServer
 import waldap.core.servlet.TransactionFilter
 import waldap.core.util.Database
 
@@ -19,7 +18,6 @@ class ScalatraBootstrap extends LifeCycle {
     context.mount(new IndexController, "/*")
     context.mount(new waldap.core.controller.admin.IndexController, "/*")
     context.mount(new waldap.core.controller.admin.UserController, "/*")
-    context.mount(new waldap.core.controller.admin.GroupController, "/*")
     context.mount(new waldap.core.controller.admin.WebAppsController, "/*")
     context.mount(new waldap.core.controller.admin.SettingsController, "/*")
 
