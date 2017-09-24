@@ -21,7 +21,7 @@
               @ls.map{ i =>
                 <tr>
                   <td>@{app.name}_@{i.instanceSuffix}</td>
-                  <td>@i.url</td>
+                  <td><a href="@i.url" target="_blank">@i.url</a></td>
                   <td>
                     <button class="button is-success is-small instance-edit" data-app-name="@app.name" data-instance-suffix="@i.instanceSuffix" data-url="@i.url" data-id="@i.id">
                       <span class="icon is-small"><i class="fa fa-pencil"></i></span>

@@ -21,7 +21,14 @@ import scala.collection.JavaConverters._
 class IndexController extends ControllerBase with JacksonJsonSupport with I18nSupport with ClientSideValidationFormSupport {
 
   get("/"){
-    html.index("WALDAP")
+    context.loginAccount match {
+      case Some(x) if x.isAdmin =>
+        redirect("/admin/")
+      case Some(x) =>
+        redirect("/user/")
+      case None =>
+        html.index()
+    }
   }
 
   get("/signout"){
