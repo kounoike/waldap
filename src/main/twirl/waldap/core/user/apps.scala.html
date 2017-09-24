@@ -3,9 +3,13 @@
 <div class="box">
   <div class="content">
     @instances.map{ instance =>
-      <p>
-        <a href="@instance.url" target="_blank">@{instance.webAppName}(@{instance.webAppName}_@{instance.instanceSuffix})</a>
-      </p>
+      <div class="card">
+        <div class="card-content">
+          <p>
+            <a href="@instance.url" target="_blank">@{instance.webAppName}(@{instance.webAppName}_@{instance.instanceSuffix})</a>
+          </p>
+        </div>
+      </div>
     }
   </div>
 </div>

@@ -13,7 +13,7 @@
         <th>@context.messages.get("ldapuser.uid")</th>
         <th>@context.messages.get("ldapuser.displayName")</th>
         <th>@context.messages.get("ldapuser.mail")</th>
-        <th>Groups</th>
+        <th class="groups">Groups</th>
         <th class="control"></th>
       </tr>
       </thead>
@@ -156,7 +156,10 @@ $(function(){
     headers: {
       '.control': {
         sorter: false
-      }
+      },
+      '.groups': {
+        sorter: false
+      }S
     }
   });
 
