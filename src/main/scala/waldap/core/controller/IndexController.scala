@@ -23,9 +23,9 @@ class IndexController extends ControllerBase with JacksonJsonSupport with I18nSu
   get("/"){
     context.loginAccount match {
       case Some(x) if x.isAdmin =>
-        redirect("/admin/")
+        redirect("/admin")
       case Some(x) =>
-        redirect("/user/")
+        redirect("/user")
       case None =>
         html.index()
     }
