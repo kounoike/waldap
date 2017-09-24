@@ -8,10 +8,11 @@ import io.github.gitbucket.scalatra.forms._
 import org.scalatra.FlashMapSupport
 
 class SettingsController extends ControllerBase with FlashMapSupport with SystemSettingsService with LDAPAccountService {
-  case class SettingsForm(baseUrl: Option[String], ldapPort: Int)
+  case class SettingsForm(baseUrl: Option[String], ldapBindOnlyLocal: Boolean, ldapPort: Int)
 
   private val settingForm = mapping(
     "baseUrl" -> trim(optional(text())),
+    "ldapBindOnlyLocal" -> boolean(),
     "ldapPort" -> number(required)
   )(SettingsForm.apply)
 
@@ -31,7 +32,7 @@ class SettingsController extends ControllerBase with FlashMapSupport with System
     }
     else{
       val adminPassword = LDAPUtil.encodePassword(form.adminPassword)
-      val newSettings = SystemSettingsService.SystemSettings(context.settings.baseUrl, adminPassword, context.settings.ldapPort, context.settings.db)
+      val newSettings = SystemSettingsService.SystemSettings(context.settings.baseUrl, adminPassword, context.settings.ldapBindOnlyLocal, context.settings.ldapPort, context.settings.db)
       saveSystemSettings(newSettings)
       ChangeLDAPAdminPassword(form.adminPassword)
 
@@ -45,7 +46,7 @@ class SettingsController extends ControllerBase with FlashMapSupport with System
   }
 
   post("/admin/system", settingForm){ form =>
-    val newSettings = SystemSettingsService.SystemSettings(form.baseUrl, context.settings.adminPassword, form.ldapPort, context.settings.db)
+    val newSettings = SystemSettingsService.SystemSettings(form.baseUrl, context.settings.adminPassword, form.ldapBindOnlyLocal, form.ldapPort, context.settings.db)
     val needRestartLdap: Boolean = context.settings.ldapPort != newSettings.ldapPort
     saveSystemSettings(newSettings)
 

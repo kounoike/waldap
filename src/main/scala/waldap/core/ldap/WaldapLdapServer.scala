@@ -14,7 +14,9 @@ object WaldapLdapServer extends WaldapLdapServer {
   var ldapServer = new org.apache.directory.server.ldap.LdapServer()
 
   def init(): Unit = {
-    ldapServer.setTransports(new TcpTransport("0.0.0.0", loadSystemSettings().ldapPort))
+    val settings = loadSystemSettings()
+    val bindHost = if(settings.ldapBindOnlyLocal) "127.0.0.1" else "0.0.0.0"
+    ldapServer.setTransports(new TcpTransport(bindHost, settings.ldapPort))
     ldapServer.setDirectoryService(directoryService)
     ldapServer.start()
   }

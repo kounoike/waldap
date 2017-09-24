@@ -12,6 +12,12 @@
         </div>
       </div>
       <div class="field">
+        <label class="label">Bind only localhost</label>
+        <div class="control">
+          <input type="checkbox" name="ldapBindOnlyLocal" @if(context.settings.ldapBindOnlyLocal){checked}>
+        </div>
+      </div>
+      <div class="field">
         <label class="label">LDAP port</label>
         <div class="control">
           <input class="input" type="text" name="ldapPort" value="@context.settings.ldapPort">

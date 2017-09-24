@@ -17,6 +17,7 @@ trait SystemSettingsService {
     defining(new java.util.Properties()){ props =>
       settings.baseUrl.foreach(x => props.setProperty(BaseURL, x.replace("/\\Z", "")))
       props.setProperty(AdminPassword, settings.adminPassword)
+      props.setProperty(LdapBindOnlyLocal, settings.ldapBindOnlyLocal.toString)
       props.setProperty(LdapPort, settings.ldapPort.toString)
       props.setProperty(DatabaseUrl, settings.db.url)
       props.setProperty(DatabaseUser, settings.db.user)
@@ -42,6 +43,7 @@ trait SystemSettingsService {
       val settings = SystemSettings(
         getOptionValue[String](props, BaseURL, None).map(x => x.replaceFirst("/\\Z", "")),
         getValue[String](props, AdminPassword, "secret"),
+        getValue[Boolean](props, LdapBindOnlyLocal, true),
         getValue[Int](props, LdapPort, 10389),
         Database(
           getValue[String](props, DatabaseUrl, s"jdbc:h2:${Directory.DatabaseHome};MVCC=true"),
@@ -68,6 +70,7 @@ object SystemSettingsService {
   case class SystemSettings(
     baseUrl: Option[String],
     adminPassword: String,
+    ldapBindOnlyLocal: Boolean,
     ldapPort: Int,
     db: Database
   ){
@@ -91,6 +94,7 @@ object SystemSettingsService {
 
   private val BaseURL = "base_url"
   private val AdminPassword = "admin.password"
+  private val LdapBindOnlyLocal = "ldap.onlyLocal"
   private val LdapPort = "ldap.port"
 
   private val DatabaseUrl = "db.url"
