@@ -47,7 +47,7 @@ class SettingsController extends ControllerBase with FlashMapSupport with System
 
   post("/admin/system", settingForm){ form =>
     val newSettings = SystemSettingsService.SystemSettings(form.baseUrl, context.settings.adminPassword, form.ldapBindOnlyLocal, form.ldapPort, context.settings.db)
-    val needRestartLdap: Boolean = context.settings.ldapPort != newSettings.ldapPort
+    val needRestartLdap: Boolean = context.settings.ldapPort != newSettings.ldapPort || context.settings.ldapBindOnlyLocal != newSettings.ldapBindOnlyLocal
     saveSystemSettings(newSettings)
 
     if(needRestartLdap){
