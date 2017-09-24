@@ -23,6 +23,9 @@
                   <td>@{app.name}_@{i.instanceSuffix}</td>
                   <td><a href="@i.url" target="_blank">@i.url</a></td>
                   <td>
+                    <button class="button is-info is-small instance-help" data-app-name="@app.name" data-instance-suffix="@i.instanceSuffix" data-url="@i.url">
+                      <span class="icon is-small"><i class="fa fa-question"></i></span>
+                    </button>
                     <button class="button is-success is-small instance-edit" data-app-name="@app.name" data-instance-suffix="@i.instanceSuffix" data-url="@i.url" data-id="@i.id">
                       <span class="icon is-small"><i class="fa fa-pencil"></i></span>
                     </button>
@@ -77,8 +80,40 @@
     </div>
   </form>
 </script>
+@help()
 <script>
 $(function(){
+  $(".instance-help").on('click', function() {
+    var name = $(this).data("app-name");
+    var data = {
+      name: $(this).data("app-name"),
+      instanceSuffix: $(this).data("instance-suffix"),
+      url: $(this).data("url"),
+      localOnly: @context.settings.ldapBindOnlyLocal,
+      ldapPort: @context.settings.ldapPort,
+      host: "@context.host",
+      rootDn: "@waldap.core.ldap.LDAPUtil.baseDnName",
+      usersBaseDn: "@waldap.core.ldap.LDAPUtil.usersDn",
+      groupsBaseDn: "@waldap.core.ldap.LDAPUtil.groupsDn"
+    };
+    var tmpl = $("#help-" + name).html();
+    Mustache.parse(tmpl);
+    $.confirm({
+      title: "help",
+      content: Mustache.render(tmpl, data),
+      type: "blue",
+      boxWidth: "80%",
+      useBootstrap: false,
+      buttons: {
+        close: {
+          text: 'CLOSE',
+          action: function(){
+          }
+        }
+      }
+    });
+  });
+
   $(".add-instance").on("click", function() {
     var data = {
       id: $(this).data("id"),

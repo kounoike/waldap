@@ -1,0 +1,54 @@
+@()
+<script type="text/html" id="help-GitBucket">
+  <h2>LDAP settings for GitBucket.</h2>
+  <form>
+    <p>Go to <a href="{{ url }}/admin/system">System settings</a></p>
+    <p>Check <b>LDAP checkbox</b> <input type="checkbox" checked></p>
+    <p><b>LDAP host:</b><span class="tag">{{#ldapBindLocalOnly}}localhost{{/ldapBindLocalOnly}}{{^ldapBindLocalOnly}}{{ host }}{{/ldapBindLocalOnly}}</span></p>
+    <p><b>LDAP port:</b><span class="tag">{{ ldapPort }}</span></p>
+    <p><b>Bind DN:</b><span class="tag"></span>(blank)</p>
+    <p><b>Bind password:</b><span class="tag"></span>(blank)</p>
+    <p><b>Base DN:</b><span class="tag">{{ usersBaseDn }}</span></p>
+    <p><b>User name attribute:</b><span class="tag">uid</span></p>
+    <p><b>Additional filter condition:</b><span class="tag">(memberOf=cn={{ name }}_{{ instanceSuffix }}_Users,{{ groupsBaseDn }})</span></p>
+    <p><b>Full name attribute:</b><span class="tag">displayName</span></p>
+    <p><b>Mail address attribute:</b><span class="tag">mail</span></p>
+    <p>Don't check <b>Enable TLS</b><input type="checkbox"></p>
+    <p>Don't check <b>Enable SSL</b><input type="checkbox"></p>
+    <p><b>Keystore:</b><span class="tag"></span>(blank)</p>
+  </form>
+</script>
+
+<script type="text/html" id="help-Jenkins">
+  <h2>LDAP settings for Jenkins.</h2>
+  <form>
+    <p><b>Server:</b><span class="tag">{{#ldapBindLocalOnly}}localhost{{/ldapBindLocalOnly}}{{^ldapBindLocalOnly}}{{ host }}{{/ldapBindLocalOnly}}</span></p>
+    <p><b>LDAP port:</b><span class="tag">{{ ldapPort }}</span></p>
+    <p><b>root DN:</b><span class="tag">{{ rootDn }}</span></p>
+    <p><b>User search base:</b><span class="tag">ou=Users</span></p>
+    <p><b>User search filter:</b><span class="tag">uid={0}</span></p>
+    <p><b>Group search base:</b><span class="tag">ou=Groups</span></p>
+    <p><b>Group search filter:</b><span class="tag"></span>(blank)</p>
+    <p><b>Group membership filter:</b><span class="tag">member={0}</span></p>
+    <p><b>Manager DN:</b><span class="tag"></span>(blank)</p>
+    <p><b>Manager Password:</b><span class="tag"></span>(blank)</p>
+    <p><b>Display Name LDAP attribute:</b><span class="tag">displayName</span></p>
+    <p><b>Email Address LDAP attribute:</b><span class="tag">mail</span></p>
+  </form>
+</script>
+
+<script type="text/html" id="help-_Custom">
+  <h2>LDAP settings for Custom apps.</h2>
+  <h3>You needs some LDAP knowledge...</h3>
+  <p><b>Server:</b><span class="tag">{{#ldapBindLocalOnly}}localhost{{/ldapBindLocalOnly}}{{^ldapBindLocalOnly}}{{ host }}{{/ldapBindLocalOnly}}</span></p>
+  <p><b>LDAP port:</b><span class="tag">{{ ldapPort }}</span></p>
+  <p><b>root DN:</b><span class="tag">{{ rootDn }}</span></p>
+  <p><b>User DN:</b><span class="tag">ou=Users</span> or <span class="tag">{{ usersBaseDn }}</span></p>
+  <p><b>User search filter:</b><span class="tag">uid={0}</span></p>
+  <p><b>Group DN:</b><span class="tag">ou=Groups</span> or <span class="tag">{{ groupsBaseDn }}</span></p>
+  <p><b>Group membership filter:</b><span class="tag">member={0}</span></p>
+  <p><b>Manager DN:</b><span class="tag"></span>(blank)</p>
+  <p><b>Manager Password:</b><span class="tag"></span>(blank)</p>
+  <p><b>Display Name LDAP attribute:</b><span class="tag">displayName</span></p>
+  <p><b>Email Address LDAP attribute:</b><span class="tag">mail</span></p>
+</script>
