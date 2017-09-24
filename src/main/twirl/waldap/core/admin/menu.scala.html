@@ -5,7 +5,6 @@
       <div class="title">Admin menu</div>
       <a href="@context.path/admin/users" class="item@if(activeMenu=="users"){ is-active}"><span class="icon"><i class="fa fa-users"></i></span><span>@context.messages.get("menu.users")</span></a>
       <a href="@context.path/admin/apps" class="item@if(activeMenu=="apps"){ is-active}"><span class="icon"><i class="fa fa-cogs"></i></span><span>@context.messages.get("menu.apps")</span></a>
-      <a href="@context.path/admin/groups" class="item@if(activeMenu=="groups"){ is-active}"><span class="icon"><i class="fa fa-sitemap"></i></span><span>@context.messages.get("menu.groups")</span></a>
       <a href="@context.path/admin/system" class="item@if(activeMenu=="system"){ is-active}"><span class="icon"><i class="fa fa-wrench"></i></span>@context.messages.get("menu.system")</a>
       <a href="@context.path/admin/password" class="item@if(activeMenu=="password"){ is-active}"><span class="icon"><i class="fa fa-key"></i></span>@context.messages.get("menu.password")</a>
       <a href="@context.path/admin/console/" class="item" target="_blank"><span class="icon"><i class="fa fa-database"></i></span>@context.messages.get("menu.h2console")</a>
