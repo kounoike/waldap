@@ -49,6 +49,12 @@ trait WebAppService extends LDAPAccountService {
     }
     instances.delete
   }
+
+  def editWebAppInstance(id: Int, webAppName: String, instanceSuffix: String, url: String)(implicit context: Context, s: Session): Unit = {
+    val instances = WebAppInstances.filter(_.id === id.bind)
+    val newInstance = WebAppInstance(id, webAppName, instanceSuffix, url)
+    instances.update(newInstance)
+  }
 }
 
 object WebAppService extends WebAppService with LDAPAccountService
