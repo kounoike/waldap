@@ -6,7 +6,7 @@ import org.apache.directory.api.ldap.model.name.Dn
 import waldap.core.service.SystemSettingsService
 import org.apache.directory.server.core.api.CoreSession
 import org.apache.directory.server.protocol.shared.transport.TcpTransport
-import waldap.core.util.SyntaxSugars._
+
 
 case class WaldapLdapServer() extends SystemSettingsService {
 }
