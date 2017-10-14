@@ -59,10 +59,11 @@ Currently if you want to backup data, simply backup `$HOME/.waldap` directory wi
 ### LDAP data
 
 save LDIFs to `$HOME/.waldap/server/partitions`.
+If you want to connect LDAP manually, you can use `uid=admin,ou=system` and your modified Administrator's password.
 
 ### Database data
 
-By default, WALDAP uses H2 Database engine.
+By default, WALDAP uses H2 Database engine. External Database(PostgreSQL/MySQL) support are implemented but not tested.
 
 ## Components
 

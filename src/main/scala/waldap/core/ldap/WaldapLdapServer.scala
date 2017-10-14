@@ -1,8 +1,12 @@
 package waldap.core.ldap
 
+import org.apache.directory.server.constants.ServerDNConstants
+import org.apache.directory.api.ldap.model.entry.{DefaultModification, ModificationOperation}
+import org.apache.directory.api.ldap.model.name.Dn
 import waldap.core.service.SystemSettingsService
 import org.apache.directory.server.core.api.CoreSession
 import org.apache.directory.server.protocol.shared.transport.TcpTransport
+import waldap.core.util.SyntaxSugars._
 
 case class WaldapLdapServer() extends SystemSettingsService {
 }
@@ -19,6 +23,12 @@ object WaldapLdapServer extends WaldapLdapServer {
     ldapServer.setTransports(new TcpTransport(bindHost, settings.ldapPort))
     ldapServer.setDirectoryService(directoryService)
     ldapServer.start()
+
+    val con = directoryService.getAdminSession
+    val passwordRemove = new DefaultModification(ModificationOperation.REMOVE_ATTRIBUTE, "userPassword")
+    val passwordAdd = new DefaultModification(ModificationOperation.ADD_ATTRIBUTE, "userPassword",
+      LDAPUtil.encodePassword(settings.adminPassword))
+    con.modify(new Dn(con.getDirectoryService.getSchemaManager, ServerDNConstants.ADMIN_SYSTEM_DN), passwordRemove, passwordAdd)
   }
 
   def restart(): Unit = {
