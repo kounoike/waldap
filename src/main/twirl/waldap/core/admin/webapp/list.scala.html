@@ -93,7 +93,8 @@ $(function(){
       url: $(this).data("url"),
       localOnly: @context.settings.ldapBindOnlyLocal,
       ldapPort: @context.settings.ldapPort,
-      host: "@context.host",
+      host: "@if(context.settings.ldapBindOnlyLocal){127.0.0.1}else{@context.host}",
+      adminDn: "@org.apache.directory.server.constants.ServerDNConstants.ADMIN_SYSTEM_DN",
       rootDn: "@waldap.core.ldap.LDAPUtil.baseDnName",
       usersBaseDn: "@waldap.core.ldap.LDAPUtil.usersDn",
       groupsBaseDn: "@waldap.core.ldap.LDAPUtil.groupsDn"

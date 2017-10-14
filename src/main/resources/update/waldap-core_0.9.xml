@@ -41,14 +41,14 @@
     <column name="NAME" value="Gogs"/>
     <column name="URL" value="https://gogs.io/"/>
     <column name="GUIDE_TEMPLATE" value="Gogs"/>
-    <column name="USER_TYPE" value="USER"/>
+    <column name="USER_TYPE" value="USER_ADMIN"/>
   </insert>
 
   <insert tableName="WEBAPP">
     <column name="NAME" value="Gitea"/>
     <column name="URL" value="https://gitea.io/"/>
     <column name="GUIDE_TEMPLATE" value="Gitea"/>
-    <column name="USER_TYPE" value="USER"/>
+    <column name="USER_TYPE" value="USER_ADMIN"/>
   </insert>
 
   <createTable tableName="WEBAPP_INSTANCE">

@@ -3,67 +3,339 @@
   <h2>LDAP settings for GitBucket.</h2>
   <form>
     <p>Go to <a href="{{ url }}/admin/system">System settings</a></p>
-    <p>Check <b>LDAP checkbox</b> <input type="checkbox" checked></p>
-    <p><b>LDAP host:</b><span class="tag">{{#ldapBindLocalOnly}}localhost{{/ldapBindLocalOnly}}{{^ldapBindLocalOnly}}{{ host }}{{/ldapBindLocalOnly}}</span></p>
-    <p><b>LDAP port:</b><span class="tag">{{ ldapPort }}</span></p>
-    <p><b>Bind DN:</b><span class="tag"></span>(blank)</p>
-    <p><b>Bind password:</b><span class="tag"></span>(blank)</p>
-    <p><b>Base DN:</b><span class="tag">{{ usersBaseDn }}</span></p>
-    <p><b>User name attribute:</b><span class="tag">uid</span></p>
-    <p><b>Additional filter condition:</b><span class="tag">(memberOf=cn={{ name }}_{{ instanceSuffix }}_Users,{{ groupsBaseDn }})</span></p>
-    <p><b>Full name attribute:</b><span class="tag">displayName</span></p>
-    <p><b>Mail address attribute:</b><span class="tag">mail</span></p>
-    <p>Don't check <b>Enable TLS</b><input type="checkbox"></p>
-    <p>Don't check <b>Enable SSL</b><input type="checkbox"></p>
-    <p><b>Keystore:</b><span class="tag"></span>(blank)</p>
+    <div class="field">
+      <label class="label">LDAP checkbox</label>
+      <input class="input" type="checkbox" checked>(Checked)
+    </div>
+    <div class="field">
+      <label class="label">LDAP host</label>
+      <input class="input" type="text" value="{{ host }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">LDAP port</label>
+      <input class="input" type="text" value="{{ ldapPort }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Bind DN</label>
+      <input class="input" type="text" readonly>(blank)
+    </div>
+    <div class="field">
+      <label class="label">Bind password</label>
+      <input class="input" type="text" readonly>(blank)
+    </div>
+    <div class="field">
+      <label class="label">Base DN</label>
+      <input class="input" type="text" value="{{ usersBaseDn }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">User name attribute</label>
+      <input class="input" type="text" value="uid" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Additional filter condition</label>
+      <input class="input" type="text" value="(memberOf=cn={{ name }}_{{ instanceSuffix }}_Users,{{ groupsBaseDn }})" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Full name attribute</label>
+      <input class="input" type="text" value="displayName" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Mail address attribute</label>
+      <input class="input" type="text" value="mail" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Enable TLS</label>
+      <input type="checkbox">(Don't check)
+    </div>
+    <div class="field">
+      <label class="label">Enable SSL</label>
+      <input type="checkbox">(Don't check)
+    </div>
+    <div class="field">
+      <label class="label">Keystore:</label>
+      <input class="input" type="text" readonly>(blank)
+    </div>
   </form>
 </script>
 
 <script type="text/html" id="help-Jenkins">
   <h2>LDAP settings for Jenkins.</h2>
   <form>
-    <p><b>Server:</b><span class="tag">{{#ldapBindLocalOnly}}localhost{{/ldapBindLocalOnly}}{{^ldapBindLocalOnly}}{{ host }}{{/ldapBindLocalOnly}}</span></p>
-    <p><b>LDAP port:</b><span class="tag">{{ ldapPort }}</span></p>
-    <p><b>root DN:</b><span class="tag">{{ rootDn }}</span></p>
-    <p><b>User search base:</b><span class="tag">ou=Users</span></p>
-    <p><b>User search filter:</b><span class="tag">uid={0}</span></p>
-    <p><b>Group search base:</b><span class="tag">ou=Groups</span></p>
-    <p><b>Group search filter:</b><span class="tag"></span>(blank)</p>
-    <p><b>Group membership filter:</b><span class="tag">member={0}</span></p>
-    <p><b>Manager DN:</b><span class="tag"></span>(blank)</p>
-    <p><b>Manager Password:</b><span class="tag"></span>(blank)</p>
-    <p><b>Display Name LDAP attribute:</b><span class="tag">displayName</span></p>
-    <p><b>Email Address LDAP attribute:</b><span class="tag">mail</span></p>
+    <div class="field">
+      <label class="label">Server</label><input class="input" type="text" value="{{ host }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">LDAP port</label><input class="input" type="text" value="{{ ldapPort }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">root DN</label><input class="input" type="text" value="{{ rootDn }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">User search base</label><input class="input" type="text" value="ou=Users" readonly>
+    </div>
+    <div class="field">
+      <label class="label">User search filter</label><input class="input" type="text" value="uid={0}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Group search base</label><input class="input" type="text" value="ou=Groups" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Group search filter</label><input class="input"  type="text" value="" readonly>(blank)
+    </div>
+    <div class="field">
+      <label class="label">Group membership filter</label><input class="input" type="text" value="member={0}" readnoly>
+    </div>
+    <div class="field">
+      <label class="label">Manager DN</label><input class="input" type="text" value="" readonly>(blank)
+    </div>
+    <div class="field">
+      <label class="label">Manager Password</label><input class="input" type="text" value="" readonly>(blank)
+    </div>
+    <div class="field">
+      <label class="label">Display Name LDAP attribute</label><input class="input" type="text" value="displayName" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Email Address LDAP attribute</label><input class="input" type="text" value="mail" readonly>
+    </div>
   </form>
 </script>
 
 <script type="text/html" id="help-Redmine">
   <h2>LDAP settings for Redmine.</h2>
   <form>
-    <p><b>Name:</b></p>
+    <div class="field">
+      <label class="label">Name</label>
+      <input class="input" type="text" value="WALDAP" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Host</label>
+      <input class="input" type="text" value="{{ host }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Port</label>
+      <input class="input" type="text" value="{{ ldapPort }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">LDAPS</label>
+      <input type="checkbox">(unchecked)
+    </div>
+    <div class="field">
+      <label class="label">Account</label>
+      <input class="input" type="text" value="{{ adminDn }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Password:</label>
+      <input class="input" type="text" value="<your admin password>" readonly>
+    </div>
+    <div class="field"><label class="label">Base DN:</label>
+      <input class="input" type="text" value="{{ rootDN }}" readonly>
+    </div>
+    <h3>Attributes</h3>
+    <div class="field">
+      <label class="label">Login:</label>
+      <input class="input" type="text" value="uid" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Firstname:</label>
+      <input class="input" type="text" value="givenName" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Lastname:</label>
+      <input class="input" type="text" value="sn" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Email:</label>
+      <input class="input" type="text" value="mail" readonly>
+    </div>
   </form>
 </script>
 
 <script type="text/html" id="help-Gogs">
   <h2>LDAP settings for Gogs.</h2>
+  <form>
+    <div class="field">
+      <label class="label">Authorization Name</label>
+      <input class="input" type="text" value="WALDAP" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Host</label>
+      <input class="input" type="text" value="{{ host }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Port</label>
+      <input class="input" type="text" value="{{ ldapPort }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Enable TLS Encryption</label>
+      <input type="checkbox">(unchecked)
+    </div>
+    <div class="field">
+      <label class="label">Admin Filter</label>
+      <input class="input" type="text" value="(memberOf=cn={{ name }}_{{ instanceSuffix }}_Admins,{{ groupsBaseDn }})" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Username attribute</label>
+      <input class="input" type="text" value="uid" readonly>
+    </div>
+    <div class="field">
+      <label class="label">First name attribute</label>
+      <input class="input" type="text" value="givenName" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Surname attribute</label>
+      <input class="input" type="text" value="sn" readonly>
+    </div>
+    <div class="field">
+      <label class="label">E-mail attribute</label>
+      <input class="input" type="text" value="mail" readonly>
+    </div>
+    <div class="field">
+      <label class="label">LDAP using simple auth</label>
+      <input type="checkbox" checked readonly>(checked)
+    </div>
+    <div class="field"><label class="label">User DN</label>
+      <input class="input" type="text" value="uid=%s,{{ usersBaseDn }}" readonly>
+    </div>
+    <div class="field"><label class="label">User Filter</label>
+      <input class="input" type="text" value="(&amp;(objectClass=inetOrgPerson)(uid=%s))" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Verify group membership in LDAP</label>
+      <input type="checkbox" checked readonly>(checked)
+    </div>
+    <div class="field"><label class="label">Group Search Base</label>
+      <input class="input" type="text" value="{{ groupsBaseDn }}" readonly>
+    </div>
+    <div class="field"><label class="label">Group Name Filter</label>
+      <input class="input" type="text" value="(|(cn={{ name }}_{{ instanceSuffix }}_Users)(cn={{ name }}_{{ instanceSuffix }}_Admins))" readonly>
+    </div>
+    <div class="field">
+      <label class="label">User Attribute in Group</label>
+      <input class="input" type="text" value="uid" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Group attribute for User</label>
+      <input class="input" type="text" value="memberUid" readonly>
+    </div>
+  </form>
 </script>
 
 <script type="text/html" id="help-Gitea">
   <h2>LDAP settings for Gitea.</h2>
+  <form>
+    <div class="field">
+      <label class="label">Authorization Name</label>
+      <input class="input" type="text" value="WALDAP" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Host</label>
+      <input class="input" type="text" value="{{ host }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Port</label>
+      <input class="input" type="text" value="{{ ldapPort }}" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Enable TLS Encryption</label>
+      <input type="checkbox">(unchecked)
+    </div>
+    <div class="field">
+      <label class="label">Admin Filter</label>
+      <input class="input" type="text" value="(memberOf=cn={{ name }}_{{ instanceSuffix }}_Admins,{{ groupsBaseDn }})" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Username attribute</label>
+      <input class="input" type="text" value="uid" readonly>
+    </div>
+    <div class="field">
+      <label class="label">First name attribute</label>
+      <input class="input" type="text" value="givenName" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Surname attribute</label>
+      <input class="input" type="text" value="sn" readonly>
+    </div>
+    <div class="field">
+      <label class="label">E-mail attribute</label>
+      <input class="input" type="text" value="mail" readonly>
+    </div>
+    <div class="field">
+      <label class="label">LDAP using simple auth</label>
+      <input type="checkbox" checked readonly>(checked)
+    </div>
+    <div class="field"><label class="label">User DN</label>
+      <input class="input" type="text" value="uid=%s,{{ usersBaseDn }}" readonly>
+    </div>
+    <div class="field"><label class="label">User Filter</label>
+      <input class="input" type="text" value="(&amp;(objectClass=inetOrgPerson)(uid=%s))" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Verify group membership in LDAP</label>
+      <input type="checkbox" checked readonly>(checked)
+    </div>
+    <div class="field"><label class="label">Group Search Base</label>
+      <input class="input" type="text" value="{{ groupsBaseDn }}" readonly>
+    </div>
+    <div class="field"><label class="label">Group Name Filter</label>
+      <input class="input" type="text" value="(|(cn={{ name }}_{{ instanceSuffix }}_Users)(cn={{ name }}_{{ instanceSuffix }}_Admins))" readonly>
+    </div>
+    <div class="field">
+      <label class="label">User Attribute in Group</label>
+      <input class="input" type="text" value="uid" readonly>
+    </div>
+    <div class="field">
+      <label class="label">Group attribute for User</label>
+      <input class="input" type="text" value="memberUid" readonly>
+    </div>
+  </form>
 </script>
 
 <script type="text/html" id="help-_Custom">
   <h2>LDAP settings for Custom apps.</h2>
   <h3>You needs some LDAP knowledge...</h3>
-  <p><b>Server:</b><span class="tag">{{#ldapBindLocalOnly}}localhost{{/ldapBindLocalOnly}}{{^ldapBindLocalOnly}}{{ host }}{{/ldapBindLocalOnly}}</span></p>
-  <p><b>LDAP port:</b><span class="tag">{{ ldapPort }}</span></p>
-  <p><b>root DN:</b><span class="tag">{{ rootDn }}</span></p>
-  <p><b>User DN:</b><span class="tag">ou=Users</span> or <span class="tag">{{ usersBaseDn }}</span></p>
-  <p><b>User search filter:</b><span class="tag">uid={0}</span></p>
-  <p><b>Group DN:</b><span class="tag">ou=Groups</span> or <span class="tag">{{ groupsBaseDn }}</span></p>
-  <p><b>Group membership filter:</b><span class="tag">member={0}</span></p>
-  <p><b>Manager DN:</b><span class="tag"></span>(blank)</p>
-  <p><b>Manager Password:</b><span class="tag"></span>(blank)</p>
-  <p><b>Display Name LDAP attribute:</b><span class="tag">displayName</span></p>
-  <p><b>Email Address LDAP attribute:</b><span class="tag">mail</span></p>
+  <div class="field">
+    <label class="label">LDAP host</label>
+    <input class="input" type="text" value="{{ host }}" readonly>
+  </div>
+  <div class="field">
+    <label class="label">LDAP port</label>
+    <input class="input" type="text" value="{{ ldapPort }}" readonly>
+  </div>
+  <div class="field">
+    <label class="label">Bind DN</label>
+    <input class="input" type="text" readonly>(blank)
+  </div>
+  <div class="field">
+    <label class="label">Bind password</label>
+    <input class="input" type="text" readonly>(blank)
+  </div>
+  <div class="field">
+    <label class="label">Base DN</label>
+    <input class="input" type="text" value="{{ usersBaseDn }}" readonly>
+  </div>
+  <div class="field">
+    <label class="label">User name attribute</label>
+    <input class="input" type="text" value="uid" readonly>
+  </div>
+  <div class="field">
+    <label class="label">Additional filter condition</label>
+    <input class="input" type="text" value="(memberOf=cn={{ name }}_{{ instanceSuffix }}_Users,{{ groupsBaseDn }})" readonly>
+  </div>
+  <div class="field">
+    <label class="label">Full name attribute</label>
+    <input class="input" type="text" value="displayName" readonly>
+  </div>
+  <div class="field">
+    <label class="label">Mail address attribute</label>
+    <input class="input" type="text" value="mail" readonly>
+  </div>
+  <div class="field">
+    <label class="label">Enable TLS</label>
+    <input type="checkbox">(Don't check)
+  </div>
+  <div class="field">
+    <label class="label">Enable SSL</label>
+    <input type="checkbox">(Don't check)
+  </div>
+  </form>
 </script>
