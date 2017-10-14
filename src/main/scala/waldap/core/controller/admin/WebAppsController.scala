@@ -26,8 +26,9 @@ class WebAppsController extends ControllerBase with WebAppService with FlashMapS
   )(EditInstanceForm.apply)
 
   get("/admin/apps") {
-    val instanceMap = getWebAppInstanceMap
-    html.list(instanceMap, flash.get("info"))
+    val apps = getAllWebApps()
+    val instanceMap = getWebAppInstanceMap()
+    html.list(apps, instanceMap, flash.get("info"))
   }
 
   post("/admin/apps/instance/add", addInstanceForm) { form =>

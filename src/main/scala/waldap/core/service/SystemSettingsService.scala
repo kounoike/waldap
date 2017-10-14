@@ -1,5 +1,6 @@
 package waldap.core.service
 
+import java.io.File
 import javax.servlet.http.HttpServletRequest
 
 import waldap.core.util.SyntaxSugars._
@@ -27,6 +28,10 @@ trait SystemSettingsService {
       settings.db.maxLifetime.foreach(x => props.setProperty(DatabaseMaxLifetime, x.toString))
       settings.db.minimumIdle.foreach(x => props.setProperty(DatabaseMinimumIdle, x.toString))
       settings.db.maximumPoolSize.foreach(x => props.setProperty(DatabaseMaximumPoolSize, x.toString))
+      val home = new File(Directory.WaldapHome)
+      if(!home.exists()){
+        home.mkdirs()
+      }
       using(new java.io.FileOutputStream(Directory.WaldapConf)){ out =>
         props.store(out, null)
       }

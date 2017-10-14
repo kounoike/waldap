@@ -1,51 +1,53 @@
-@(instanceMap: Map[waldap.core.model.WebApp, List[waldap.core.model.WebAppInstance]], info: Option[Any])(implicit context: waldap.core.controller.Context)
+@(apps: List[waldap.core.model.WebApp], instanceMap: Map[waldap.core.model.WebApp, List[waldap.core.model.WebAppInstance]], info: Option[Any])(implicit context: waldap.core.controller.Context)
 @waldap.core.admin.html.main("WebApps", Some("apps")){
 <div class="box box-main">
   @info.map{ i =>
   <div class="box is-info">@i</div>
   }
-  @instanceMap.map{ case(app, ls) =>
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title">
-          @app.name
-        </p>
-      </header>
-      <div class="card-content">
-        @if(ls.nonEmpty) {
+  @apps.map{ app =>
+    @defining(instanceMap(app)){ ls =>
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            @app.name
+          </p>
+        </header>
+        <div class="card-content">
+          @if(ls.nonEmpty) {
           <table class="table">
             <thead>
-              <tr><th>Instance name</th><th>url</th><th><br/></th></tr>
+            <tr><th>Instance name</th><th>url</th><th><br/></th></tr>
             </thead>
             <tbody>
-              @ls.map{ i =>
-                <tr>
-                  <td>@{app.name}_@{i.instanceSuffix}</td>
-                  <td><a href="@i.url" target="_blank">@i.url</a></td>
-                  <td>
-                    <button class="button is-info is-small instance-help" data-app-name="@app.name" data-instance-suffix="@i.instanceSuffix" data-url="@i.url">
-                      <span class="icon is-small"><i class="fa fa-question"></i></span>
-                    </button>
-                    <button class="button is-success is-small instance-edit" data-app-name="@app.name" data-instance-suffix="@i.instanceSuffix" data-url="@i.url" data-id="@i.id">
-                      <span class="icon is-small"><i class="fa fa-pencil"></i></span>
-                    </button>
-                    <button class="button is-danger is-small instance-delete" data-id="@i.id" data-name="@{app.name}_@{i.instanceSuffix}">
-                      <span class="icon is-small"><i class="fa fa-times"></i></span>
-                    </button>
-                  </td>
-                </tr>
-              }
+            @ls.map{ i =>
+            <tr>
+              <td>@{app.name}_@{i.instanceSuffix}</td>
+              <td><a href="@i.url" target="_blank">@i.url</a></td>
+              <td>
+                <button class="button is-info is-small instance-help" data-app-name="@app.name" data-instance-suffix="@i.instanceSuffix" data-url="@i.url">
+                  <span class="icon is-small"><i class="fa fa-question"></i></span>
+                </button>
+                <button class="button is-success is-small instance-edit" data-app-name="@app.name" data-instance-suffix="@i.instanceSuffix" data-url="@i.url" data-id="@i.id">
+                  <span class="icon is-small"><i class="fa fa-pencil"></i></span>
+                </button>
+                <button class="button is-danger is-small instance-delete" data-id="@i.id" data-name="@{app.name}_@{i.instanceSuffix}">
+                  <span class="icon is-small"><i class="fa fa-times"></i></span>
+                </button>
+              </td>
+            </tr>
+            }
             </tbody>
           </table>
-        } else {
+          } else {
           No Instance
-        }
+          }
+        </div>
+        <div class="card-footer">
+          <a href="#" class="card-footer-item add-instance" data-id="@app.id" data-name="@app.name">Add Instance</a>
+        </div>
       </div>
-      <div class="card-footer">
-        <a href="#" class="card-footer-item add-instance" data-id="@app.id" data-name="@app.name">Add Instance</a>
-      </div>
-    </div>
-    <hr/>
+      <hr/>
+    }
   }
 </div>
 <script type="text/html" id="add-instance-tmpl">

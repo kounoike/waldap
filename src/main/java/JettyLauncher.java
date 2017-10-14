@@ -14,6 +14,11 @@ public class JettyLauncher {
         Server server = new Server(new InetSocketAddress(port));
         WebAppContext context = new WebAppContext();
 
+        File home = getWaldapHome();
+        if (!home.exists()){
+            home.mkdirs();
+        }
+
         File webTmpDir = new File(getWaldapHome(), "tmp");
         context.setTempDirectory(webTmpDir);
 

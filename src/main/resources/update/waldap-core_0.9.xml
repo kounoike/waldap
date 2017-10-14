@@ -30,6 +30,27 @@
     <column name="USER_TYPE" value="USER_ADMIN"/>
   </insert>
 
+  <insert tableName="WEBAPP">
+    <column name="NAME" value="Redmine"/>
+    <column name="URL" value="http://www.redmine.org/"/>
+    <column name="GUIDE_TEMPLATE" value="Redmine"/>
+    <column name="USER_TYPE" value="USER"/>
+  </insert>
+
+  <insert tableName="WEBAPP">
+    <column name="NAME" value="Gogs"/>
+    <column name="URL" value="https://gogs.io/"/>
+    <column name="GUIDE_TEMPLATE" value="Gogs"/>
+    <column name="USER_TYPE" value="USER"/>
+  </insert>
+
+  <insert tableName="WEBAPP">
+    <column name="NAME" value="Gitea"/>
+    <column name="URL" value="https://gitea.io/"/>
+    <column name="GUIDE_TEMPLATE" value="Gitea"/>
+    <column name="USER_TYPE" value="USER"/>
+  </insert>
+
   <createTable tableName="WEBAPP_INSTANCE">
     <column name="ID" type="int" nullable="false" autoIncrement="true" unique="true"/>
     <column name="WEBAPP_NAME" type="varchar(100)" nullable="false"/>
