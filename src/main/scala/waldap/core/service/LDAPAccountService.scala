@@ -28,9 +28,11 @@ trait LDAPAccountService {
   def GetLDAPUsersGroups(userName: String)(implicit context: Context): List[Entry] = {
     val dn = s"uid=${userName},${LDAPUtil.usersDn}"
     val entry = context.ldapSession.lookup(new Dn(context.ldapSession.getDirectoryService.getSchemaManager, dn))
-    entry.get("memberOf").iterator().asScala.map{dn =>
-      context.ldapSession.lookup(new Dn(context.ldapSession.getDirectoryService.getSchemaManager, dn.getString))
-    }.toList
+    Option(entry.get("memberOf")).map {
+      _.iterator().asScala.map { dn =>
+        context.ldapSession.lookup(new Dn(context.ldapSession.getDirectoryService.getSchemaManager, dn.getString))
+      }.toList
+    }.getOrElse(List[Entry]())
   }
 
   def AddLDAPUser(userName: String, password: String, givenName: String, sn: String, displayName: String, mail: String)(implicit context: Context): Unit = {
