@@ -4,7 +4,7 @@ import org.scalatra.sbt.DistPlugin.DistKeys._
 
 organization := "io.github.kounoike"
 name := "waldap"
-version := "0.9.0"
+version := "0.9.1"
 scalaVersion := "2.12.3"
 scalacOptions := Seq("-deprecation", "-language:postfixOps")
 val JettyVersion = "9.3.19.v20170502"
