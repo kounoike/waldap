@@ -6,8 +6,8 @@ object LDAPUtil {
   val ldapName: String = "waldap"
   val baseDnName: String = "o=waldap"
 
-  val usersDn: String = s"ou=Users,${baseDnName}"
-  val groupsDn: String = s"ou=Groups,${baseDnName}"
+  val usersDn: String = s"ou=Users,$baseDnName"
+  val groupsDn: String = s"ou=Groups,$baseDnName"
 
   val systemAdmin: String = "uid=admin,ou=system"
 

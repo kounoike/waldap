@@ -151,7 +151,7 @@ object DatabaseType {
     } else if(url.startsWith("jdbc:postgresql:")){
       PostgreSQL
     } else {
-      throw new IllegalArgumentException(s"${url} is not supported.")
+      throw new IllegalArgumentException(s"$url is not supported.")
     }
   }
 

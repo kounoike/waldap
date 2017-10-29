@@ -5,11 +5,11 @@ import waldap.core.util.Keys
 
 class PreprocessController extends ControllerBase {
 
-  get(context.currentPath.startsWith("/user") && context.loginAccount.map{_.isAdmin}.getOrElse(false)){
+  get(context.currentPath.startsWith("/user") && context.loginAccount.exists(_.isAdmin)){
     org.scalatra.Forbidden("Access Denied")
   }
 
-  get(context.currentPath.startsWith("/admin") && context.loginAccount.map{!_.isAdmin}.getOrElse(false)){
+  get(context.currentPath.startsWith("/admin") && context.loginAccount.exists(!_.isAdmin)){
     org.scalatra.Forbidden("Access Denied")
   }
 

@@ -10,15 +10,14 @@ object Directory {
       scala.util.Properties.envOrNone("WALDAP_HOME") match {
         case Some(env) =>
           new File(env)
-        case None => {
+        case None =>
           new File(System.getProperty("user.home"), ".waldap")
-        }
       }
   }).getAbsolutePath
 
   val WaldapConf = new File(WaldapHome, "waldap.conf")
 
-  val DatabaseHome = s"${WaldapHome}/data"
+  val DatabaseHome = s"$WaldapHome/data"
 
-  val InstanceHome = s"${WaldapHome}/server"
+  val InstanceHome = s"$WaldapHome/server"
 }

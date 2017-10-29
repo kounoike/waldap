@@ -5,7 +5,9 @@ import org.apache.directory.api.ldap.model.entry.{DefaultModification, Modificat
 import org.apache.directory.api.ldap.model.name.Dn
 import waldap.core.service.SystemSettingsService
 import org.apache.directory.server.core.api.CoreSession
+import org.apache.directory.server.ldap.handlers.extended.StartTlsHandler
 import org.apache.directory.server.protocol.shared.transport.TcpTransport
+import waldap.core.util.Directory
 
 
 case class WaldapLdapServer() extends SystemSettingsService {
@@ -20,8 +22,22 @@ object WaldapLdapServer extends WaldapLdapServer {
   def init(): Unit = {
     val settings = loadSystemSettings()
     val bindHost = if(settings.ldapBindOnlyLocal) "127.0.0.1" else "0.0.0.0"
+
     ldapServer.setTransports(new TcpTransport(bindHost, settings.ldapPort))
     ldapServer.setDirectoryService(directoryService)
+
+    println("TESTTESTTEST")
+    ldapServer.setCertificatePassword("hogehoge")
+    ldapServer.setKeystoreFile(Directory.WaldapHome + "/cert/hoge.ks")
+    ldapServer.loadKeyStore()
+
+    val tlsHandler = new StartTlsHandler()
+    tlsHandler.setLdapServer(ldapServer)
+
+    val transport = new TcpTransport(bindHost, 10636)
+    transport.setEnableSSL(true)
+    ldapServer.addTransports(transport)
+
     ldapServer.start()
 
     val con = directoryService.getAdminSession

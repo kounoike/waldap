@@ -31,7 +31,7 @@ class InitializeListner extends ServletContextListener with SystemSettingsServic
       val databaseVersion = manager.getCurrentVersion(WaldapCoreModule.getModuleId)
       val waldapVersion = WaldapCoreModule.getVersions.asScala.last.getVersion
       if (databaseVersion != waldapVersion) {
-        throw new IllegalStateException(s"Initialization failed. WALDAP version is ${waldapVersion}, but database version is ${databaseVersion}")
+        throw new IllegalStateException(s"Initialization failed. WALDAP version is $waldapVersion, but database version is $databaseVersion")
       }
 
       WaldapLdapServer.init()

@@ -26,7 +26,7 @@ trait LDAPAccountService {
   }
 
   def GetLDAPUsersGroups(userName: String)(implicit context: Context): List[Entry] = {
-    val dn = s"uid=${userName},${LDAPUtil.usersDn}"
+    val dn = s"uid=$userName,${LDAPUtil.usersDn}"
     val entry = context.ldapSession.lookup(new Dn(context.ldapSession.getDirectoryService.getSchemaManager, dn))
     Option(entry.get("memberOf")).map {
       _.iterator().asScala.map { dn =>
@@ -36,7 +36,7 @@ trait LDAPAccountService {
   }
 
   def AddLDAPUser(userName: String, password: String, givenName: String, sn: String, displayName: String, mail: String)(implicit context: Context): Unit = {
-    val dn = s"uid=${userName},${LDAPUtil.usersDn}"
+    val dn = s"uid=$userName,${LDAPUtil.usersDn}"
     if(!context.ldapSession.exists(dn)){
       val entry = new DefaultEntry(context.ldapSession.getDirectoryService.getSchemaManager())
       entry.setDn(dn)
@@ -53,10 +53,10 @@ trait LDAPAccountService {
   }
 
   def DeleteLDAPUser(userName: String)(implicit context: Context): Unit = {
-    val userDn = s"uid=${userName},${LDAPUtil.usersDn}"
+    val userDn = s"uid=$userName,${LDAPUtil.usersDn}"
     if (context.ldapSession.exists(userDn)){
       context.ldapSession.search(new Dn(WaldapLdapServer.directoryService.getSchemaManager, LDAPUtil.groupsDn),
-        SearchScope.ONELEVEL, FilterParser.parse(s"(member=${userDn})"), AliasDerefMode.DEREF_ALWAYS).asScala.foreach{ entry =>
+        SearchScope.ONELEVEL, FilterParser.parse(s"(member=$userDn)"), AliasDerefMode.DEREF_ALWAYS).asScala.foreach{ entry =>
         entry.remove("member", userDn)
       }
 
@@ -65,7 +65,7 @@ trait LDAPAccountService {
   }
 
   def EditLDAPUser(userName: String, givenName: String, sn: String, displayName: String, mail: String)(implicit context: Context): Unit = {
-    val dn = s"uid=${userName},${LDAPUtil.usersDn}"
+    val dn = s"uid=$userName,${LDAPUtil.usersDn}"
     if (context.ldapSession.exists(dn)) {
       val givenNameMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE, "givenName", givenName)
       val snMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE, "sn", sn)
@@ -78,7 +78,7 @@ trait LDAPAccountService {
   }
 
   def ChangeLDAPUserPassword(userName: String, password: String)(implicit context: Context): Unit = {
-    val dn = s"uid=${userName},${LDAPUtil.usersDn}"
+    val dn = s"uid=$userName,${LDAPUtil.usersDn}"
     if (context.ldapSession.exists(dn)) {
       val passwordMod = new DefaultModification(ModificationOperation.REPLACE_ATTRIBUTE,
         "userPassword", LDAPUtil.encodePassword(password))
@@ -97,7 +97,7 @@ trait LDAPAccountService {
   }
 
   def AddLDAPGroup(groupName: String, webAppName: String, instanceSuffix: String)(implicit context: Context): Unit = {
-    val dn = s"cn=${groupName},${LDAPUtil.groupsDn}"
+    val dn = s"cn=$groupName,${LDAPUtil.groupsDn}"
     if (!context.ldapSession.exists(dn)){
       val entry = new DefaultEntry(context.ldapSession.getDirectoryService.getSchemaManager())
       entry.setDn(dn)
@@ -111,10 +111,10 @@ trait LDAPAccountService {
   }
 
   def DeleteLDAPGroup(groupName: String)(implicit context: Context): Unit = {
-    val groupDn = s"cn=${groupName},${LDAPUtil.groupsDn}"
+    val groupDn = s"cn=$groupName,${LDAPUtil.groupsDn}"
     if (context.ldapSession.exists(groupDn)){
       val usersCursor = context.ldapSession.search(new Dn(WaldapLdapServer.directoryService.getSchemaManager, LDAPUtil.usersDn),
-        SearchScope.ONELEVEL, FilterParser.parse(s"(memberOf=${groupDn})"), AliasDerefMode.DEREF_ALWAYS)
+        SearchScope.ONELEVEL, FilterParser.parse(s"(memberOf=$groupDn)"), AliasDerefMode.DEREF_ALWAYS)
       usersCursor.asScala.foreach{ entry =>
         entry.remove("memberOf", groupDn)
       }
@@ -124,8 +124,8 @@ trait LDAPAccountService {
   }
 
   def JoinToLDAPGroup(userName: String, groupName: String)(implicit context: Context): Unit = {
-    val userDn = s"uid=${userName},${LDAPUtil.usersDn}"
-    val groupDn = s"cn=${groupName},${LDAPUtil.groupsDn}"
+    val userDn = s"uid=$userName,${LDAPUtil.usersDn}"
+    val groupDn = s"cn=$groupName,${LDAPUtil.groupsDn}"
     if(context.ldapSession.exists(userDn) && context.ldapSession.exists(groupDn)){
       val userMod = new DefaultModification(ModificationOperation.ADD_ATTRIBUTE, "memberOf", groupDn)
       context.ldapSession.modify(new Dn(context.ldapSession.getDirectoryService.getSchemaManager, userDn), userMod)
@@ -136,8 +136,8 @@ trait LDAPAccountService {
   }
 
   def DisjoinFromLDAPGroup(userName: String, groupName: String)(implicit context: Context): Unit = {
-    val userDn = s"uid=${userName},${LDAPUtil.usersDn}"
-    val groupDn = s"cn=${groupName},${LDAPUtil.groupsDn}"
+    val userDn = s"uid=$userName,${LDAPUtil.usersDn}"
+    val groupDn = s"cn=$groupName,${LDAPUtil.groupsDn}"
     if(context.ldapSession.exists(userDn) && context.ldapSession.exists(groupDn)){
       val userMod = new DefaultModification(ModificationOperation.REMOVE_ATTRIBUTE, "memberOf", groupDn)
       context.ldapSession.modify(new Dn(context.ldapSession.getDirectoryService.getSchemaManager, userDn), userMod)
