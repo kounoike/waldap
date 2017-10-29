@@ -10,7 +10,7 @@ trait Profile {
 }
 
 trait ProfileProvider { self: Profile with SystemSettingsService =>
-  lazy val profile = loadSystemSettings().db.slickDriver
+  lazy val profile: BlockingJdbcProfile = loadSystemSettings().db.slickDriver
 }
 
 trait CoreProfile extends ProfileProvider with Profile with SystemSettingsService

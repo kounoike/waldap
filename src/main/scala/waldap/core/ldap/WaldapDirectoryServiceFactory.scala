@@ -42,8 +42,10 @@ class WaldapDirectoryServiceFactory extends DirectoryServiceFactory{
     val schemaManager = new DefaultSchemaManager(new JarLdifSchemaLoader())
     schemaManager.loadAllEnabled()
     schemaManager.getComparatorRegistry.asScala.foreach{ comparator =>
-      if (comparator.isInstanceOf[NormalizingComparator]){
-        comparator.asInstanceOf[NormalizingComparator].setOnServer()
+      comparator match {
+        case cmp: NormalizingComparator =>
+          cmp.setOnServer()
+        case _ =>
       }
     }
     directoryService.setSchemaManager(schemaManager)
@@ -71,7 +73,7 @@ class WaldapDirectoryServiceFactory extends DirectoryServiceFactory{
 
     directoryService.startup()
 
-    val schemaReader = new LdifReader((getClass.getResourceAsStream("/schema.ldif")))
+    val schemaReader = new LdifReader(getClass.getResourceAsStream("/schema.ldif"))
     schemaReader.forEach{ ldifEntry =>
       val entry: Entry = new DefaultEntry(schemaManager, ldifEntry.getEntry)
       directoryService.getAdminSession.add(entry)
@@ -92,7 +94,7 @@ class WaldapDirectoryServiceFactory extends DirectoryServiceFactory{
     }
   }
 
-  override def getDirectoryService = directoryService
+  override def getDirectoryService: DirectoryService = directoryService
 
-  override def getPartitionFactory = partitionFactory
+  override def getPartitionFactory: PartitionFactory = partitionFactory
 }

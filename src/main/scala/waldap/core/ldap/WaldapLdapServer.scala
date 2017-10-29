@@ -4,7 +4,8 @@ import org.apache.directory.server.constants.ServerDNConstants
 import org.apache.directory.api.ldap.model.entry.{DefaultModification, ModificationOperation}
 import org.apache.directory.api.ldap.model.name.Dn
 import waldap.core.service.SystemSettingsService
-import org.apache.directory.server.core.api.CoreSession
+import org.apache.directory.server.core.api.{CoreSession, DirectoryService}
+import org.apache.directory.server.ldap.LdapServer
 import org.apache.directory.server.ldap.handlers.extended.StartTlsHandler
 import org.apache.directory.server.protocol.shared.transport.TcpTransport
 import waldap.core.util.Directory
@@ -16,8 +17,8 @@ case class WaldapLdapServer() extends SystemSettingsService {
 object WaldapLdapServer extends WaldapLdapServer {
   val dsFactory = new WaldapDirectoryServiceFactory()
   dsFactory.init(LDAPUtil.ldapName)
-  val directoryService = dsFactory.getDirectoryService()
-  var ldapServer = new org.apache.directory.server.ldap.LdapServer()
+  val directoryService: DirectoryService = dsFactory.getDirectoryService()
+  var ldapServer: LdapServer = new org.apache.directory.server.ldap.LdapServer()
 
   def init(): Unit = {
     val settings = loadSystemSettings()

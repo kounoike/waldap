@@ -3,8 +3,8 @@ package waldap.core.util
 import java.io.File
 
 object Directory {
-  val WaldapHome = (System.getProperty("waldap.home") match {
-    case path if (path != null) =>
+  val WaldapHome: String = (System.getProperty("waldap.home") match {
+    case path if path != null =>
       new File(path)
     case _ =>
       scala.util.Properties.envOrNone("WALDAP_HOME") match {
@@ -15,9 +15,9 @@ object Directory {
       }
   }).getAbsolutePath
 
-  val WaldapConf = new File(WaldapHome, "waldap.conf")
+  val WaldapConf: File = new File(WaldapHome, "waldap.conf")
 
-  val DatabaseHome = s"$WaldapHome/data"
+  val DatabaseHome: String = s"$WaldapHome/data"
 
-  val InstanceHome = s"$WaldapHome/server"
+  val InstanceHome: String = s"$WaldapHome/server"
 }
