@@ -28,7 +28,8 @@
           @groups.map{ group =>
             <div class="tags has-addons">
               <span class='tag is-small @if(group.get("member").contains(user.getDn.getName)){is-primary}else{is-light}'>@group.get("cn").get</span>
-              <a class='tag is-light is-small @if(group.get("member").contains(user.getDn.getName)){disjoin}else{join}' data-username="@user.get("uid").get" data-groupname="@group.get("cn").get">
+              <a class='tag is-light is-small @if(group.get("member").contains(user.getDn.getName)){disjoin}else{join}' data-username='@user.get("uid").get'
+                 data-groupname='@group.get("cn").get'>
                 <i class="fa fa-check-square"></i>
               </a>
             </div>
