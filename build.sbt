@@ -31,8 +31,8 @@ libraryDependencies ++= Seq(
   "org.webjars" % "webjars-locator" % "0.32-1",
   "org.webjars.npm" % "bulma" % "0.5.1",
   "org.webjars" % "font-awesome" % "4.7.0",
-  "org.webjars" % "jquery" % "3.2.1",
-  "org.webjars.npm" % "github-com-craftpip-jquery-confirm" % "3.2.3",
+  "org.webjars.npm" % "jquery" % "3.2.1",
+  "org.webjars.npm" % "jquery-confirm" % "3.3.2",
   "org.webjars" % "tablesorter" % "2.25.4",
   "org.webjars.npm" % "mustache" % "2.3.0",
   "org.webjars.npm" % "bulmaswatch" % "0.4.1"
