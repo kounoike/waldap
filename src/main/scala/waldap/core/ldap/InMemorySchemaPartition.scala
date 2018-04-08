@@ -4,6 +4,7 @@ import java.util.UUID
 import java.util.regex.Pattern
 
 import org.apache.directory.api.ldap.model.constants.SchemaConstants
+import org.apache.directory.api.ldap.model.csn.CsnFactory
 import org.apache.directory.api.ldap.model.entry.{DefaultEntry, Entry}
 import org.apache.directory.api.ldap.model.ldif.LdifReader
 
@@ -36,7 +37,8 @@ class InMemorySchemaPartition(schemaManager: SchemaManager) extends AbstractLdif
           val entry: Entry = new DefaultEntry(schemaManager, ldifEntry.getEntry)
           //add mandatory attributes
           if (Option(entry.get(SchemaConstants.ENTRY_CSN_AT)).isEmpty){
-            entry.add(SchemaConstants.ENTRY_CSN_AT, AbstractLdifPartition.defaultCSNFactory.newInstance.toString)
+            val csnFactory = new CsnFactory(1)
+            entry.add(SchemaConstants.ENTRY_CSN_AT, csnFactory.newInstance.toString)
           }
           if (Option(entry.get(SchemaConstants.ENTRY_UUID_AT)).isEmpty){
             entry.add(SchemaConstants.ENTRY_UUID_AT, UUID.randomUUID.toString)
