@@ -1,11 +1,7 @@
-import org.scalatra.sbt._
-import org.scalatra.sbt.DistPlugin._
-import org.scalatra.sbt.DistPlugin.DistKeys._
-
 organization := "io.github.kounoike"
 name := "waldap"
 version := "0.9.1"
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.4"
 scalacOptions := Seq("-deprecation", "-language:postfixOps")
 val JettyVersion = "9.3.19.v20170502"
 
@@ -50,14 +46,6 @@ enablePlugins(SbtTwirl, JettyPlugin, SbtWeb)
 
 containerPort := 10080
 
-val myDistSettings = DistPlugin.distSettings ++ Seq(
-  mainClass in Dist := Some("ScalatraLauncher"),
-  memSetting in Dist := "2g",
-  permGenSetting in Dist := "256m",
-  envExports in Dist := Seq("LC_CTYPE=en_US.UTF-8", "LC_ALL=en_US.utf-8"),
-  javaOptions in Dist ++= Seq("-Xss4m", "-Dfile.encoding=UTF-8")
-)
-
 artifactName := { (v: ScalaVersion, m: ModuleID, a: Artifact) =>
   a.name + "." + a.extension
 }
@@ -84,8 +72,8 @@ assemblyMergeStrategy in assembly := {
 packageOptions += Package.MainClass("JettyLauncher")
 
 // Create executable war file
-val executableConfig = config("executable").hide
-sbt.Keys.ivyConfigurations += executableConfig
+val ExecutableConfig = config("executable").hide
+Keys.ivyConfigurations += ExecutableConfig
 libraryDependencies ++= Seq(
   "org.eclipse.jetty" % "jetty-security"     % JettyVersion % "executable",
   "org.eclipse.jetty" % "jetty-webapp"       % JettyVersion % "executable",
@@ -100,11 +88,11 @@ libraryDependencies ++= Seq(
 
 val executableKey = TaskKey[File]("executable")
 executableKey := {
-  import java.util.jar.{ Manifest => JarManifest }
   import java.util.jar.Attributes.{ Name => AttrName }
+  import java.util.jar.{ Manifest => JarManifest }
 
-  val workDir   = sbt.Keys.target.value / "executable"
-  val warName   = sbt.Keys.name.value + ".war"
+  val workDir   = Keys.target.value / "executable"
+  val warName   = Keys.name.value + ".war"
 
   val log       = streams.value.log
   log info s"building executable webapp in ${workDir}"
@@ -114,7 +102,7 @@ executableKey := {
   IO delete temp
 
   // include jetty classes
-  val jettyJars = sbt.Keys.update.value select configurationFilter(name = executableConfig.name)
+  val jettyJars = Keys.update.value select configurationFilter(name = ExecutableConfig.name)
   jettyJars foreach { jar =>
     IO unzip (jar, temp, (name:String) =>
       (name startsWith "javax/") ||
@@ -123,11 +111,11 @@ executableKey := {
   }
 
   // include original war file
-  val warFile   = (sbt.Keys.`package`).value
+  val warFile   = (Keys.`package`).value
   IO unzip (warFile, temp)
 
   // include launcher classes
-  val classDir      = (sbt.Keys.classDirectory in Compile).value
+  val classDir      = (Keys.classDirectory in Compile).value
   val launchClasses = Seq("JettyLauncher.class" /*, "HttpsSupportConnector.class" */)
   launchClasses foreach { name =>
     IO copyFile (classDir / name, temp / name)
@@ -135,12 +123,12 @@ executableKey := {
 
   // zip it up
   IO delete (temp / "META-INF" / "MANIFEST.MF")
-  val contentMappings   = (temp.*** --- PathFinder(temp)).get pair relativeTo(temp)
+  val contentMappings   = (temp.allPaths --- PathFinder(temp)).get pair { file => IO.relativizeFile(temp, file) }
   val manifest          = new JarManifest
   manifest.getMainAttributes put (AttrName.MANIFEST_VERSION, "1.0")
   manifest.getMainAttributes put (AttrName.MAIN_CLASS,       "JettyLauncher")
   val outputFile    = workDir / warName
-  IO jar (contentMappings, outputFile, manifest)
+  IO jar (contentMappings.map { case (file, path) => (file, path.toString) } , outputFile, manifest)
 
   // done
   log info s"built executable webapp ${outputFile}"
