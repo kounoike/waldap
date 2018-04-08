@@ -23,30 +23,36 @@ class IndexController extends ControllerBase with AccountService with LDAPAccoun
   )(PasswordForm.apply)
   case class PasswordForm(userPassword: String, userPasswordRetype: String)
 
-  get("/user"){
+  get("/user") {
     val entry = getLdapEntry(context.loginAccount.get)
-    entry.map{ e =>
-      html.index(e)
-    }.getOrElse{
-      NotFound()
-    }
+    entry
+      .map { e =>
+        html.index(e)
+      }
+      .getOrElse {
+        NotFound()
+      }
   }
 
-  get("/user/apps"){
+  get("/user/apps") {
     val groups = GetLDAPUsersGroups(context.loginAccount.get.userName)
-    val instances = groups.map{g => getWebAppInstance(g.get("o").getString, g.get("ou").getString)}.flatten.distinct
+    val instances = groups
+      .map { g =>
+        getWebAppInstance(g.get("o").getString, g.get("ou").getString)
+      }
+      .flatten
+      .distinct
     html.apps(instances)
   }
 
-  get("/user/password"){
+  get("/user/password") {
     html.password(flash.get("info"))
   }
 
-  post("/user/password", passwordForm){ form =>
-    if(form.userPassword != form.userPasswordRetype){
+  post("/user/password", passwordForm) { form =>
+    if (form.userPassword != form.userPasswordRetype) {
       flash += "info" -> context.messages.get("settings.passwordMismatch")
-    }
-    else{
+    } else {
       ChangeLDAPUserPassword(context.loginAccount.get.userName, form.userPassword)
 
       flash += "info" -> context.messages.get("settings.passwordChanged")
@@ -54,18 +60,18 @@ class IndexController extends ControllerBase with AccountService with LDAPAccoun
     redirect("/user/password")
   }
 
-  get("/user/signin"){
+  get("/user/signin") {
     val redirect = params.get("redirect")
-    if(redirect.isDefined && redirect.get.startsWith("/")){
+    if (redirect.isDefined && redirect.get.startsWith("/")) {
       flash += Keys.Flash.Redirect -> redirect.get
     }
     html.signin(flash.get("userName"), flash.get("password"), flash.get("error"))
   }
 
-  post("/user/signin", signinForm){ form =>
+  post("/user/signin", signinForm) { form =>
     userAuthenticate(context.settings, form.username, form.password) match {
       case Some(account) => signin(account)
-      case None          => {
+      case None => {
         flash += "userName" -> form.username
         flash += "password" -> form.password
         flash += "error" -> context.messages.get("loginform.error")
@@ -77,10 +83,14 @@ class IndexController extends ControllerBase with AccountService with LDAPAccoun
   private def signin(account: Account) = {
     session.setAttribute(Keys.Session.LoginAccount, account)
 
-    flash.get(Keys.Flash.Redirect).asInstanceOf[Option[String]].map { redirectUrl =>
-      redirect(redirectUrl)
-    }.getOrElse {
-      redirect("/user")
-    }
+    flash
+      .get(Keys.Flash.Redirect)
+      .asInstanceOf[Option[String]]
+      .map { redirectUrl =>
+        redirect(redirectUrl)
+      }
+      .getOrElse {
+        redirect("/user")
+      }
   }
 }

@@ -15,10 +15,10 @@ import org.apache.directory.server.core.api.interceptor.context.AddOperationCont
 import org.apache.directory.server.core.partition.ldif.AbstractLdifPartition
 import org.slf4j.{Logger, LoggerFactory}
 
-class InMemorySchemaPartition(schemaManager: SchemaManager) extends AbstractLdifPartition(schemaManager){
+class InMemorySchemaPartition(schemaManager: SchemaManager) extends AbstractLdifPartition(schemaManager) {
   val logger: Logger = LoggerFactory.getLogger(getClass)
 
-  override protected def doInit() : Unit = {
+  override protected def doInit(): Unit = {
     if (!initialized) {
       logger.debug("Initializing schema partition " + getId())
       suffixDn.apply(schemaManager)
@@ -28,7 +28,7 @@ class InMemorySchemaPartition(schemaManager: SchemaManager) extends AbstractLdif
       val resMap = ResourceMap.getResources(Pattern.compile("schema[/\\Q\\\\E]ou=schema.*"))
       val keySet = new java.util.TreeSet[String](resMap.keySet()).asScala
       keySet.foreach { resourcePath =>
-        if(resourcePath.endsWith(".ldif")){
+        if (resourcePath.endsWith(".ldif")) {
           val resource = DefaultSchemaLdifExtractor.getUniqueResource(resourcePath, "Schema LDIF file")
           val reader = new LdifReader(resource.openStream)
           val ldifEntry = reader.next
@@ -36,11 +36,11 @@ class InMemorySchemaPartition(schemaManager: SchemaManager) extends AbstractLdif
 
           val entry: Entry = new DefaultEntry(schemaManager, ldifEntry.getEntry)
           //add mandatory attributes
-          if (Option(entry.get(SchemaConstants.ENTRY_CSN_AT)).isEmpty){
+          if (Option(entry.get(SchemaConstants.ENTRY_CSN_AT)).isEmpty) {
             val csnFactory = new CsnFactory(1)
             entry.add(SchemaConstants.ENTRY_CSN_AT, csnFactory.newInstance.toString)
           }
-          if (Option(entry.get(SchemaConstants.ENTRY_UUID_AT)).isEmpty){
+          if (Option(entry.get(SchemaConstants.ENTRY_UUID_AT)).isEmpty) {
             entry.add(SchemaConstants.ENTRY_UUID_AT, UUID.randomUUID.toString)
           }
           super.add(new AddOperationContext(null, entry))

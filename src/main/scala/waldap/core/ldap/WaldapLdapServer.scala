@@ -7,9 +7,7 @@ import waldap.core.service.SystemSettingsService
 import org.apache.directory.server.core.api.CoreSession
 import org.apache.directory.server.protocol.shared.transport.TcpTransport
 
-
-case class WaldapLdapServer() extends SystemSettingsService {
-}
+case class WaldapLdapServer() extends SystemSettingsService {}
 
 object WaldapLdapServer extends WaldapLdapServer {
   val dsFactory = new WaldapDirectoryServiceFactory()
@@ -19,16 +17,23 @@ object WaldapLdapServer extends WaldapLdapServer {
 
   def init(): Unit = {
     val settings = loadSystemSettings()
-    val bindHost = if(settings.ldapBindOnlyLocal) "127.0.0.1" else "0.0.0.0"
+    val bindHost = if (settings.ldapBindOnlyLocal) "127.0.0.1" else "0.0.0.0"
     ldapServer.setTransports(new TcpTransport(bindHost, settings.ldapPort))
     ldapServer.setDirectoryService(directoryService)
     ldapServer.start()
 
     val con = directoryService.getAdminSession
     val passwordRemove = new DefaultModification(ModificationOperation.REMOVE_ATTRIBUTE, "userPassword")
-    val passwordAdd = new DefaultModification(ModificationOperation.ADD_ATTRIBUTE, "userPassword",
-      LDAPUtil.encodePassword(settings.adminPassword))
-    con.modify(new Dn(con.getDirectoryService.getSchemaManager, ServerDNConstants.ADMIN_SYSTEM_DN), passwordRemove, passwordAdd)
+    val passwordAdd = new DefaultModification(
+      ModificationOperation.ADD_ATTRIBUTE,
+      "userPassword",
+      LDAPUtil.encodePassword(settings.adminPassword)
+    )
+    con.modify(
+      new Dn(con.getDirectoryService.getSchemaManager, ServerDNConstants.ADMIN_SYSTEM_DN),
+      passwordRemove,
+      passwordAdd
+    )
   }
 
   def restart(): Unit = {

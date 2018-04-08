@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 import waldap.core.service.SystemSettingsService
 import slick.jdbc.JdbcBackend.{Session, Database => SlickDatabase}
 
-object Database extends SystemSettingsService{
+object Database extends SystemSettingsService {
   private val settings = loadSystemSettings()
 
   private val logger = LoggerFactory.getLogger(getClass)

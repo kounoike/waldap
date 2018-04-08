@@ -9,19 +9,18 @@ import waldap.core.util.{Database, Keys}
 import waldap.core.model.Profile.profile.blockingApi._
 import com.zaxxer.hikari._
 
-class TransactionFilter extends Filter{
+class TransactionFilter extends Filter {
   private val logger = LoggerFactory.getLogger(getClass)
 
-  override def init(filterConfig: FilterConfig) : Unit = {}
+  override def init(filterConfig: FilterConfig): Unit = {}
 
-  override def destroy() : Unit = {}
+  override def destroy(): Unit = {}
 
-  override def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) : Unit = {
+  override def doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain): Unit = {
     val servletPath = req.asInstanceOf[HttpServletRequest].getServletPath()
-    if(servletPath.startsWith("/webjars") || servletPath.startsWith("/assets/")){
+    if (servletPath.startsWith("/webjars") || servletPath.startsWith("/assets/")) {
       chain.doFilter(req, res)
-    }
-    else{
+    } else {
       Database() withTransaction { session =>
         // Register Scalatra error callback to rollback transaction
         ScalatraBase.onFailure { _ =>

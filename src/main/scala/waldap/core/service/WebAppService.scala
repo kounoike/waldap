@@ -7,20 +7,21 @@ import waldap.core.model.Profile.profile.blockingApi._
 
 trait WebAppService extends LDAPAccountService {
   def getAllWebApps()(implicit s: Session): List[WebApp] = {
-    WebApps sortBy(_.name) list
+    WebApps sortBy (_.name) list
   }
 
   def getWebAppInstance(appName: String, instanceSuffix: String)(implicit s: Session): Option[WebAppInstance] = {
     WebAppInstances.filter(x => x.webAppName === appName.bind && x.instanceSuffix === instanceSuffix.bind).firstOption
   }
 
-  def getWebAppInstanceMap()(implicit s:Session): Map[WebApp, List[WebAppInstance]] = {
-    getAllWebApps().map(app =>
-      (app -> (WebAppInstances.filter(_.webAppName === app.name.bind) list))
-    ).toMap
+  def getWebAppInstanceMap()(implicit s: Session): Map[WebApp, List[WebAppInstance]] = {
+    getAllWebApps().map(app => (app -> (WebAppInstances.filter(_.webAppName === app.name.bind) list))).toMap
   }
 
-  def insertWebAppInstance(webAppName: String, instanceSuffix: String, url: String)(implicit context: Context, s: Session): Unit = {
+  def insertWebAppInstance(webAppName: String, instanceSuffix: String, url: String)(
+    implicit context: Context,
+    s: Session
+  ): Unit = {
     WebAppInstances insert WebAppInstance(
       webAppName = webAppName,
       instanceSuffix = instanceSuffix,
@@ -50,7 +51,10 @@ trait WebAppService extends LDAPAccountService {
     instances.delete
   }
 
-  def editWebAppInstance(id: Int, webAppName: String, instanceSuffix: String, url: String)(implicit context: Context, s: Session): Unit = {
+  def editWebAppInstance(id: Int, webAppName: String, instanceSuffix: String, url: String)(
+    implicit context: Context,
+    s: Session
+  ): Unit = {
     val instances = WebAppInstances.filter(_.id === id.bind)
     val newInstance = WebAppInstance(id, webAppName, instanceSuffix, url)
     instances.update(newInstance)

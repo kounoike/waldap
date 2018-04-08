@@ -18,9 +18,13 @@ import org.apache.directory.api.ldap.model.filter.FilterParser
 
 import scala.collection.JavaConverters._
 
-class IndexController extends ControllerBase with JacksonJsonSupport with I18nSupport with ClientSideValidationFormSupport {
+class IndexController
+    extends ControllerBase
+    with JacksonJsonSupport
+    with I18nSupport
+    with ClientSideValidationFormSupport {
 
-  get("/"){
+  get("/") {
     context.loginAccount match {
       case Some(x) if x.isAdmin =>
         redirect("/admin")
@@ -31,7 +35,7 @@ class IndexController extends ControllerBase with JacksonJsonSupport with I18nSu
     }
   }
 
-  get("/signout"){
+  get("/signout") {
     session.invalidate
     redirect("/")
   }

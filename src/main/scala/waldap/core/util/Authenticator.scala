@@ -9,8 +9,8 @@ trait AdminAuthenticator { self: ControllerBase =>
   private def authenticate(action: => Any) = {
     {
       context.loginAccount match {
-        case Some(x) if(x.isAdmin) => action
-        case _ => UnauthorizedAdmin()
+        case Some(x) if (x.isAdmin) => action
+        case _                      => UnauthorizedAdmin()
       }
     }
   }

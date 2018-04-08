@@ -16,7 +16,7 @@ trait WebAppInstanceComponent extends TemplateComponent { self: Profile =>
   }
 }
 
-case class WebAppInstance (
+case class WebAppInstance(
   id: Int = 0,
   webAppName: String,
   instanceSuffix: String,

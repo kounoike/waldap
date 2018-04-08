@@ -6,10 +6,17 @@ import org.scalatra.{FlashMapSupport, Ok}
 import org.slf4j.LoggerFactory
 import waldap.core.service.LDAPAccountService
 
-trait UserControllerBase extends ControllerBase with FlashMapSupport with LDAPAccountService{
+trait UserControllerBase extends ControllerBase with FlashMapSupport with LDAPAccountService {
   private val logger = LoggerFactory.getLogger(getClass)
 
-  case class UserAddForm(username: String, password: String, sn: String, givenName: String, displayName: String, mail: String)
+  case class UserAddForm(
+    username: String,
+    password: String,
+    sn: String,
+    givenName: String,
+    displayName: String,
+    mail: String
+  )
   val useraddform = mapping(
     "username" -> text(required, maxlength(40)),
     "password" -> text(required, maxlength(40)),
@@ -32,39 +39,41 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport with LDAPAc
     "password" -> trim(label("Password", text(required)))
   )(PasswordForm.apply)
 
-  get("/admin/users"){
+  get("/admin/users") {
     waldap.core.admin.user.html.userlist(GetLDAPUsers, GetLDAPGroups)
   }
 
   post("/admin/users/:name/edit", usereditform) { form =>
-    params.get("name").map{ n =>
+    params.get("name").map { n =>
       EditLDAPUser(n, form.givenName, form.sn, form.displayName, form.mail)
       redirect("/admin/users")
-    }getOrElse(NotFound())
+    } getOrElse (NotFound())
   }
 
   post("/admin/users/:name/password", passwordform) { form =>
-    params.get("name").map{ n =>
+    params.get("name").map { n =>
       ChangeLDAPUserPassword(n, form.password)
       redirect("/admin/users")
-    }getOrElse(NotFound())
+    } getOrElse (NotFound())
   }
 
-  get("/admin/users/:name/delete"){
+  get("/admin/users/:name/delete") {
     val name = params.get("name")
-    name.map { n =>
-      DeleteLDAPUser(n)
-      redirect("/admin/users")
-    }.getOrElse(NotFound())
+    name
+      .map { n =>
+        DeleteLDAPUser(n)
+        redirect("/admin/users")
+      }
+      .getOrElse(NotFound())
   }
 
-  post("/admin/users/add", useraddform){form =>
+  post("/admin/users/add", useraddform) { form =>
     AddLDAPUser(form.username, form.password, form.givenName, form.sn, form.displayName, form.mail)
 
     redirect("/admin/users")
   }
 
-  get("/admin/users/join/:user/:group"){
+  get("/admin/users/join/:user/:group") {
     val userName = params.get("user").get
     val groupName = params.get("group").get
     println(s"join user:${userName} group:${groupName}")
@@ -72,7 +81,7 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport with LDAPAc
     redirect("/admin/users")
   }
 
-  get("/admin/users/disjoin/:user/:group"){
+  get("/admin/users/disjoin/:user/:group") {
     val userName = params.get("user").get
     val groupName = params.get("group").get
     println(s"disjoin user:${userName} group:${groupName}")

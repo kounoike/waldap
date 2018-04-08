@@ -20,13 +20,13 @@ import org.apache.directory.server.core.factory.{DirectoryServiceFactory, LdifPa
 import org.apache.directory.server.i18n.I18n
 import waldap.core.util.Directory
 
-class WaldapDirectoryServiceFactory extends DirectoryServiceFactory{
+class WaldapDirectoryServiceFactory extends DirectoryServiceFactory {
   val directoryService: DirectoryService = new DefaultDirectoryService
   directoryService.setShutdownHookEnabled(false)
 
   val partitionFactory: PartitionFactory = new LdifPartitionFactory
 
-  override def init(name: String) : Unit = {
+  override def init(name: String): Unit = {
     if (directoryService.isStarted) return
 
     directoryService.setInstanceId(name)
@@ -41,8 +41,8 @@ class WaldapDirectoryServiceFactory extends DirectoryServiceFactory{
     // Init the schema
     val schemaManager = new DefaultSchemaManager(new JarLdifSchemaLoader())
     schemaManager.loadAllEnabled()
-    schemaManager.getComparatorRegistry.asScala.foreach{ comparator =>
-      if (comparator.isInstanceOf[NormalizingComparator]){
+    schemaManager.getComparatorRegistry.asScala.foreach { comparator =>
+      if (comparator.isInstanceOf[NormalizingComparator]) {
         comparator.asInstanceOf[NormalizingComparator].setOnServer()
       }
     }
@@ -59,11 +59,16 @@ class WaldapDirectoryServiceFactory extends DirectoryServiceFactory{
     }
 
     // Init system partition
-    val systemPartition = partitionFactory.createPartition(directoryService.getSchemaManager,
-      directoryService.getDnFactory, "system", ServerDNConstants.SYSTEM_DN, 500,
-      new File(directoryService.getInstanceLayout.getPartitionsDirectory, "system"))
+    val systemPartition = partitionFactory.createPartition(
+      directoryService.getSchemaManager,
+      directoryService.getDnFactory,
+      "system",
+      ServerDNConstants.SYSTEM_DN,
+      500,
+      new File(directoryService.getInstanceLayout.getPartitionsDirectory, "system")
+    )
     systemPartition.setSchemaManager(directoryService.getSchemaManager)
-    partitionFactory.addIndex(systemPartition, SchemaConstants.OBJECT_CLASS_AT,100)
+    partitionFactory.addIndex(systemPartition, SchemaConstants.OBJECT_CLASS_AT, 100)
     directoryService.setSystemPartition(systemPartition)
 
     directoryService.setAccessControlEnabled(true)
@@ -72,21 +77,26 @@ class WaldapDirectoryServiceFactory extends DirectoryServiceFactory{
     directoryService.startup()
 
     val schemaReader = new LdifReader((getClass.getResourceAsStream("/schema.ldif")))
-    schemaReader.forEach{ ldifEntry =>
+    schemaReader.forEach { ldifEntry =>
       val entry: Entry = new DefaultEntry(schemaManager, ldifEntry.getEntry)
       directoryService.getAdminSession.add(entry)
     }
 
-    val dataPartition = partitionFactory.createPartition(directoryService.getSchemaManager,
-      directoryService.getDnFactory, LDAPUtil.ldapName, LDAPUtil.baseDnName, 500,
-      new File(directoryService.getInstanceLayout.getPartitionsDirectory, LDAPUtil.ldapName))
+    val dataPartition = partitionFactory.createPartition(
+      directoryService.getSchemaManager,
+      directoryService.getDnFactory,
+      LDAPUtil.ldapName,
+      LDAPUtil.baseDnName,
+      500,
+      new File(directoryService.getInstanceLayout.getPartitionsDirectory, LDAPUtil.ldapName)
+    )
     directoryService.addPartition(dataPartition)
 
     val session = directoryService.getAdminSession()
 
-    if (!session.exists(LDAPUtil.baseDnName)){
+    if (!session.exists(LDAPUtil.baseDnName)) {
       val reader = new LdifReader(getClass.getResourceAsStream("/base.ldif"))
-      reader.forEach{ entry =>
+      reader.forEach { entry =>
         session.add(new DefaultEntry(directoryService.getSchemaManager, entry.getEntry))
       }
     }

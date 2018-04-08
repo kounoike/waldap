@@ -10,8 +10,8 @@ class AdminAuthenticationFilter extends Filter {
 
   override def destroy() = {}
 
-  override def doFilter(servletRequest: ServletRequest, servletResponse: ServletResponse, filterChain: FilterChain) ={
+  override def doFilter(servletRequest: ServletRequest, servletResponse: ServletResponse, filterChain: FilterChain) = {
     implicit val request = servletRequest.asInstanceOf[HttpServletRequest]
-     val response = servletResponse.asInstanceOf[HttpServletResponse]
+    val response = servletResponse.asInstanceOf[HttpServletResponse]
   }
 }

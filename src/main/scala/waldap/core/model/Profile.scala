@@ -13,8 +13,11 @@ trait ProfileProvider { self: Profile with SystemSettingsService =>
   lazy val profile = loadSystemSettings().db.slickDriver
 }
 
-trait CoreProfile extends ProfileProvider with Profile with SystemSettingsService
-  with WebAppComponent
-  with WebAppInstanceComponent
+trait CoreProfile
+    extends ProfileProvider
+    with Profile
+    with SystemSettingsService
+    with WebAppComponent
+    with WebAppInstanceComponent
 
 object Profile extends CoreProfile

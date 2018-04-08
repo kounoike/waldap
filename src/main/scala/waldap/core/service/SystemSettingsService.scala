@@ -15,7 +15,7 @@ import liquibase.database.core.{H2Database, MySQLDatabase, PostgresDatabase}
 trait SystemSettingsService {
 
   def saveSystemSettings(settings: SystemSettings): Unit = {
-    defining(new java.util.Properties()){ props =>
+    defining(new java.util.Properties()) { props =>
       settings.baseUrl.foreach(x => props.setProperty(BaseURL, x.replace("/\\Z", "")))
       props.setProperty(AdminPassword, settings.adminPassword)
       props.setProperty(LdapBindOnlyLocal, settings.ldapBindOnlyLocal.toString)
@@ -29,19 +29,19 @@ trait SystemSettingsService {
       settings.db.minimumIdle.foreach(x => props.setProperty(DatabaseMinimumIdle, x.toString))
       settings.db.maximumPoolSize.foreach(x => props.setProperty(DatabaseMaximumPoolSize, x.toString))
       val home = new File(Directory.WaldapHome)
-      if(!home.exists()){
+      if (!home.exists()) {
         home.mkdirs()
       }
-      using(new java.io.FileOutputStream(Directory.WaldapConf)){ out =>
+      using(new java.io.FileOutputStream(Directory.WaldapConf)) { out =>
         props.store(out, null)
       }
     }
   }
 
   def loadSystemSettings(): SystemSettings = {
-    defining(new java.util.Properties()){ props =>
-      if(Directory.WaldapConf.exists){
-        using(new java.io.FileInputStream(Directory.WaldapConf)){ in =>
+    defining(new java.util.Properties()) { props =>
+      if (Directory.WaldapConf.exists) {
+        using(new java.io.FileInputStream(Directory.WaldapConf)) { in =>
           props.load(in)
         }
       }
@@ -61,7 +61,7 @@ trait SystemSettingsService {
           getOptionValue[Int](props, DatabaseMaximumPoolSize, None)
         )
       )
-      if(!Directory.WaldapConf.exists()){
+      if (!Directory.WaldapConf.exists()) {
         saveSystemSettings(settings)
       }
       settings
@@ -78,7 +78,7 @@ object SystemSettingsService {
     ldapBindOnlyLocal: Boolean,
     ldapPort: Int,
     db: Database
-  ){
+  ) {
     def baseUrl(request: HttpServletRequest): String = baseUrl.fold(request.baseUrl)(_.stripSuffix("/"))
   }
 
@@ -91,7 +91,7 @@ object SystemSettingsService {
     maxLifetime: Option[Long],
     minimumIdle: Option[Int],
     maximumPoolSize: Option[Int]
-  ){
+  ) {
     def jdbcDriver: String = DatabaseType(url).jdbcDriver
     def slickDriver: BlockingJdbcProfile = DatabaseType(url).slickDriver
     def liquiDriver: AbstractJdbcDatabase = DatabaseType(url).liquiDriver
@@ -104,7 +104,7 @@ object SystemSettingsService {
 
   private val DatabaseUrl = "db.url"
   private val DatabaseUser = "db.user"
-  private val DatabasePassword =  "db.pw"
+  private val DatabasePassword = "db.pw"
   private val DatabaseConnectionTimeout = "db.connectionTimeout"
   private val DatabaseIdleTimeout = "db.idleTimeout"
   private val DatabaseMaxLifetime = "db.maxLifetime"
@@ -113,8 +113,8 @@ object SystemSettingsService {
 
   private def getValue[A: ClassTag](props: java.util.Properties, key: String, default: A): A = {
     getSystemProperty(key).getOrElse(getEnvironmentVariable(key).getOrElse {
-      defining(props.getProperty(key)){ value =>
-        if(value == null || value.isEmpty){
+      defining(props.getProperty(key)) { value =>
+        if (value == null || value.isEmpty) {
           default
         } else {
           convertType(value).asInstanceOf[A]
@@ -125,8 +125,8 @@ object SystemSettingsService {
 
   private def getOptionValue[A: ClassTag](props: java.util.Properties, key: String, default: Option[A]): Option[A] = {
     getSystemProperty(key).orElse(getEnvironmentVariable(key).orElse {
-      defining(props.getProperty(key)){ value =>
-        if(value == null || value.isEmpty){
+      defining(props.getProperty(key)) { value =>
+        if (value == null || value.isEmpty) {
           default
         } else {
           Some(convertType(value)).asInstanceOf[Option[A]]
@@ -144,11 +144,11 @@ sealed trait DatabaseType {
 object DatabaseType {
 
   def apply(url: String): DatabaseType = {
-    if(url.startsWith("jdbc:h2:")){
+    if (url.startsWith("jdbc:h2:")) {
       H2
-    } else if(url.startsWith("jdbc:mysql:")){
+    } else if (url.startsWith("jdbc:mysql:")) {
       MySQL
-    } else if(url.startsWith("jdbc:postgresql:")){
+    } else if (url.startsWith("jdbc:postgresql:")) {
       PostgreSQL
     } else {
       throw new IllegalArgumentException(s"${url} is not supported.")
@@ -176,7 +176,7 @@ object DatabaseType {
   object BlockingPostgresDriver extends slick.jdbc.PostgresProfile with BlockingJdbcProfile {
     override def quoteIdentifier(id: String): String = {
       val s = new StringBuilder(id.length + 4) append '"'
-      for(c <- id) if(c == '"') s append "\"\"" else s append c.toLower
+      for (c <- id) if (c == '"') s append "\"\"" else s append c.toLower
       (s append '"').toString
     }
   }

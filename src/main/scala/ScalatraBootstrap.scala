@@ -11,7 +11,9 @@ import waldap.core.util.Database
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
     context.addFilter("transactionFilter", new TransactionFilter)
-    context.getFilterRegistration("transactionFilter").addMappingForUrlPatterns(EnumSet.allOf(classOf[DispatcherType]), true, "/*")
+    context
+      .getFilterRegistration("transactionFilter")
+      .addMappingForUrlPatterns(EnumSet.allOf(classOf[DispatcherType]), true, "/*")
 
     context.mount(new PreprocessController, "/*")
 

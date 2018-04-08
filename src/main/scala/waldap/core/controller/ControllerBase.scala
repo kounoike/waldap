@@ -16,68 +16,77 @@ import org.scalatra.{FlashMap, FlashMapSupport, Route, ScalatraFilter}
 import org.scalatra.i18n.{I18nSupport, Messages}
 import org.scalatra.json.JacksonJsonSupport
 
+abstract class ControllerBase
+    extends ScalatraFilter
+    with ClientSideValidationFormSupport
+    with JacksonJsonSupport
+    with I18nSupport
+    with FlashMapSupport
+    with SystemSettingsService {
 
-abstract class ControllerBase extends ScalatraFilter
-  with ClientSideValidationFormSupport with JacksonJsonSupport with I18nSupport with FlashMapSupport
-  with SystemSettingsService{
-
-  override def doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain): Unit = try{
-    super.doFilter(request, response, chain)
-  } finally {
-    contextCache.remove()
-  }
+  override def doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain): Unit =
+    try {
+      super.doFilter(request, response, chain)
+    } finally {
+      contextCache.remove()
+    }
   implicit val jsonFormats = waldap.core.util.JsonFormat.jsonFormats
 
   protected def UnauthorizedAdmin()(implicit context: Context) =
-    if(request.hasAttribute(Keys.Request.Ajax)){
+    if (request.hasAttribute(Keys.Request.Ajax)) {
       org.scalatra.Unauthorized()
     } else {
-      if(context.loginAccount.isDefined){
+      if (context.loginAccount.isDefined) {
         org.scalatra.Unauthorized(redirect("/"))
       } else {
-        if(request.getMethod.toUpperCase == "POST"){
+        if (request.getMethod.toUpperCase == "POST") {
           org.scalatra.Unauthorized(redirect("/admin/signin"))
         } else {
-          org.scalatra.Unauthorized(redirect("/admin/signin?redirect=" + StringUtil.urlEncode(
-            defining(request.getQueryString){ queryString =>
-              request.getRequestURI.substring(request.getContextPath.length) + (if(queryString != null) "?" + queryString else "")
-            }
-          )))
+          org.scalatra.Unauthorized(
+            redirect(
+              "/admin/signin?redirect=" + StringUtil.urlEncode(
+                defining(request.getQueryString) { queryString =>
+                  request.getRequestURI.substring(request.getContextPath.length) + (if (queryString != null)
+                                                                                      "?" + queryString
+                                                                                    else "")
+                }
+              )
+            )
+          )
         }
       }
     }
 
-  def ajaxGet(path : String)(action : => Any) : Route =
-    super.get(path){
+  def ajaxGet(path: String)(action: => Any): Route =
+    super.get(path) {
       request.setAttribute(Keys.Request.Ajax, "true")
       action
     }
 
-  override def ajaxGet[T](path : String, form : ValueType[T])(action : T => Any) : Route =
-    super.ajaxGet(path, form){ form =>
+  override def ajaxGet[T](path: String, form: ValueType[T])(action: T => Any): Route =
+    super.ajaxGet(path, form) { form =>
       request.setAttribute(Keys.Request.Ajax, "true")
       action(form)
     }
 
-  def ajaxPost(path : String)(action : => Any) : Route =
-    super.post(path){
+  def ajaxPost(path: String)(action: => Any): Route =
+    super.post(path) {
       request.setAttribute(Keys.Request.Ajax, "true")
       action
     }
 
-  override def ajaxPost[T](path : String, form : ValueType[T])(action : T => Any) : Route =
-    super.ajaxPost(path, form){ form =>
+  override def ajaxPost[T](path: String, form: ValueType[T])(action: T => Any): Route =
+    super.ajaxPost(path, form) { form =>
       request.setAttribute(Keys.Request.Ajax, "true")
       action(form)
     }
 
   protected def NotFound() =
-    if(request.hasAttribute(Keys.Request.Ajax)){
+    if (request.hasAttribute(Keys.Request.Ajax)) {
       org.scalatra.NotFound()
     } else {
       org.scalatra.NotFound(waldap.core.html.error("Not Found"))
     }
-
 
   private val contextCache = new java.lang.ThreadLocal[Context]()
   implicit def context: Context = {
@@ -93,10 +102,16 @@ abstract class ControllerBase extends ScalatraFilter
 
   implicit def ldapSession: CoreSession = context.ldapSession
 
-  private def LoginAccount: Option[Account] = request.getAs[Account](Keys.Session.LoginAccount).orElse(session.getAs[Account](Keys.Session.LoginAccount))
+  private def LoginAccount: Option[Account] =
+    request.getAs[Account](Keys.Session.LoginAccount).orElse(session.getAs[Account](Keys.Session.LoginAccount))
 }
 
-case class Context(settings: SystemSettingsService.SystemSettings, loginAccount: Option[Account], request: HttpServletRequest, messages: Messages){
+case class Context(
+  settings: SystemSettingsService.SystemSettings,
+  loginAccount: Option[Account],
+  request: HttpServletRequest,
+  messages: Messages
+) {
   val path = settings.baseUrl.getOrElse(request.getContextPath)
   val currentPath = request.getRequestURI.substring(request.getContextPath.length)
   val baseUrl = settings.baseUrl(request)
@@ -104,13 +119,13 @@ case class Context(settings: SystemSettingsService.SystemSettings, loginAccount:
   val ldapSession = WaldapLdapServer.directoryService.getAdminSession
 
   /**
-    * Get object from cache.
-    *
-    * If object has not been cached with the specified key then retrieves by given action.
-    * Cached object are available during a request.
-    */
+   * Get object from cache.
+   *
+   * If object has not been cached with the specified key then retrieves by given action.
+   * Cached object are available during a request.
+   */
   def cache[A](key: String)(action: => A): A =
-    defining(Keys.Request.Cache(key)){ cacheKey =>
+    defining(Keys.Request.Cache(key)) { cacheKey =>
       Option(request.getAttribute(cacheKey).asInstanceOf[A]).getOrElse {
         val newObject = action
         request.setAttribute(cacheKey, newObject)

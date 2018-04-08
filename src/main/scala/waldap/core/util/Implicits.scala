@@ -18,9 +18,10 @@ object Implicits {
 
     def hasAttribute(name: String): Boolean = request.getAttribute(name) != null
 
-    def gitRepositoryPath: String = request.getRequestURI.replaceFirst("^" + quote(request.getContextPath) + "/git/", "/")
+    def gitRepositoryPath: String =
+      request.getRequestURI.replaceFirst("^" + quote(request.getContextPath) + "/git/", "/")
 
-    def baseUrl:String = {
+    def baseUrl: String = {
       val url = request.getRequestURL.toString
       val len = url.length - (request.getRequestURI.length - request.getContextPath.length)
       url.substring(0, len).stripSuffix("/")

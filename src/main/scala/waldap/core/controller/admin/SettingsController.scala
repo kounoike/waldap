@@ -7,7 +7,11 @@ import waldap.core.admin.html
 import io.github.gitbucket.scalatra.forms._
 import org.scalatra.FlashMapSupport
 
-class SettingsController extends ControllerBase with FlashMapSupport with SystemSettingsService with LDAPAccountService {
+class SettingsController
+    extends ControllerBase
+    with FlashMapSupport
+    with SystemSettingsService
+    with LDAPAccountService {
   case class SettingsForm(baseUrl: Option[String], ldapBindOnlyLocal: Boolean, ldapPort: Int)
 
   private val settingForm = mapping(
@@ -22,17 +26,22 @@ class SettingsController extends ControllerBase with FlashMapSupport with System
   )(PasswordForm.apply)
   case class PasswordForm(adminPassword: String, adminPasswordRetype: String)
 
-  get("/admin/password"){
+  get("/admin/password") {
     html.password(flash.get("info"))
   }
 
-  post("/admin/password", passwordForm){ form =>
-    if(form.adminPassword != form.adminPasswordRetype){
+  post("/admin/password", passwordForm) { form =>
+    if (form.adminPassword != form.adminPasswordRetype) {
       flash += "info" -> context.messages.get("settings.passwordMismatch")
-    }
-    else{
+    } else {
       val adminPassword = LDAPUtil.encodePassword(form.adminPassword)
-      val newSettings = SystemSettingsService.SystemSettings(context.settings.baseUrl, adminPassword, context.settings.ldapBindOnlyLocal, context.settings.ldapPort, context.settings.db)
+      val newSettings = SystemSettingsService.SystemSettings(
+        context.settings.baseUrl,
+        adminPassword,
+        context.settings.ldapBindOnlyLocal,
+        context.settings.ldapPort,
+        context.settings.db
+      )
       saveSystemSettings(newSettings)
       ChangeLDAPAdminPassword(form.adminPassword)
 
@@ -41,16 +50,23 @@ class SettingsController extends ControllerBase with FlashMapSupport with System
     redirect("/admin/password")
   }
 
-  get("/admin/system"){
+  get("/admin/system") {
     html.setting(flash.get("info"))
   }
 
-  post("/admin/system", settingForm){ form =>
-    val newSettings = SystemSettingsService.SystemSettings(form.baseUrl, context.settings.adminPassword, form.ldapBindOnlyLocal, form.ldapPort, context.settings.db)
-    val needRestartLdap: Boolean = context.settings.ldapPort != newSettings.ldapPort || context.settings.ldapBindOnlyLocal != newSettings.ldapBindOnlyLocal
+  post("/admin/system", settingForm) { form =>
+    val newSettings = SystemSettingsService.SystemSettings(
+      form.baseUrl,
+      context.settings.adminPassword,
+      form.ldapBindOnlyLocal,
+      form.ldapPort,
+      context.settings.db
+    )
+    val needRestartLdap
+      : Boolean = context.settings.ldapPort != newSettings.ldapPort || context.settings.ldapBindOnlyLocal != newSettings.ldapBindOnlyLocal
     saveSystemSettings(newSettings)
 
-    if(needRestartLdap){
+    if (needRestartLdap) {
       WaldapLdapServer.restart()
     }
 
