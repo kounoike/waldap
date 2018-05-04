@@ -76,7 +76,7 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport with LDAPAc
   get("/admin/users/join/:user/:group") {
     val userName = params.get("user").get
     val groupName = params.get("group").get
-    println(s"join user:${userName} group:${groupName}")
+    println(s"join user:$userName group:$groupName")
     JoinToLDAPGroup(userName, groupName)
     redirect("/admin/users")
   }
@@ -84,7 +84,7 @@ trait UserControllerBase extends ControllerBase with FlashMapSupport with LDAPAc
   get("/admin/users/disjoin/:user/:group") {
     val userName = params.get("user").get
     val groupName = params.get("group").get
-    println(s"disjoin user:${userName} group:${groupName}")
+    println(s"disjoin user:$userName group:$groupName")
     DisjoinFromLDAPGroup(userName, groupName)
     redirect("/admin/users")
   }

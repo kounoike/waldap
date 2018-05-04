@@ -20,7 +20,7 @@ trait AccountService {
     implicit context: Context
   ): Option[Account] = {
     val ds = WaldapLdapServer.directoryService
-    val dnString = s"uid=${userName},ou=Users,o=waldap"
+    val dnString = s"uid=$userName,ou=Users,o=waldap"
 
     val account = if (context.ldapSession.exists(dnString)) {
       val dn = context.ldapSession.getDirectoryService.getDnFactory().create(dnString)

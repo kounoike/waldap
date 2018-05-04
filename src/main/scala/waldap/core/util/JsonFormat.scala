@@ -7,6 +7,6 @@ object JsonFormat {
 
   case class Context(baseUrl: String)
 
-  val jsonFormats = DefaultFormats
+  val jsonFormats: DefaultFormats.type = DefaultFormats
 
 }

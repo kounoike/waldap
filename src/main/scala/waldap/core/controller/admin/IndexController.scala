@@ -33,12 +33,11 @@ trait IndexControllerBase extends ControllerBase with FlashMapSupport with Accou
   post("/admin/signin", signinForm) { form =>
     adminAuthenticate(context.settings, form.username, form.password) match {
       case Some(account) => signin(account)
-      case None => {
+      case None =>
         flash += "userName" -> form.username
         flash += "password" -> form.password
         flash += "error" -> "Sorry, your Username and/or Password is incorrect. Please try again."
         redirect("/admin/signin")
-      }
     }
   }
 

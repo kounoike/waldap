@@ -91,11 +91,10 @@ abstract class ControllerBase
   private val contextCache = new java.lang.ThreadLocal[Context]()
   implicit def context: Context = {
     contextCache.get match {
-      case null => {
+      case null =>
         val context = Context(loadSystemSettings(), LoginAccount, request, messages)
         contextCache.set(context)
         context
-      }
       case context => context
     }
   }

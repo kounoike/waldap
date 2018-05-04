@@ -22,7 +22,7 @@ object ConfigUtil {
     }
   }
 
-  def convertType[A: ClassTag](value: String) =
+  def convertType[A: ClassTag](value: String): Any =
     defining(implicitly[ClassTag[A]].runtimeClass) { c =>
       if (c == classOf[Boolean]) value.toBoolean
       else if (c == classOf[Long]) value.toLong

@@ -1,5 +1,6 @@
 @(users:List[org.apache.directory.api.ldap.model.entry.Entry], groups:List[org.apache.directory.api.ldap.model.entry.Entry])(implicit context: waldap.core.controller.Context)
 @waldap.core.admin.html.main("User List", Some("users")) {
+<!--suppress XmlDuplicatedId -->
 <div class="box box-main">
   <button class="button is-primary is-pulled-right" id="add-button">
     <span class="icon"><i class="fa fa-plus-square"></i></span>
@@ -26,8 +27,9 @@
         <td>
           @groups.map{ group =>
             <div class="tags has-addons">
-              <span class="tag is-small @if(group.get("member").contains(user.getDn.getName)){is-primary}else{is-light}">@group.get("cn").get</span>
-              <a class="tag is-light is-small @if(group.get("member").contains(user.getDn.getName)){disjoin}else{join}" data-username="@user.get("uid").get" data-groupname="@group.get("cn").get">
+              <span class='tag is-small @if(group.get("member").contains(user.getDn.getName)){is-primary}else{is-light}'>@group.get("cn").get</span>
+              <a class='tag is-light is-small @if(group.get("member").contains(user.getDn.getName)){disjoin}else{join}' data-username='@user.get("uid").get'
+                 data-groupname='@group.get("cn").get'>
                 <i class="fa fa-check-square"></i>
               </a>
             </div>
@@ -35,17 +37,17 @@
         </td>
         <td>
           <button class="button is-success is-small user-edit"
-                  data-username="@user.get("uid").get"
-          data-sn="@user.get("sn").get" data-given-name="@user.get("givenName").get"
-          data-display-name="@user.get("displayName").get" data-mail="@user.get("mail").get">
+                  data-username='@user.get("uid").get'
+          data-sn='@user.get("sn").get' data-given-name='@user.get("givenName").get'
+          data-display-name='@user.get("displayName").get' data-mail='@user.get("mail").get'>
 
           <span class="icon is-small"><i class="fa fa-pencil"></i></span>
           </button>
           <button class="button is-warning is-small user-password"
-                  data-username="@user.get("uid").get">
+                  data-username='@user.get("uid").get'>
           <span class="icon is-small"><i class="fa fa-key"></i></span>
           </button>
-          <button class="button is-danger is-small user-delete" data-username="@user.get("uid").get">
+          <button class="button is-danger is-small user-delete" data-username='@user.get("uid").get'>
           <span class="icon is-small"><i class="fa fa-times"></i></span>
           </button>
         </td>

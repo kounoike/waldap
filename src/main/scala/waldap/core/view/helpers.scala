@@ -11,7 +11,7 @@ object helpers {
       case Some(fullPath) =>
         fullPath.replaceFirst("^META-INF/resources", context.path)
       case None =>
-        throw new IllegalArgumentException(s"WebJar resource not found: ${webjar}, ${exactPath}")
+        throw new IllegalArgumentException(s"WebJar resource not found: $webjar, $exactPath")
     }
   }
 }

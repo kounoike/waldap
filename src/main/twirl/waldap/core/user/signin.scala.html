@@ -12,14 +12,14 @@ error: Option[Any] = None)(implicit context: waldap.core.controller.Context)
             <div class="is-danger">@error</div>
             <form action="@context.path/user/signin" method="POST">
               <div class="field">
-                <label class="label is-capitalized">@context.messages.get("loginform.username")</label><span class="error" id="error-username"></span>
+                <label class="label is-capitalized">@context.messages.get("loginform.username")</label>
                 <span id="error-username" class="error"></span>
                 <div class="control">
                   <input class="input" id="username" type="text" name="username" placeholder="username">
                 </div>
               </div>
               <div class="field">
-                <label class="label is-capitalized">@context.messages.get("loginform.password")</label><span class="error" id="error-password"></span>
+                <label class="label is-capitalized">@context.messages.get("loginform.password")</label>
                 <span id="error-password" class="error"></span>
                 <div class="control">
                   <input class="input" id="password" type="password" name="password" placeholder="your password">

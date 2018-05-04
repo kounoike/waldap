@@ -1,3 +1,7 @@
+import org.scalatra.sbt._
+import org.scalatra.sbt.DistPlugin._
+import org.scalatra.sbt.DistPlugin.DistKeys._
+
 organization := "io.github.kounoike"
 name := "waldap"
 version := "0.9.1"

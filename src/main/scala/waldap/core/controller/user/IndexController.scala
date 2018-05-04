@@ -36,12 +36,7 @@ class IndexController extends ControllerBase with AccountService with LDAPAccoun
 
   get("/user/apps") {
     val groups = GetLDAPUsersGroups(context.loginAccount.get.userName)
-    val instances = groups
-      .map { g =>
-        getWebAppInstance(g.get("o").getString, g.get("ou").getString)
-      }
-      .flatten
-      .distinct
+    val instances = groups.flatMap{g => getWebAppInstance(g.get("o").getString, g.get("ou").getString)}.distinct
     html.apps(instances)
   }
 
