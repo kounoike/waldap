@@ -3,6 +3,7 @@ sudo: false
 dist: trusty
 jdk: oraclejdk8
 script:
+  - npm install
   - sbt test
 cache:
   directories:
