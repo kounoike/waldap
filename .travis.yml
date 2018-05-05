@@ -11,3 +11,4 @@ cache:
     - $HOME/.sbt/boot
     - $HOME/.sbt/launchers
     - $HOME/.coursier
+    - $HOME/.npm
