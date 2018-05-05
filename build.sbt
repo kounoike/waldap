@@ -27,15 +27,7 @@ libraryDependencies ++= Seq(
   "org.codehaus.janino" % "janino" % "3.0.6" % "runtime",
   "org.apache.directory.server" % "apacheds-all" % "2.0.0-M24",
   "commons-io" % "commons-io" % "2.5",
-  "commons-codec" % "commons-codec" % "1.10",
-  "org.webjars" % "webjars-locator" % "0.32-1",
-  "org.webjars.npm" % "bulma" % "0.5.1",
-  "org.webjars" % "font-awesome" % "4.7.0",
-  "org.webjars.npm" % "jquery" % "3.2.1",
-  "org.webjars.npm" % "jquery-confirm" % "3.3.2",
-  "org.webjars" % "tablesorter" % "2.25.4",
-  "org.webjars.npm" % "mustache" % "2.3.0",
-  "org.webjars.npm" % "bulmaswatch" % "0.4.1"
+  "commons-codec" % "commons-codec" % "1.10"
 )
 
 javacOptions in compile ++= Seq("-target", "8", "-source", "8")
@@ -48,20 +40,13 @@ packageOptions += Package.MainClass("JettyLauncher")
 
 enablePlugins(SbtTwirl, JettyPlugin, SbtWeb)
 
+compile in Compile := (compile in Compile).dependsOn(webpack.toTask("")).value
+
 containerPort := 10080
 
 artifactName := { (v: ScalaVersion, m: ModuleID, a: Artifact) =>
   a.name + "." + a.extension
 }
-
-import org.irundaia.sbt.sass._
-
-SassKeys.assetRootURL := "/main/assets"
-SassKeys.cssStyle := Maxified
-
-import com.typesafe.sbt.web.Import.WebKeys.webTarget
-//webTarget = target.value / "web"
-resourceManaged in SassKeys.sassify in Assets := target.value / "webapp" /  "assets" / "sass"
 
 // Assembly settings
 test in assembly := {}
